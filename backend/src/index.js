@@ -1,10 +1,17 @@
 import express from "express";
 import cors from "cors";
 
+import { query } from "./config/db.js";
+
 const app = express();
 
 app.use(express.json());
 app.use(cors());
+
+// Test DB connection
+query('SELECT NOW()')
+  .then((res) => console.log('Database connected successfully:', res.rows[0]))
+  .catch((err) => console.error('Database connection failed:', err.message));
 
 app.get("/health", (req, res) => {
   res.json({ status: "ok" });
