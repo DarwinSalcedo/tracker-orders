@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { orderService } from '../../services/orderService';
 import { useAuth } from '../../context/AuthContext';
@@ -20,6 +21,7 @@ import {
 import Input from '../../components/ui/Input';
 
 const Dashboard = () => {
+    const navigate = useNavigate();
     const { user, logout } = useAuth();
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -90,7 +92,7 @@ const Dashboard = () => {
                         <Button variant="secondary" onClick={handleRefresh} disabled={refreshing}>
                             <RefreshCw size={18} className={refreshing ? 'spin' : ''} />
                         </Button>
-                        <Button variant="primary" onClick={() => alert('Create Order Modal/Page')}>
+                        <Button variant="primary" onClick={() => navigate('/backoffice/create-order')}>
                             <Plus size={18} /> New Order
                         </Button>
                         <Button variant="outline" onClick={logout} style={{ borderColor: 'var(--color-error)', color: 'var(--color-error)' }}>
