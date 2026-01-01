@@ -1,0 +1,59 @@
+.premium-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    width: 100%;
+}
+
+.premium-input-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    margin-left: 0.25rem;
+}
+
+.premium-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.premium-input {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text-main);
+    font-size: 1rem;
+    transition: all var(--transition-smooth);
+}
+
+.premium-input:focus {
+    border-color: var(--color-primary);
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 0 4px var(--color-primary-glow);
+    outline: none;
+}
+
+.premium-input::placeholder {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.premium-input-icon {
+    position: absolute;
+    left: 1rem;
+    color: var(--color-text-muted);
+    pointer-events: none;
+    transition: color var(--transition-fast);
+}
+
+.premium-input:focus+.premium-input-icon,
+.premium-input-wrapper:focus-within .premium-input-icon {
+    color: var(--color-primary);
+}
+
+.premium-input.with-icon {
+    padding-left: 2.75rem;
+}

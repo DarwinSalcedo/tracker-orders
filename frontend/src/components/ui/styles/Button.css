@@ -1,0 +1,65 @@
+.premium-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: none;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    position: relative;
+    overflow: hidden;
+}
+
+.premium-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.premium-button.primary {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+    color: white;
+    box-shadow: 0 4px 15px var(--color-primary-glow);
+}
+
+.premium-button.secondary {
+    background: var(--color-bg-secondary);
+    color: var(--color-text-main);
+    border: 1px solid var(--glass-border);
+}
+
+.premium-button.outline {
+    background: transparent;
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+}
+
+.premium-button.ghost {
+    background: transparent;
+    color: var(--color-text-muted);
+}
+
+.premium-button.full-width {
+    width: 100%;
+}
+
+/* Shine Effect */
+.premium-button::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.1);
+    transform: rotate(45deg) translateY(-100%);
+    transition: transform 0.6s;
+}
+
+.premium-button:hover::after {
+    transform: rotate(45deg) translateY(100%);
+}
