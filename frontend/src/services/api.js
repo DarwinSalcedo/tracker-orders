@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://localhost:3000/api', // Make this configurable via env vars ideally
+    baseURL: import.meta.env.FRONTEND_URL || 'http://localhost:3000/api',
     headers: {
         'Content-Type': 'application/json',
     },
