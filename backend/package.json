@@ -4,7 +4,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "db:setup": "node src/scripts/setup.js"
   },
   "keywords": [],
   "author": "",
