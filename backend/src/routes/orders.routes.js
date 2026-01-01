@@ -13,6 +13,21 @@ router.get('/statuses', async (req, res) => {
     }
 });
 
+// Get All Orders (Backoffice Dashboard)
+router.get('/orders', async (req, res) => {
+    try {
+        const result = await query(
+            `SELECT o.*, s.code as status_code, s.label as status_label 
+             FROM orders o
+             JOIN order_statuses s ON o.current_status_id = s.id
+             ORDER BY o.created_at DESC`
+        );
+        res.json(result.rows);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // Create Order (Backoffice)
 router.post('/orders', async (req, res) => {
     const { trackingId, email, pickup, dropoff } = req.body;
