@@ -6,13 +6,14 @@ import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
 import {
-    Package,
+    Truck,
     Mail,
     MapPin,
     ArrowLeft,
     CheckCircle,
     Loader,
-    Hash
+    Hash,
+    ClipboardList
 } from 'lucide-react';
 
 const CreateOrder = () => {
@@ -53,7 +54,7 @@ const CreateOrder = () => {
             setTimeout(() => navigate('/backoffice/dashboard'), 2000);
         } catch (err) {
             console.error(err);
-            setError(err.response?.data?.error || 'Failed to create order');
+            setError(err.response?.data?.error || 'Failed to register shipment');
         } finally {
             setLoading(false);
         }
@@ -70,8 +71,8 @@ const CreateOrder = () => {
                     <div style={{ padding: '2rem', background: 'rgba(16, 185, 129, 0.1)', borderRadius: '50%', display: 'inline-block', marginBottom: '1.5rem' }}>
                         <CheckCircle size={64} color="var(--color-success)" />
                     </div>
-                    <h1>Order Created!</h1>
-                    <p style={{ color: 'var(--color-text-muted)' }}>Redirecting to dashboard...</p>
+                    <h1>Shipment Registered!</h1>
+                    <p style={{ color: 'var(--color-text-muted)' }}>Updating manifest and redirecting...</p>
                 </motion.div>
             </div>
         );
@@ -82,10 +83,10 @@ const CreateOrder = () => {
             <div className="container" style={{ maxWidth: '800px' }}>
                 <header style={{ marginBottom: '2rem' }}>
                     <Button variant="ghost" onClick={() => navigate('/backoffice/dashboard')} style={{ paddingLeft: 0, marginBottom: '1rem' }}>
-                        <ArrowLeft size={18} /> Back to Dashboard
+                        <ArrowLeft size={18} /> Back to Command Center
                     </Button>
-                    <h1 className="text-gradient" style={{ fontSize: '2.5rem' }}>Create New Shipment</h1>
-                    <p style={{ color: 'var(--color-text-muted)' }}>Initialize a new tracking order in the system.</p>
+                    <h1 className="text-gradient" style={{ fontSize: '2.5rem' }}>Register New Shipment</h1>
+                    <p style={{ color: 'var(--color-text-muted)' }}>Initialize a new tracking waybill in the system.</p>
                 </header>
 
                 <form onSubmit={handleSubmit}>
@@ -93,10 +94,10 @@ const CreateOrder = () => {
                         {/* General Info */}
                         <Card>
                             <h3 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                <Package size={20} color="var(--color-primary)" /> Basic Information
+                                <ClipboardList size={20} color="var(--color-primary)" /> Shipment Information
                             </h3>
                             <Input
-                                label="Tracking ID"
+                                label="Waybill / Tracking ID"
                                 name="trackingId"
                                 value={formData.trackingId}
                                 onChange={handleChange}
@@ -104,7 +105,7 @@ const CreateOrder = () => {
                                 required
                             />
                             <Input
-                                label="Customer Email"
+                                label="Client Email"
                                 name="email"
                                 type="email"
                                 value={formData.email}
@@ -181,7 +182,7 @@ const CreateOrder = () => {
                                 </div>
                             )}
                             <Button type="submit" fullWidth disabled={loading}>
-                                {loading ? <Loader className="spin" size={20} /> : 'Create Shipment & Generate Tracking'}
+                                {loading ? <Loader className="spin" size={20} /> : 'Register Shipment & Generate Waybill'}
                             </Button>
                         </div>
                     </div>

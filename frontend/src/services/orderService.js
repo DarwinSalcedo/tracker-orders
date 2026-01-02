@@ -28,5 +28,10 @@ export const orderService = {
     getOrder: async (id) => {
         const response = await api.get(`/orders/${id}`);
         return response.data;
+    },
+
+    getStatuses: async () => {
+        const response = await api.get('/statuses');
+        return response.data;
     }
 };

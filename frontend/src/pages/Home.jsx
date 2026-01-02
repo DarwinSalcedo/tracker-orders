@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
-import { Package, ShieldCheck, ArrowRight } from 'lucide-react';
+import { Truck, ShieldCheck, ArrowRight, Boxes } from 'lucide-react';
 
 const Home = () => {
     const navigate = useNavigate();
@@ -19,9 +19,9 @@ const Home = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
                 >
-                    <h1 style={{ fontSize: '3.5rem', marginBottom: '1rem' }} className="text-gradient">Unknown Tracker</h1>
+                    <h1 style={{ fontSize: '3.5rem', marginBottom: '1rem' }} className="text-gradient">Unknown Logistics</h1>
                     <p style={{ fontSize: '1.25rem', color: 'var(--color-text-muted)', marginBottom: '3rem' }}>
-                        Next-generation logistics tracking system. Real-time updates with premium precision.
+                        Enterprise-grade shipment tracking. Real-time manifests with premium precision.
                     </p>
                 </motion.div>
 
@@ -29,11 +29,11 @@ const Home = () => {
                     <Card hover onClick={() => navigate('/track')} className="pointer">
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
                             <div style={{ padding: '1rem', background: 'rgba(99, 102, 241, 0.1)', borderRadius: '50%' }}>
-                                <Package size={40} color="var(--color-primary)" />
+                                <Truck size={40} color="var(--color-primary)" />
                             </div>
-                            <h3>Track Your Order</h3>
+                            <h3>Track Shipment</h3>
                             <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>
-                                Check the status of your shipment in real-time.
+                                Follow your shipment's journey in real-time.
                             </p>
                             <Button variant="outline" onClick={() => navigate('/track')} fullWidth>
                                 Track Now
@@ -46,9 +46,9 @@ const Home = () => {
                             <div style={{ padding: '1rem', background: 'rgba(139, 92, 246, 0.1)', borderRadius: '50%' }}>
                                 <ShieldCheck size={40} color="var(--color-accent)" />
                             </div>
-                            <h3>Backoffice Access</h3>
+                            <h3>Logistics Portal</h3>
                             <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>
-                                Manage orders, update status, and view analytics.
+                                Manage manifests, update waybills, and view analytics.
                             </p>
                             <Button variant="primary" onClick={() => navigate('/backoffice/login')} fullWidth>
                                 Login <ArrowRight size={16} />

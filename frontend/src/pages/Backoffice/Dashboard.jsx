@@ -16,7 +16,11 @@ import {
     TrendingUp,
     Clock,
     CheckCircle,
-    Truck
+    Truck,
+    Trash2,
+    ClipboardList,
+    Boxes,
+    Navigation
 } from 'lucide-react';
 import Input from '../../components/ui/Input';
 
@@ -24,16 +28,22 @@ const Dashboard = () => {
     const navigate = useNavigate();
     const { user, logout } = useAuth();
     const [orders, setOrders] = useState([]);
+    const [statuses, setStatuses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [refreshing, setRefreshing] = useState(false);
+    const [actionLoading, setActionLoading] = useState(null); // tracking ID of order being updated
 
     const fetchOrders = async () => {
         try {
-            const data = await orderService.getAllOrders();
-            setOrders(data);
+            const [ordersData, statusesData] = await Promise.all([
+                orderService.getAllOrders(),
+                orderService.getStatuses()
+            ]);
+            setOrders(ordersData);
+            setStatuses(statusesData);
         } catch (err) {
-            console.error('Failed to fetch orders:', err);
+            console.error('Failed to fetch data:', err);
         } finally {
             setLoading(false);
             setRefreshing(false);
@@ -49,10 +59,41 @@ const Dashboard = () => {
         fetchOrders();
     };
 
-    const filteredOrders = orders.filter(order =>
-        order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        order.email.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const handleUpdateStatus = async (orderId, statusCode) => {
+        setActionLoading(orderId);
+        try {
+            await orderService.updateOrder(orderId, { statusCode });
+            await fetchOrders();
+        } catch (err) {
+            console.error('Failed to update status:', err);
+            alert('Failed to update status. Please try again.');
+        } finally {
+            setActionLoading(null);
+        }
+    };
+
+    const handleSoftDelete = async (orderId) => {
+        if (!window.confirm('Are you sure you want to hide/delete this order?')) return;
+
+        setActionLoading(orderId);
+        try {
+            await orderService.updateOrder(orderId, { statusCode: 'deleted' });
+            await fetchOrders();
+        } catch (err) {
+            console.error('Failed to delete order:', err);
+            alert('Failed to delete order. Please try again.');
+        } finally {
+            setActionLoading(null);
+        }
+    };
+
+    const filteredOrders = orders.filter(order => {
+        const matchesSearch =
+            order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            order.email.toLowerCase().includes(searchTerm.toLowerCase());
+        const isNotDeleted = order.status_code !== 'deleted';
+        return matchesSearch && isNotDeleted;
+    });
 
     const getStatusBadgeStyle = (code) => {
         switch (code) {
@@ -65,10 +106,10 @@ const Dashboard = () => {
     };
 
     const stats = [
-        { label: 'Total Orders', value: orders.length, icon: Package, color: 'var(--color-primary)' },
+        { label: 'Total Shipments', value: orders.length, icon: Boxes, color: 'var(--color-primary)' },
         { label: 'In Transit', value: orders.filter(o => o.status_code === 'in_transit').length, icon: Truck, color: 'var(--color-warning)' },
         { label: 'Delivered', value: orders.filter(o => o.status_code === 'delivered').length, icon: CheckCircle, color: 'var(--color-success)' },
-        { label: 'New Today', value: orders.filter(o => new Date(o.created_at).toDateString() === new Date().toDateString()).length, icon: TrendingUp, color: 'var(--color-accent)' },
+        { label: 'New Today', value: orders.filter(o => new Date(o.created_at).toDateString() === new Date().toDateString()).length, icon: Navigation, color: 'var(--color-accent)' },
     ];
 
     if (loading && !refreshing) {
@@ -85,15 +126,15 @@ const Dashboard = () => {
                 {/* Header */}
                 <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
                     <div>
-                        <h1 className="text-gradient" style={{ fontSize: '2rem', marginBottom: '0.25rem' }}>Backoffice Dashboard</h1>
-                        <p style={{ color: 'var(--color-text-muted)' }}>Welcome back, {user?.name}</p>
+                        <h1 className="text-gradient" style={{ fontSize: '2rem', marginBottom: '0.25rem' }}>Logistics Command Center</h1>
+                        <p style={{ color: 'var(--color-text-muted)' }}>Monitoring shipments for {user?.name}</p>
                     </div>
                     <div style={{ display: 'flex', gap: '1rem' }}>
                         <Button variant="secondary" onClick={handleRefresh} disabled={refreshing}>
                             <RefreshCw size={18} className={refreshing ? 'spin' : ''} />
                         </Button>
                         <Button variant="primary" onClick={() => navigate('/backoffice/create-order')}>
-                            <Plus size={18} /> New Order
+                            <Plus size={18} /> Register Shipment
                         </Button>
                         <Button variant="outline" onClick={logout} style={{ borderColor: 'var(--color-error)', color: 'var(--color-error)' }}>
                             Logout
@@ -102,7 +143,7 @@ const Dashboard = () => {
                 </header>
 
                 {/* Stats Grid */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
                     {stats.map((stat, i) => (
                         <Card key={i} style={{ padding: '1.5rem' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
@@ -121,10 +162,13 @@ const Dashboard = () => {
                 {/* Main Content Area */}
                 <Card style={{ padding: 0, overflow: 'hidden' }}>
                     <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--glass-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
-                        <h3 style={{ margin: 0 }}>Order History</h3>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <ClipboardList size={20} color="var(--color-primary)" />
+                            <h3 style={{ margin: 0 }}>Shipment Manifest</h3>
+                        </div>
                         <div style={{ width: '300px' }}>
                             <Input
-                                placeholder="Search by ID or Email..."
+                                placeholder="Search Shipment ID or Client..."
                                 icon={Search}
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -137,10 +181,10 @@ const Dashboard = () => {
                         <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                             <thead>
                                 <tr style={{ background: 'rgba(255,255,255,0.02)', color: 'var(--color-text-muted)', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                                    <th style={{ padding: '1rem 1.5rem' }}>Tracking ID</th>
-                                    <th style={{ padding: '1rem 1.5rem' }}>Customer</th>
+                                    <th style={{ padding: '1rem 1.5rem' }}>Waybill / ID</th>
+                                    <th style={{ padding: '1rem 1.5rem' }}>Client</th>
                                     <th style={{ padding: '1rem 1.5rem' }}>Status</th>
-                                    <th style={{ padding: '1rem 1.5rem' }}>Created</th>
+                                    <th style={{ padding: '1rem 1.5rem' }}>Registered</th>
                                     <th style={{ padding: '1rem 1.5rem' }}>Actions</th>
                                 </tr>
                             </thead>
@@ -183,13 +227,44 @@ const Dashboard = () => {
                                                 </div>
                                             </td>
                                             <td style={{ padding: '1.25rem 1.5rem' }}>
-                                                <div style={{ display: 'flex', gap: '0.75rem' }}>
-                                                    <button style={{ color: 'var(--color-text-muted)' }} title="View Details" onClick={() => alert(`View details for ${order.id}`)}>
+                                                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+                                                    <button
+                                                        style={{ color: 'var(--color-text-muted)', background: 'none', border: 'none', cursor: 'pointer', display: 'flex' }}
+                                                        title="View Tracking"
+                                                        onClick={() => navigate(`/track?id=${order.id}&email=${order.email}`)}
+                                                    >
                                                         <ExternalLink size={18} />
                                                     </button>
-                                                    <button style={{ color: 'var(--color-text-muted)' }} title="Quick Edit" onClick={() => alert(`Quick edit for ${order.id}`)}>
-                                                        <MoreVertical size={18} />
+
+                                                    <select
+                                                        value={order.status_code}
+                                                        onChange={(e) => handleUpdateStatus(order.id, e.target.value)}
+                                                        disabled={actionLoading === order.id}
+                                                        style={{
+                                                            background: 'rgba(255,255,255,0.05)',
+                                                            color: 'var(--color-text-main)',
+                                                            border: '1px solid var(--glass-border)',
+                                                            borderRadius: '4px',
+                                                            fontSize: '0.8rem',
+                                                            padding: '0.2rem',
+                                                            cursor: 'pointer'
+                                                        }}
+                                                    >
+                                                        {statuses.filter(s => s.code !== 'deleted').map(s => (
+                                                            <option key={s.id} value={s.code}>{s.label}</option>
+                                                        ))}
+                                                    </select>
+
+                                                    <button
+                                                        style={{ color: 'var(--color-error)', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', opacity: 0.7 }}
+                                                        title="Delete Order"
+                                                        onClick={() => handleSoftDelete(order.id)}
+                                                        disabled={actionLoading === order.id}
+                                                    >
+                                                        <Trash2 size={18} />
                                                     </button>
+
+                                                    {actionLoading === order.id && <Loader size={14} className="spin" style={{ color: 'var(--color-primary)' }} />}
                                                 </div>
                                             </td>
                                         </motion.tr>
@@ -197,7 +272,7 @@ const Dashboard = () => {
                                 }) : (
                                     <tr>
                                         <td colSpan="5" style={{ padding: '4rem', textAlign: 'center', color: 'var(--color-text-muted)' }}>
-                                            No orders found matching your search.
+                                            No shipments found matching your search.
                                         </td>
                                     </tr>
                                 )}

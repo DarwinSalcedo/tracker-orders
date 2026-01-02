@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
@@ -6,15 +6,38 @@ import Card from '../../components/ui/Card';
 import { Search, Mail, Loader, ArrowLeft } from 'lucide-react';
 import { orderService } from '../../services/orderService';
 import OrderDetails from './OrderDetails';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const TrackOrder = () => {
     const navigate = useNavigate();
-    const [trackingId, setTrackingId] = useState('');
-    const [email, setEmail] = useState('');
+    const [searchParams] = useSearchParams();
+    const [trackingId, setTrackingId] = useState(searchParams.get('id') || '');
+    const [email, setEmail] = useState(searchParams.get('email') || '');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [orderData, setOrderData] = useState(null);
+
+    useEffect(() => {
+        const idParam = searchParams.get('id');
+        const emailParam = searchParams.get('email');
+        if (idParam && emailParam) {
+            handleAutoTrack(idParam, emailParam);
+        }
+    }, []);
+
+    const handleAutoTrack = async (id, mail) => {
+        setLoading(true);
+        setError('');
+        try {
+            const data = await orderService.trackOrder(id, mail);
+            setOrderData(data);
+        } catch (err) {
+            console.error(err);
+            setError(err.response?.data?.message || 'Order not found or invalid credentials');
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleTrack = async (e) => {
         e.preventDefault();
@@ -72,13 +95,13 @@ const TrackOrder = () => {
                         >
                             <Card>
                                 <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-                                    <h1 className="text-gradient">Track Order</h1>
-                                    <p style={{ color: 'var(--color-text-muted)' }}>Enter your tracking ID and email to see details.</p>
+                                    <h1 className="text-gradient">Track Shipment</h1>
+                                    <p style={{ color: 'var(--color-text-muted)' }}>Enter your waybill number and email to follow the delivery.</p>
                                 </div>
 
                                 <form onSubmit={handleTrack}>
                                     <Input
-                                        label="Tracking ID"
+                                        label="Waybill Number / Tracking ID"
                                         placeholder="e.g. TRK-12345678"
                                         icon={Search}
                                         value={trackingId}
@@ -106,7 +129,7 @@ const TrackOrder = () => {
                                     )}
 
                                     <Button type="submit" fullWidth disabled={loading}>
-                                        {loading ? <Loader className="spin" size={20} /> : 'Track Order'}
+                                        {loading ? <Loader className="spin" size={20} /> : 'Track Shipment'}
                                     </Button>
                                 </form>
                             </Card>
