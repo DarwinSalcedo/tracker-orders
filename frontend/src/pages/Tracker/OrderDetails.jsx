@@ -4,6 +4,7 @@ import Card from '../../components/ui/Card';
 import StatusTimeline from '../../components/ui/StatusTimeline';
 import { MapPin, Truck, Calendar, Activity } from 'lucide-react';
 import Button from '../../components/ui/Button';
+import ShipmentMap from '../../components/ShipmentMap';
 
 const OrderDetails = ({ order, onBack }) => {
     if (!order) return null;
@@ -68,7 +69,12 @@ const OrderDetails = ({ order, onBack }) => {
                     <p style={{ color: 'var(--color-text-muted)', marginBottom: '1rem', fontSize: '0.9rem' }}>
                         Routing and destination matrix.
                     </p>
-                    <div style={{ padding: '1rem', background: 'var(--bg-secondary)', borderRadius: 'var(--radius-md)' }}>
+                    <ShipmentMap
+                        pickup={order.pickup}
+                        dropoff={order.dropoff}
+                        currentLocation={order.currentLocation}
+                    />
+                    <div style={{ padding: '1rem', background: 'var(--bg-secondary)', borderRadius: 'var(--radius-md)', marginTop: '1rem' }}>
                         <p><strong>Origin:</strong> {order.pickup?.lat ? `${order.pickup.lat}, ${order.pickup.lng}` : 'Unspecified'}</p>
                         <div style={{ height: '1px', background: 'var(--glass-border)', margin: '0.5rem 0' }} />
                         <p><strong>Destination:</strong> {order.dropoff?.lat ? `${order.dropoff.lat}, ${order.dropoff.lng}` : 'Unspecified'}</p>
@@ -86,10 +92,6 @@ const OrderDetails = ({ order, onBack }) => {
                                 )}
                             </>
                         )}
-                    </div>
-                    {/* Here we would integrate a map like Google Maps or Leaflet */}
-                    <div style={{ marginTop: '1rem', height: '100px', background: 'rgba(255,255,255,0.05)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>
-                        Map Visualization Placeholder
                     </div>
                 </Card>
             </div>
