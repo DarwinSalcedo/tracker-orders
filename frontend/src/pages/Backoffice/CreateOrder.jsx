@@ -13,7 +13,9 @@ import {
     CheckCircle,
     Loader,
     Hash,
-    ClipboardList
+    ClipboardList,
+    User,
+    MessageSquare
 } from 'lucide-react';
 
 const CreateOrder = () => {
@@ -28,7 +30,9 @@ const CreateOrder = () => {
         pickupLat: '',
         pickupLng: '',
         dropoffLat: '',
-        dropoffLng: ''
+        dropoffLng: '',
+        deliveryPerson: '',
+        deliveryInstructions: ''
     });
 
     const handleChange = (e) => {
@@ -45,8 +49,10 @@ const CreateOrder = () => {
             const payload = {
                 trackingId: formData.trackingId,
                 email: formData.email,
-                pickup: { lat: parseFloat(formData.pickupLat), lng: parseFloat(formData.pickupLng) },
-                dropoff: { lat: parseFloat(formData.dropoffLat), lng: parseFloat(formData.dropoffLng) }
+                pickup: formData.pickupLat && formData.pickupLng ? { lat: parseFloat(formData.pickupLat), lng: parseFloat(formData.pickupLng) } : null,
+                dropoff: formData.dropoffLat && formData.dropoffLng ? { lat: parseFloat(formData.dropoffLat), lng: parseFloat(formData.dropoffLng) } : null,
+                deliveryPerson: formData.deliveryPerson,
+                deliveryInstructions: formData.deliveryInstructions
             };
 
             await orderService.createOrder(payload);
@@ -114,12 +120,45 @@ const CreateOrder = () => {
                                 icon={Mail}
                                 required
                             />
+                            <Input
+                                label="Delivery Person (Optional)"
+                                name="deliveryPerson"
+                                value={formData.deliveryPerson}
+                                onChange={handleChange}
+                                placeholder="e.g. John Doe"
+                                icon={User}
+                            />
+                            <div style={{ marginBottom: '1rem' }}>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>
+                                    Delivery Instructions (Optional)
+                                </label>
+                                <div style={{ position: 'relative' }}>
+                                    <MessageSquare size={18} style={{ position: 'absolute', top: '1rem', left: '1rem', color: 'var(--color-text-muted)' }} />
+                                    <textarea
+                                        name="deliveryInstructions"
+                                        value={formData.deliveryInstructions}
+                                        onChange={handleChange}
+                                        placeholder="e.g. Leave at front door"
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.75rem 1rem 0.75rem 2.8rem',
+                                            background: 'rgba(255,255,255,0.05)',
+                                            border: '1px solid var(--glass-border)',
+                                            borderRadius: 'var(--radius-md)',
+                                            color: 'var(--color-text-main)',
+                                            fontSize: '1rem',
+                                            minHeight: '100px',
+                                            resize: 'vertical'
+                                        }}
+                                    />
+                                </div>
+                            </div>
                         </Card>
 
                         {/* Pickup Info */}
                         <Card>
                             <h3 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                <MapPin size={20} color="var(--color-accent)" /> Pickup Location
+                                <MapPin size={20} color="var(--color-accent)" /> Pickup Location (Optional)
                             </h3>
                             <div style={{ display: 'flex', gap: '1rem' }}>
                                 <Input
@@ -130,7 +169,6 @@ const CreateOrder = () => {
                                     value={formData.pickupLat}
                                     onChange={handleChange}
                                     placeholder="e.g. 19.4326"
-                                    required
                                 />
                                 <Input
                                     label="Longitude"
@@ -140,7 +178,6 @@ const CreateOrder = () => {
                                     value={formData.pickupLng}
                                     onChange={handleChange}
                                     placeholder="e.g. -99.1332"
-                                    required
                                 />
                             </div>
                         </Card>
@@ -148,7 +185,7 @@ const CreateOrder = () => {
                         {/* Dropoff Info */}
                         <Card>
                             <h3 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                <MapPin size={20} color="var(--color-success)" /> Destination (Dropoff)
+                                <MapPin size={20} color="var(--color-success)" /> Destination (Optional)
                             </h3>
                             <div style={{ display: 'flex', gap: '1rem' }}>
                                 <Input
@@ -159,7 +196,6 @@ const CreateOrder = () => {
                                     value={formData.dropoffLat}
                                     onChange={handleChange}
                                     placeholder="e.g. 19.4000"
-                                    required
                                 />
                                 <Input
                                     label="Longitude"
@@ -169,7 +205,6 @@ const CreateOrder = () => {
                                     value={formData.dropoffLng}
                                     onChange={handleChange}
                                     placeholder="e.g. -99.1000"
-                                    required
                                 />
                             </div>
                         </Card>

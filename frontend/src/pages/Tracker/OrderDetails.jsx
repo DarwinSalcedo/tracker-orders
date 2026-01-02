@@ -69,9 +69,23 @@ const OrderDetails = ({ order, onBack }) => {
                         Routing and destination matrix.
                     </p>
                     <div style={{ padding: '1rem', background: 'var(--bg-secondary)', borderRadius: 'var(--radius-md)' }}>
-                        <p><strong>Origin:</strong> {order.pickup ? `${order.pickup.lat}, ${order.pickup.lng}` : 'N/A'}</p>
+                        <p><strong>Origin:</strong> {order.pickup?.lat ? `${order.pickup.lat}, ${order.pickup.lng}` : 'Unspecified'}</p>
                         <div style={{ height: '1px', background: 'var(--glass-border)', margin: '0.5rem 0' }} />
-                        <p><strong>Destination:</strong> {order.dropoff ? `${order.dropoff.lat}, ${order.dropoff.lng}` : 'N/A'}</p>
+                        <p><strong>Destination:</strong> {order.dropoff?.lat ? `${order.dropoff.lat}, ${order.dropoff.lng}` : 'Unspecified'}</p>
+
+                        {(order.deliveryPerson || order.deliveryInstructions) && (
+                            <>
+                                <div style={{ height: '1px', background: 'var(--glass-border)', margin: '0.5rem 0' }} />
+                                {order.deliveryPerson && (
+                                    <p style={{ marginBottom: '0.5rem' }}><strong>Delivery:</strong> {order.deliveryPerson}</p>
+                                )}
+                                {order.deliveryInstructions && (
+                                    <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', fontStyle: 'italic' }}>
+                                        " {order.deliveryInstructions} "
+                                    </p>
+                                )}
+                            </>
+                        )}
                     </div>
                     {/* Here we would integrate a map like Google Maps or Leaflet */}
                     <div style={{ marginTop: '1rem', height: '100px', background: 'rgba(255,255,255,0.05)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>

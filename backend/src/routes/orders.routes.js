@@ -28,9 +28,9 @@ router.get('/orders', async (req, res) => {
     }
 });
 
-// Create Order (Backoffice)
+// Create Shipment (Backoffice)
 router.post('/orders', async (req, res) => {
-    const { trackingId, email, pickup, dropoff } = req.body;
+    const { trackingId, email, pickup, dropoff, deliveryPerson, deliveryInstructions } = req.body;
 
     if (!trackingId || !email) {
         return res.status(400).json({ error: 'Tracking ID and Email are required' });
@@ -45,12 +45,12 @@ router.post('/orders', async (req, res) => {
             return res.status(500).json({ error: "Default status 'created' not found." });
         }
 
-        // Insert Order
+        // Insert Shipment
         const result = await query(
-            `INSERT INTO orders (id, email, current_status_id, pickup_lat, pickup_lng, dropoff_lat, dropoff_lng) 
-       VALUES ($1, $2, $3, $4, $5, $6, $7) 
+            `INSERT INTO orders (id, email, current_status_id, pickup_lat, pickup_lng, dropoff_lat, dropoff_lng, delivery_person, delivery_instructions) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
        RETURNING *`,
-            [trackingId, email, createdStatusId, pickup?.lat, pickup?.lng, dropoff?.lat, dropoff?.lng]
+            [trackingId, email, createdStatusId, pickup?.lat, pickup?.lng, dropoff?.lat, dropoff?.lng, deliveryPerson, deliveryInstructions]
         );
 
         // Add initial history entry

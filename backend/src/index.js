@@ -68,6 +68,8 @@ app.post("/api/track", async (req, res) => {
       location: { lat: order.location_lat, lng: order.location_lng },
       pickup: { lat: order.pickup_lat, lng: order.pickup_lng },
       dropoff: { lat: order.dropoff_lat, lng: order.dropoff_lng },
+      deliveryPerson: order.delivery_person,
+      deliveryInstructions: order.delivery_instructions,
       history: historyRes.rows.map(h => ({
         status: h.status_label,
         date: h.timestamp,
