@@ -68,7 +68,18 @@ router.post('/orders', async (req, res) => {
 // Update Order (Backoffice)
 router.patch('/orders/:id', async (req, res) => {
     const { id } = req.params;
-    const { statusCode, lat, lng } = req.body;
+    const {
+        statusCode,
+        lat,
+        lng,
+        email,
+        deliveryPerson,
+        deliveryInstructions,
+        pickupLat,
+        pickupLng,
+        dropoffLat,
+        dropoffLng
+    } = req.body;
 
     try {
         let updateQuery = 'UPDATE orders SET updated_at = NOW()';
@@ -87,7 +98,37 @@ router.patch('/orders/:id', async (req, res) => {
             params.push(statusId);
         }
 
-        // Update location if provided
+        // Update basic info
+        if (email !== undefined) {
+            updateQuery += `, email = $${paramCount++}`;
+            params.push(email);
+        }
+        if (deliveryPerson !== undefined) {
+            updateQuery += `, delivery_person = $${paramCount++}`;
+            params.push(deliveryPerson);
+        }
+        if (deliveryInstructions !== undefined) {
+            updateQuery += `, delivery_instructions = $${paramCount++}`;
+            params.push(deliveryInstructions);
+        }
+        if (pickupLat !== undefined) {
+            updateQuery += `, pickup_lat = $${paramCount++}`;
+            params.push(pickupLat);
+        }
+        if (pickupLng !== undefined) {
+            updateQuery += `, pickup_lng = $${paramCount++}`;
+            params.push(pickupLng);
+        }
+        if (dropoffLat !== undefined) {
+            updateQuery += `, dropoff_lat = $${paramCount++}`;
+            params.push(dropoffLat);
+        }
+        if (dropoffLng !== undefined) {
+            updateQuery += `, dropoff_lng = $${paramCount++}`;
+            params.push(dropoffLng);
+        }
+
+        // Update current tracking location (if provided)
         if (lat !== undefined && lng !== undefined) {
             updateQuery += `, location_lat = $${paramCount++}, location_lng = $${paramCount++}`;
             params.push(lat, lng);
@@ -100,12 +141,11 @@ router.patch('/orders/:id', async (req, res) => {
         const result = await query(updateQuery, params);
 
         if (result.rows.length === 0) {
-            return res.status(404).json({ error: 'Order not found' });
+            return res.status(404).json({ error: 'Shipment not found' });
         }
 
         // Add history entry if status or location changed
         if (statusId || (lat !== undefined && lng !== undefined)) {
-            // Use current order status if not changing status, or new status if changing
             const historyStatusId = statusId || result.rows[0].current_status_id;
             const historyLat = lat !== undefined ? lat : result.rows[0].location_lat;
             const historyLng = lng !== undefined ? lng : result.rows[0].location_lng;
@@ -116,6 +156,8 @@ router.patch('/orders/:id', async (req, res) => {
                 [id, historyStatusId, historyLat, historyLng]
             );
         }
+
+        res.json(result.rows[0]);
 
         res.json(result.rows[0]);
     } catch (err) {

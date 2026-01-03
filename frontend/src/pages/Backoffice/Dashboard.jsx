@@ -20,9 +20,11 @@ import {
     Trash2,
     ClipboardList,
     Boxes,
-    Navigation
+    Navigation,
+    Edit2
 } from 'lucide-react';
 import Input from '../../components/ui/Input';
+import EditShipmentModal from './EditShipmentModal';
 
 const Dashboard = () => {
     const navigate = useNavigate();
@@ -33,6 +35,8 @@ const Dashboard = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [refreshing, setRefreshing] = useState(false);
     const [actionLoading, setActionLoading] = useState(null); // tracking ID of order being updated
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [editingShipment, setEditingShipment] = useState(null);
 
     const fetchOrders = async () => {
         try {
@@ -85,6 +89,21 @@ const Dashboard = () => {
         } finally {
             setActionLoading(null);
         }
+    };
+
+    const handleUpdateShipment = async (id, updateData) => {
+        try {
+            await orderService.updateOrder(id, updateData);
+            await fetchOrders();
+        } catch (err) {
+            console.error('Failed to update shipment:', err);
+            throw err;
+        }
+    };
+
+    const openEditModal = (shipment) => {
+        setEditingShipment(shipment);
+        setIsEditModalOpen(true);
     };
 
     const filteredOrders = orders.filter(order => {
@@ -202,7 +221,12 @@ const Dashboard = () => {
                                             onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                                         >
                                             <td style={{ padding: '1.25rem 1.5rem' }}>
-                                                <span style={{ fontWeight: '600', color: 'var(--color-primary)' }}>#{order.id}</span>
+                                                <span
+                                                    style={{ fontWeight: '600', color: 'var(--color-primary)', cursor: 'pointer', textDecoration: 'underline' }}
+                                                    onClick={() => openEditModal(order)}
+                                                >
+                                                    #{order.id}
+                                                </span>
                                             </td>
                                             <td style={{ padding: '1.25rem 1.5rem' }}>
                                                 <div style={{ fontSize: '0.95rem' }}>{order.email}</div>
@@ -234,6 +258,14 @@ const Dashboard = () => {
                                                         onClick={() => navigate(`/track?id=${order.id}&email=${order.email}`)}
                                                     >
                                                         <ExternalLink size={18} />
+                                                    </button>
+
+                                                    <button
+                                                        style={{ color: 'var(--color-primary)', background: 'none', border: 'none', cursor: 'pointer', display: 'flex' }}
+                                                        title="Edit Shipment"
+                                                        onClick={() => openEditModal(order)}
+                                                    >
+                                                        <Edit2 size={18} />
                                                     </button>
 
                                                     <select
@@ -281,6 +313,13 @@ const Dashboard = () => {
                     </div>
                 </Card>
             </div>
+
+            <EditShipmentModal
+                isOpen={isEditModalOpen}
+                onClose={() => setIsEditModalOpen(false)}
+                shipment={editingShipment}
+                onUpdate={handleUpdateShipment}
+            />
         </div>
     );
 };
