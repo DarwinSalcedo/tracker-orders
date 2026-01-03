@@ -4,7 +4,11 @@ import { CheckCircle, Truck, Package, MapPin, Clock } from 'lucide-react';
 
 const StatusTimeline = ({ history = [] }) => {
     // Sort history by timestamp descending (newest first)
-    const sortedHistory = [...history].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    const sortedHistory = [...history].sort((a, b) => {
+        const dateA = new Date(a.timestamp);
+        const dateB = new Date(b.timestamp);
+        return dateB - dateA;
+    });
 
     const getIcon = (status) => {
         switch (status) {
@@ -87,10 +91,17 @@ const StatusTimeline = ({ history = [] }) => {
                                         {new Date(event.timestamp).toLocaleString()}
                                     </span>
                                 </div>
+
+                                {event.description && (
+                                    <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', marginBottom: '0.5rem' }}>
+                                        {event.description}
+                                    </p>
+                                )}
+
                                 {event.location && (event.location.lat || event.location.address) && (
-                                    <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                                        <MapPin size={14} />
-                                        {event.location.address || `Lat: ${event.location.lat}, Lng: ${event.location.lng}`}
+                                    <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', display: 'flex', alignItems: 'center', gap: '0.25rem', opacity: 0.8 }}>
+                                        <MapPin size={12} />
+                                        {event.location.address || `Manifested at ${event.location.lat.toFixed(4)}, ${event.location.lng.toFixed(4)}`}
                                     </div>
                                 )}
                             </div>

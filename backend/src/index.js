@@ -53,7 +53,7 @@ app.post("/api/track", async (req, res) => {
 
     // 2. Get Order History
     const historyRes = await query(
-      `SELECT h.*, s.label as status_label 
+      `SELECT h.*, s.label as status_label, s.description as status_description 
        FROM order_history h
        JOIN order_statuses s ON h.status_id = s.id
        WHERE h.order_id = $1
@@ -72,7 +72,8 @@ app.post("/api/track", async (req, res) => {
       deliveryInstructions: order.delivery_instructions,
       history: historyRes.rows.map(h => ({
         status: h.status_label,
-        date: h.timestamp,
+        description: h.status_description,
+        timestamp: h.timestamp,
         location: { lat: h.location_lat, lng: h.location_lng }
       }))
     });
