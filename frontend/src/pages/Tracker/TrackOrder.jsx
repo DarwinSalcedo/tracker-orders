@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
 import Card from '../../components/ui/Card';
-import { Search, Mail, Loader, ArrowLeft } from 'lucide-react';
+import { Search, Mail, Loader, ArrowLeft, LayoutDashboard } from 'lucide-react';
 import { orderService } from '../../services/orderService';
 import OrderDetails from './OrderDetails';
-import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const TrackOrder = () => {
     const navigate = useNavigate();
+    const { isAuthenticated } = useAuth();
     const [searchParams] = useSearchParams();
     const [trackingId, setTrackingId] = useState(searchParams.get('id') || '');
     const [email, setEmail] = useState(searchParams.get('email') || '');
@@ -74,11 +76,18 @@ const TrackOrder = () => {
             background: 'radial-gradient(ellipse at top, #0f172a, #000000)'
         }}>
             {/* Header / Nav */}
-            <div className="container" style={{ width: '100%', marginBottom: '2rem', display: 'flex', justifyContent: 'flex-start' }}>
+            <div className="container" style={{ width: '100%', marginBottom: '2rem', display: 'flex', justifyContent: 'flex-start', gap: '1rem' }}>
                 {!orderData && (
-                    <Button variant="ghost" onClick={() => navigate('/')}>
-                        <ArrowLeft size={18} /> Back to Home
-                    </Button>
+                    <>
+                        <Button variant="ghost" onClick={() => navigate(-1)}>
+                            <ArrowLeft size={18} /> Back
+                        </Button>
+                        {isAuthenticated && (
+                            <Button variant="ghost" onClick={() => navigate('/backoffice/dashboard')}>
+                                <LayoutDashboard size={18} /> Dashboard
+                            </Button>
+                        )}
+                    </>
                 )}
             </div>
 

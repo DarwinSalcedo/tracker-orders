@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import { motion } from 'framer-motion';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
@@ -7,6 +8,7 @@ import { Truck, ShieldCheck, ArrowRight, Boxes } from 'lucide-react';
 
 const Home = () => {
     const navigate = useNavigate();
+    const { isAuthenticated } = useAuth();
 
     return (
         <div className="page flex-center" style={{
@@ -41,7 +43,7 @@ const Home = () => {
                         </div>
                     </Card>
 
-                    <Card hover onClick={() => navigate('/backoffice/login')} className="pointer">
+                    <Card hover onClick={() => navigate(isAuthenticated ? '/backoffice/dashboard' : '/backoffice/login')} className="pointer">
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
                             <div style={{ padding: '1rem', background: 'rgba(139, 92, 246, 0.1)', borderRadius: '50%' }}>
                                 <ShieldCheck size={40} color="var(--color-accent)" />
@@ -50,8 +52,8 @@ const Home = () => {
                             <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>
                                 Manage manifests, update waybills, and view analytics.
                             </p>
-                            <Button variant="primary" onClick={() => navigate('/backoffice/login')} fullWidth>
-                                Login <ArrowRight size={16} />
+                            <Button variant="primary" onClick={() => navigate(isAuthenticated ? '/backoffice/dashboard' : '/backoffice/login')} fullWidth>
+                                {isAuthenticated ? 'Go to Dashboard' : 'Login'} <ArrowRight size={16} />
                             </Button>
                         </div>
                     </Card>

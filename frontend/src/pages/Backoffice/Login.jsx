@@ -12,8 +12,15 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const { login } = useAuth();
+    const { login, isAuthenticated } = useAuth();
     const navigate = useNavigate();
+
+    // Redirect if already authenticated
+    React.useEffect(() => {
+        if (isAuthenticated) {
+            navigate('/backoffice/dashboard', { replace: true });
+        }
+    }, [isAuthenticated, navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -22,7 +29,7 @@ const Login = () => {
 
         try {
             await login(username, password);
-            navigate('/backoffice/dashboard'); // Redirect after login
+            navigate('/backoffice/dashboard', { replace: true }); // Redirect after login
         } catch (err) {
             setError(err.message || 'Failed to login');
         } finally {

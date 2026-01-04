@@ -17,7 +17,6 @@ import {
     Clock,
     CheckCircle,
     Truck,
-    Trash2,
     ClipboardList,
     Boxes,
     Navigation,
@@ -75,21 +74,6 @@ const Dashboard = () => {
         } catch (err) {
             console.error('Failed to update status:', err);
             alert('Failed to update status. Please try again.');
-        } finally {
-            setActionLoading(null);
-        }
-    };
-
-    const handleSoftDelete = async (orderId) => {
-        if (!window.confirm('Are you sure you want to hide/delete this order?')) return;
-
-        setActionLoading(orderId);
-        try {
-            await orderService.updateOrder(orderId, { statusCode: 'deleted' });
-            await fetchOrders();
-        } catch (err) {
-            console.error('Failed to delete order:', err);
-            alert('Failed to delete order. Please try again.');
         } finally {
             setActionLoading(null);
         }
@@ -404,16 +388,6 @@ const Dashboard = () => {
                                                                 </button>
                                                             )}
 
-                                                            {user?.role === 'Admin' && order.status_code !== 'archived' && (
-                                                                <button
-                                                                    style={{ color: 'var(--color-error)', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', opacity: 0.7 }}
-                                                                    title="Delete Order"
-                                                                    onClick={() => handleSoftDelete(order.id)}
-                                                                    disabled={actionLoading === order.id}
-                                                                >
-                                                                    <Trash2 size={18} />
-                                                                </button>
-                                                            )}
 
                                                             {actionLoading === order.id && <Loader size={14} className="spin" style={{ color: 'var(--color-primary)' }} />}
                                                         </div>
