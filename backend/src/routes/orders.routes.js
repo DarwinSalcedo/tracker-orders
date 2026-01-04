@@ -4,16 +4,6 @@ import { verifyToken, authorize } from '../middleware/auth.middleware.js';
 
 const router = express.Router();
 
-// Get Statuses (Helper)
-router.get('/statuses', verifyToken, async (req, res) => {
-    try {
-        const result = await query('SELECT * FROM order_statuses ORDER BY id ASC');
-        res.json(result.rows);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
-
 // Get All Orders (Backoffice Dashboard)
 router.get('/orders', verifyToken, async (req, res) => {
     try {

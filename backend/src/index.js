@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import ordersRoutes from "./routes/orders.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import usersRoutes from "./routes/users.routes.js";
+import statusesRoutes from "./routes/statuses.routes.js";
 
 import { query } from "./config/db.js";
 
@@ -28,6 +29,9 @@ app.use("/api/auth", authRoutes);
 
 // User Management Routes
 app.use("/api/users", usersRoutes);
+
+// Status Management Routes
+app.use("/api/statuses", statusesRoutes);
 
 // Backoffice Routes
 app.use("/api", ordersRoutes);

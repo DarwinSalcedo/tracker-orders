@@ -39,6 +39,6 @@ INSERT INTO order_statuses (code, label, description)
 VALUES 
     ('created', 'Order Placed', 'Your order has been placed and is being processed.'),
     ('in_transit', 'In Transit', 'Your package is on its way.'),
-    ('delivered', 'Delivered', 'Your package has been delivered.'),
-    ('deleted', 'Deleted/Archived', 'This order has been deleted or archived.')
+    ('delivered', 'Delivery', 'Your package has been delivered.'),
+    ('archived', 'Archived', 'This order has been moved to archive.')
 ON CONFLICT (code) DO NOTHING;
