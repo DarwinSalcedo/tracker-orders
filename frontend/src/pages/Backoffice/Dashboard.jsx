@@ -101,7 +101,9 @@ const Dashboard = () => {
     const filteredOrders = orders.filter(order => {
         const matchesSearch =
             order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            order.email.toLowerCase().includes(searchTerm.toLowerCase());
+            order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (order.email && order.email.toLowerCase().includes(searchTerm.toLowerCase())) ||
+            (order.customer_name && order.customer_name.toLowerCase().includes(searchTerm.toLowerCase()));
 
         const isNotDeleted = order.status_code !== 'deleted';
 
@@ -213,7 +215,15 @@ const Dashboard = () => {
                                             </span>
                                         </td>
                                         <td style={{ padding: '1.25rem 1.5rem' }}>
-                                            <div style={{ fontSize: '0.95rem' }}>{order.email}</div>
+                                            <div style={{ fontWeight: '500', color: 'var(--color-text-main)' }}>
+                                                {order.customer_name || <span style={{ fontStyle: 'italic', color: 'var(--color-text-muted)' }}>Guest</span>}
+                                            </div>
+                                            {order.email && <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>{order.email}</div>}
+                                            {order.customer_phone && (
+                                                <div style={{ fontSize: '0.8rem', color: 'var(--color-text-dim)', marginTop: '0.25rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                                    <Hash size={12} /> {order.customer_phone}
+                                                </div>
+                                            )}
                                         </td>
                                         <td style={{ padding: '1.25rem 1.5rem' }}>
                                             <span style={{

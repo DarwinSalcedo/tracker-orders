@@ -19,7 +19,9 @@ const createTables = async () => {
     await query(`
       CREATE TABLE IF NOT EXISTS orders (
         id VARCHAR(50) PRIMARY KEY,
-        email VARCHAR(255) NOT NULL,
+        email VARCHAR(255),
+        customer_name VARCHAR(255),
+        customer_phone VARCHAR(50),
         location_lat DECIMAL(9, 6),
         location_lng DECIMAL(9, 6),
         pickup_lat DECIMAL(9, 6),

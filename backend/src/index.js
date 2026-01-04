@@ -43,8 +43,8 @@ app.get("/health", (req, res) => {
 app.post("/api/track", async (req, res) => {
   const { trackingId, email } = req.body;
 
-  if (!trackingId || !email) {
-    return res.status(400).json({ error: "Missing data" });
+  if (!trackingId) {
+    return res.status(400).json({ error: "Tracking ID is required" });
   }
 
   try {
@@ -53,8 +53,8 @@ app.post("/api/track", async (req, res) => {
       `SELECT o.*, s.code as status_code, s.label as status_label 
        FROM orders o
        JOIN order_statuses s ON o.current_status_id = s.id
-       WHERE o.id = $1 AND o.email = $2`,
-      [trackingId, email]
+     WHERE o.id = $1`,
+      [trackingId]
     );
 
     if (orderRes.rows.length === 0) {
@@ -62,6 +62,11 @@ app.post("/api/track", async (req, res) => {
     }
 
     const order = orderRes.rows[0];
+
+    // Security Check: If order has email, req must provide matching email
+    if (order.email && (!email || email.toLowerCase() !== order.email.toLowerCase())) {
+      return res.status(403).json({ error: "Invalid credentials for this order" });
+    }
 
     // 2. Get Order History
     const historyRes = await query(
@@ -77,6 +82,9 @@ app.post("/api/track", async (req, res) => {
       trackingId: order.id,
       status: order.status_code,
       statusLabel: order.status_label,
+      customerName: order.customer_name,
+      customerPhone: order.customer_phone,
+      email: order.email,
       location: { lat: order.location_lat, lng: order.location_lng },
       pickup: { lat: order.pickup_lat, lng: order.pickup_lng },
       dropoff: { lat: order.dropoff_lat, lng: order.dropoff_lng },

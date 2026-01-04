@@ -21,10 +21,10 @@ router.get('/orders', verifyToken, async (req, res) => {
 
 // Create Shipment (Backoffice)
 router.post('/orders', verifyToken, authorize('Admin'), async (req, res) => {
-    const { trackingId, email, pickup, dropoff, deliveryPerson, deliveryInstructions } = req.body;
+    const { trackingId, email, customerName, customerPhone, pickup, dropoff, deliveryPerson, deliveryInstructions } = req.body;
 
-    if (!trackingId || !email) {
-        return res.status(400).json({ error: 'Tracking ID and Email are required' });
+    if (!trackingId) {
+        return res.status(400).json({ error: 'Tracking ID is required' });
     }
 
     try {
@@ -38,10 +38,10 @@ router.post('/orders', verifyToken, authorize('Admin'), async (req, res) => {
 
         // Insert Shipment
         const result = await query(
-            `INSERT INTO orders (id, email, current_status_id, pickup_lat, pickup_lng, dropoff_lat, dropoff_lng, delivery_person, delivery_instructions) 
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
+            `INSERT INTO orders (id, email, customer_name, customer_phone, current_status_id, pickup_lat, pickup_lng, dropoff_lat, dropoff_lng, delivery_person, delivery_instructions) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) 
        RETURNING *`,
-            [trackingId, email, createdStatusId, pickup?.lat, pickup?.lng, dropoff?.lat, dropoff?.lng, deliveryPerson, deliveryInstructions]
+            [trackingId, email, customerName, customerPhone, createdStatusId, pickup?.lat, pickup?.lng, dropoff?.lat, dropoff?.lng, deliveryPerson, deliveryInstructions]
         );
 
         // Add initial history entry
@@ -64,6 +64,8 @@ router.patch('/orders/:id', verifyToken, authorize(['Admin', 'Delivery']), async
         lat,
         lng,
         email,
+        customerName,
+        customerPhone,
         deliveryPerson,
         deliveryInstructions,
         pickupLat,
@@ -128,6 +130,14 @@ router.patch('/orders/:id', verifyToken, authorize(['Admin', 'Delivery']), async
         if (email !== undefined) {
             updateQuery += `, email = $${paramCount++}`;
             params.push(email);
+        }
+        if (customerName !== undefined) {
+            updateQuery += `, customer_name = $${paramCount++}`;
+            params.push(customerName);
+        }
+        if (customerPhone !== undefined) {
+            updateQuery += `, customer_phone = $${paramCount++}`;
+            params.push(customerPhone);
         }
         if (deliveryPerson !== undefined) {
             updateQuery += `, delivery_person = $${paramCount++}`;

@@ -47,8 +47,8 @@ const TrackOrder = () => {
 
     const handleTrack = async (e) => {
         e.preventDefault();
-        if (!trackingId || !email) {
-            setError("Please fill in all fields");
+        if (!trackingId) {
+            setError("Please enter a tracking ID");
             return;
         }
 
@@ -130,13 +130,12 @@ const TrackOrder = () => {
                                         required
                                     />
                                     <Input
-                                        label={t('track.placeholder_email')}
+                                        label={t('track.placeholder_email') + " (Optional)"}
                                         type="email"
                                         placeholder={t('track.placeholder_email')}
                                         icon={Mail}
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
-                                        required
                                     />
 
                                     {error && (

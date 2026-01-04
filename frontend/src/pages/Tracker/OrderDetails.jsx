@@ -95,11 +95,32 @@ const OrderDetails = ({ order, onBack }) => {
                             </>
                         )}
                     </div>
+                    {(order.customerName || order.customerPhone) && (
+                        <div style={{ marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid var(--glass-border)' }}>
+                            <h4 style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                Receiver Details
+                            </h4>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                {order.customerName && (
+                                    <div>
+                                        <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Name</p>
+                                        <p style={{ fontWeight: '500' }}>{order.customerName}</p>
+                                    </div>
+                                )}
+                                {order.customerPhone && (
+                                    <div>
+                                        <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Phone</p>
+                                        <p style={{ fontWeight: '500' }}>{order.customerPhone}</p>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
                 </Card>
             </div>
 
             <StatusTimeline history={order.history} />
-        </motion.div>
+        </motion.div >
     );
 };
 

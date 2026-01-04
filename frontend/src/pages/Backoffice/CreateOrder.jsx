@@ -31,6 +31,8 @@ const CreateOrder = () => {
     const [formData, setFormData] = useState({
         trackingId: `TRK-${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
         email: '',
+        customerName: '',
+        customerPhone: '',
         pickupLat: '',
         pickupLng: '',
         dropoffLat: '',
@@ -53,6 +55,8 @@ const CreateOrder = () => {
             const payload = {
                 trackingId: formData.trackingId,
                 email: formData.email,
+                customerName: formData.customerName,
+                customerPhone: formData.customerPhone,
                 pickup: formData.pickupLat && formData.pickupLng ? { lat: parseFloat(formData.pickupLat), lng: parseFloat(formData.pickupLng) } : null,
                 dropoff: formData.dropoffLat && formData.dropoffLng ? { lat: parseFloat(formData.dropoffLat), lng: parseFloat(formData.dropoffLng) } : null,
                 deliveryPerson: formData.deliveryPerson,
@@ -121,14 +125,29 @@ const CreateOrder = () => {
                                 required
                             />
                             <Input
-                                label="Client Email"
+                                label={t('track.client')}
+                                name="customerName"
+                                value={formData.customerName}
+                                onChange={handleChange}
+                                placeholder="John Doe"
+                                icon={User}
+                            />
+                            <Input
+                                label={t('track.customer_phone')}
+                                name="customerPhone"
+                                value={formData.customerPhone}
+                                onChange={handleChange}
+                                placeholder="+1 234 567 890"
+                                icon={Hash}
+                            />
+                            <Input
+                                label="Client Email (Optional)"
                                 name="email"
                                 type="email"
                                 value={formData.email}
                                 onChange={handleChange}
                                 placeholder="customer@example.com"
                                 icon={Mail}
-                                required
                             />
                             <Input
                                 label="Delivery Person (Optional)"

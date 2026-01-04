@@ -33,7 +33,9 @@
         "client": "Client",
         "dest": "Destination",
         "origin": "Origin",
-        "status": "Current Status"
+        "status": "Current Status",
+        "customer_name": "Customer Name",
+        "customer_phone": "Phone Number"
     },
     "dashboard": {
         "welcome": "Welcome back",
@@ -49,6 +51,7 @@
         "table": {
             "id": "Waybill / ID",
             "client": "Client",
+            "name": "Name",
             "status": "Status",
             "registered": "Registered",
             "actions": "Actions"

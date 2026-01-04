@@ -19,6 +19,8 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
     const [error, setError] = useState('');
     const [formData, setFormData] = useState({
         email: '',
+        customerName: '',
+        customerPhone: '',
         deliveryPerson: '',
         deliveryInstructions: '',
         pickupLat: '',
@@ -31,6 +33,8 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
         if (shipment) {
             setFormData({
                 email: shipment.email || '',
+                customerName: shipment.customer_name || '',
+                customerPhone: shipment.customer_phone || '',
                 deliveryPerson: shipment.delivery_person || '',
                 deliveryInstructions: shipment.delivery_instructions || '',
                 pickupLat: shipment.pickup_lat || '',
@@ -54,6 +58,8 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
         try {
             const updateData = {
                 email: formData.email,
+                customerName: formData.customerName,
+                customerPhone: formData.customerPhone,
                 deliveryPerson: formData.deliveryPerson,
                 deliveryInstructions: formData.deliveryInstructions,
                 pickupLat: formData.pickupLat ? parseFloat(formData.pickupLat) : null,
@@ -117,13 +123,26 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
                                 <div>
                                     <h4 style={{ marginBottom: '1.5rem', color: 'var(--color-text-muted)', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Shipment Logistics</h4>
                                     <Input
-                                        label="Client Email"
+                                        label="Customer Name"
+                                        name="customerName"
+                                        value={formData.customerName}
+                                        onChange={handleChange}
+                                        icon={User}
+                                    />
+                                    <Input
+                                        label="Phone Number"
+                                        name="customerPhone"
+                                        value={formData.customerPhone}
+                                        onChange={handleChange}
+                                        icon={Hash}
+                                    />
+                                    <Input
+                                        label="Client Email (Optional)"
                                         name="email"
                                         type="email"
                                         value={formData.email}
                                         onChange={handleChange}
                                         icon={Mail}
-                                        required
                                     />
                                     <Input
                                         label="Delivery Person (Optional)"

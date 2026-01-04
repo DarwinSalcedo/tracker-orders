@@ -33,7 +33,9 @@
         "client": "Cliente",
         "dest": "Destino",
         "origin": "Origen",
-        "status": "Estado Actual"
+        "status": "Estado Actual",
+        "customer_name": "Nombre Cliente",
+        "customer_phone": "Teléfono"
     },
     "dashboard": {
         "welcome": "Bienvenido de nuevo",
@@ -49,6 +51,7 @@
         "table": {
             "id": "Guía / ID",
             "client": "Cliente",
+            "name": "Nombre",
             "status": "Estado",
             "registered": "Registrado",
             "actions": "Acciones"
