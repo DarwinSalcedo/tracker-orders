@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
 import Card from '../../components/ui/Card';
-import { Lock, User, UserPlus, ArrowRight, Loader, ShieldCheck } from 'lucide-react';
+import { Lock, User, UserPlus, ArrowRight, Loader, ShieldCheck, Truck } from 'lucide-react';
 
 const Register = () => {
     const [username, setUsername] = useState('');
@@ -85,18 +85,53 @@ const Register = () => {
                         />
 
                         <div className="input-group" style={{ marginBottom: '1.5rem' }}>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--color-text-dim)', fontSize: '0.875rem' }}>Role</label>
-                            <div style={{ position: 'relative' }}>
-                                <ShieldCheck size={20} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--color-text-muted)' }} />
-                                <select
-                                    className="input-field"
-                                    value={role}
-                                    onChange={(e) => setRole(e.target.value)}
-                                    style={{ width: '100%', paddingLeft: '40px', appearance: 'none' }}
+                            <label style={{ display: 'block', marginBottom: '0.75rem', color: 'var(--color-text-dim)', fontSize: '0.875rem', fontWeight: '500' }}>Select Account Type</label>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                <motion.div
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    onClick={() => setRole('Admin')}
+                                    style={{
+                                        padding: '1rem',
+                                        background: role === 'Admin' ? 'rgba(99, 102, 241, 0.15)' : 'rgba(255, 255, 255, 0.03)',
+                                        border: `2px solid ${role === 'Admin' ? 'var(--color-primary)' : 'var(--glass-border)'}`,
+                                        borderRadius: '12px',
+                                        cursor: 'pointer',
+                                        textAlign: 'center',
+                                        transition: 'all 0.2s ease'
+                                    }}
                                 >
-                                    <option value="Admin">Admin</option>
-                                    <option value="Delivery">Delivery</option>
-                                </select>
+                                    <ShieldCheck
+                                        size={24}
+                                        color={role === 'Admin' ? 'var(--color-primary)' : 'var(--color-text-muted)'}
+                                        style={{ marginBottom: '0.5rem' }}
+                                    />
+                                    <div style={{ fontWeight: '600', fontSize: '0.9rem', color: role === 'Admin' ? 'white' : 'var(--color-text-muted)' }}>Admin</div>
+                                    <div style={{ fontSize: '0.7rem', color: 'var(--color-text-dim)', marginTop: '0.25rem' }}>Full Control</div>
+                                </motion.div>
+
+                                <motion.div
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    onClick={() => setRole('Delivery')}
+                                    style={{
+                                        padding: '1rem',
+                                        background: role === 'Delivery' ? 'rgba(99, 102, 241, 0.15)' : 'rgba(255, 255, 255, 0.03)',
+                                        border: `2px solid ${role === 'Delivery' ? 'var(--color-primary)' : 'var(--glass-border)'}`,
+                                        borderRadius: '12px',
+                                        cursor: 'pointer',
+                                        textAlign: 'center',
+                                        transition: 'all 0.2s ease'
+                                    }}
+                                >
+                                    <Truck
+                                        size={24}
+                                        color={role === 'Delivery' ? 'var(--color-primary)' : 'var(--color-text-muted)'}
+                                        style={{ marginBottom: '0.5rem' }}
+                                    />
+                                    <div style={{ fontWeight: '600', fontSize: '0.9rem', color: role === 'Delivery' ? 'white' : 'var(--color-text-muted)' }}>Delivery</div>
+                                    <div style={{ fontSize: '0.7rem', color: 'var(--color-text-dim)', marginTop: '0.25rem' }}>Field Ops</div>
+                                </motion.div>
                             </div>
                         </div>
 
