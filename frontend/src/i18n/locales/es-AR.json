@@ -1,0 +1,57 @@
+{
+    "common": {
+        "loading": "Cargando...",
+        "error": "Ocurrió un error",
+        "save": "Guardar Cambios",
+        "cancel": "Cancelar",
+        "back": "Volver",
+        "logout": "Cerrar Sesión",
+        "dashboard": "Panel de Control",
+        "login": "Iniciar Sesión",
+        "register": "Registrarse"
+    },
+    "home": {
+        "title": "Seguí tus pedidos en tiempo real.",
+        "subtitle": "La solución logística definitiva para empresas modernas y clientes.",
+        "track_card_title": "Seguir Envío",
+        "track_card_desc": "Consultá el estado de tu entrega al instante con tu número de guía.",
+        "portal_card_title": "Portal Logístico",
+        "portal_card_desc": "Acceso para administradores y repartidores para gestión de manifiestos.",
+        "go_to_dashboard": "Ir al Panel"
+    },
+    "track": {
+        "title": "Seguir Envío",
+        "placeholder_waybill": "ej: TRK-12345678",
+        "placeholder_email": "nombre@ejemplo.com",
+        "button": "Seguir Envío",
+        "back_to_search": "Nueva Búsqueda",
+        "history": "Historial de Seguimiento",
+        "manifested_at": "Registrado en",
+        "not_found": "Pedido no encontrado o credenciales inválidas",
+        "details_title": "Detalles del Envío",
+        "waybill": "Número de Guía",
+        "client": "Cliente",
+        "dest": "Destino",
+        "origin": "Origen",
+        "status": "Estado Actual"
+    },
+    "dashboard": {
+        "welcome": "Bienvenido de nuevo",
+        "logged_as": "Sesión iniciada como",
+        "register_shipment": "Registrar Envío",
+        "refresh": "Actualizar",
+        "tabs": {
+            "shipments": "Envíos",
+            "archived": "Archivados",
+            "users": "Usuarios",
+            "statuses": "Estados"
+        },
+        "table": {
+            "id": "Guía / ID",
+            "client": "Cliente",
+            "status": "Estado",
+            "registered": "Registrado",
+            "actions": "Acciones"
+        }
+    }
+}

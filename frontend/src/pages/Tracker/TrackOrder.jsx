@@ -9,8 +9,11 @@ import { Search, Mail, Loader, ArrowLeft, LayoutDashboard, Globe } from 'lucide-
 import { orderService } from '../../services/orderService';
 import OrderDetails from './OrderDetails';
 import ThemeToggle from '../../components/ui/ThemeToggle';
+import LanguageSwitcher from '../../components/ui/LanguageSwitcher';
+import { useTranslation } from 'react-i18next';
 
 const TrackOrder = () => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const { isAuthenticated } = useAuth();
     const [searchParams] = useSearchParams();
@@ -82,18 +85,21 @@ const TrackOrder = () => {
                     {!orderData ? (
                         <div className="flex-stack-sm" style={{ display: 'flex', gap: '1rem' }}>
                             <Button variant="secondary" onClick={() => navigate(-1)}>
-                                <ArrowLeft size={18} /> Back
+                                <ArrowLeft size={18} /> {t('common.back')}
                             </Button>
                             {isAuthenticated && (
                                 <Button variant="ghost" onClick={() => navigate('/backoffice/dashboard')}>
-                                    <LayoutDashboard size={18} /> Dashboard
+                                    <LayoutDashboard size={18} /> {t('common.dashboard')}
                                 </Button>
                             )}
                         </div>
                     ) : (
                         <div /> // Spacer
                     )}
-                    <ThemeToggle variant="minimal" />
+                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                        <LanguageSwitcher />
+                        <ThemeToggle variant="minimal" />
+                    </div>
                 </div>
             </div>
 
@@ -110,23 +116,23 @@ const TrackOrder = () => {
                         >
                             <Card>
                                 <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-                                    <h1 className="text-gradient">Track Shipment</h1>
-                                    <p style={{ color: 'var(--color-text-muted)' }}>Enter your waybill number and email to follow the delivery.</p>
+                                    <h1 className="text-gradient">{t('track.title')}</h1>
+                                    <p style={{ color: 'var(--color-text-muted)' }}>{t('track.placeholder_waybill')}</p>
                                 </div>
 
                                 <form onSubmit={handleTrack}>
                                     <Input
-                                        label="Waybill Number / Tracking ID"
-                                        placeholder="e.g. TRK-12345678"
+                                        label={t('track.title')}
+                                        placeholder={t('track.placeholder_waybill')}
                                         icon={Search}
                                         value={trackingId}
                                         onChange={(e) => setTrackingId(e.target.value)}
                                         required
                                     />
                                     <Input
-                                        label="Email Address"
+                                        label={t('track.placeholder_email')}
                                         type="email"
-                                        placeholder="name@example.com"
+                                        placeholder={t('track.placeholder_email')}
                                         icon={Mail}
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
@@ -139,12 +145,12 @@ const TrackOrder = () => {
                                             animate={{ opacity: 1, height: 'auto' }}
                                             style={{ color: 'var(--color-error)', background: 'rgba(239, 68, 68, 0.1)', padding: '0.5rem', borderRadius: '4px', marginBottom: '1rem', textAlign: 'center', fontSize: '0.9rem' }}
                                         >
-                                            {error}
+                                            {error === 'Order not found or invalid credentials' ? t('track.not_found') : error}
                                         </motion.div>
                                     )}
 
                                     <Button type="submit" fullWidth disabled={loading}>
-                                        {loading ? <Loader className="spin" size={20} /> : 'Track Shipment'}
+                                        {loading ? <Loader className="spin" size={20} /> : t('track.button')}
                                     </Button>
                                 </form>
                             </Card>

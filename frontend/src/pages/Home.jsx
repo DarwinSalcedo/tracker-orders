@@ -6,8 +6,11 @@ import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
 import { Truck, ShieldCheck, ArrowRight, Boxes } from 'lucide-react';
 import ThemeToggle from '../components/ui/ThemeToggle';
+import LanguageSwitcher from '../components/ui/LanguageSwitcher';
+import { useTranslation } from 'react-i18next';
 
 const Home = () => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const { isAuthenticated } = useAuth();
 
@@ -17,7 +20,8 @@ const Home = () => {
             padding: '2rem',
             position: 'relative'
         }}>
-            <div style={{ position: 'absolute', top: '2rem', right: '2rem' }}>
+            <div style={{ position: 'absolute', top: '2rem', right: '2rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                <LanguageSwitcher />
                 <ThemeToggle />
             </div>
             <div className="container" style={{ textAlign: 'center', maxWidth: '800px' }}>
@@ -28,7 +32,7 @@ const Home = () => {
                 >
                     <h1 className="text-gradient">Unknown Logistics</h1>
                     <p style={{ color: 'var(--color-text-muted)', marginBottom: '3rem' }}>
-                        Enterprise-grade shipment tracking. Real-time manifests with premium precision.
+                        {t('home.subtitle')}
                     </p>
                 </motion.div>
 
@@ -38,12 +42,12 @@ const Home = () => {
                             <div style={{ padding: '1rem', background: 'rgba(99, 102, 241, 0.1)', borderRadius: '50%' }}>
                                 <Truck size={40} color="var(--color-primary)" />
                             </div>
-                            <h3>Track Shipment</h3>
+                            <h3>{t('home.track_card_title')}</h3>
                             <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>
-                                Follow your shipment's journey in real-time.
+                                {t('home.track_card_desc')}
                             </p>
                             <Button variant="outline" onClick={() => navigate('/track')} fullWidth>
-                                Track Now
+                                {t('track.button')}
                             </Button>
                         </div>
                     </Card>
@@ -53,12 +57,12 @@ const Home = () => {
                             <div style={{ padding: '1rem', background: 'rgba(139, 92, 246, 0.1)', borderRadius: '50%' }}>
                                 <ShieldCheck size={40} color="var(--color-accent)" />
                             </div>
-                            <h3>Logistics Portal</h3>
+                            <h3>{t('home.portal_card_title')}</h3>
                             <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>
-                                Manage manifests, update waybills, and view analytics.
+                                {t('home.portal_card_desc')}
                             </p>
                             <Button variant="primary" onClick={() => navigate(isAuthenticated ? '/backoffice/dashboard' : '/backoffice/login')} fullWidth>
-                                {isAuthenticated ? 'Go to Dashboard' : 'Login'} <ArrowRight size={16} />
+                                {isAuthenticated ? t('home.go_to_dashboard') : t('common.login')} <ArrowRight size={16} />
                             </Button>
                         </div>
                     </Card>

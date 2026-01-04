@@ -9,11 +9,9 @@ import {
     Package,
     Search,
     Plus,
-    MoreVertical,
     ExternalLink,
     Loader,
     RefreshCw,
-    TrendingUp,
     Clock,
     CheckCircle,
     Truck,
@@ -22,8 +20,6 @@ import {
     Navigation,
     Edit2,
     Archive,
-    Shield,
-    Trash2,
     Settings
 } from 'lucide-react';
 import Input from '../../components/ui/Input';
@@ -32,8 +28,11 @@ import StatusManagement from './StatusManagement';
 import UserManagement from './UserManagement';
 import { Users } from 'lucide-react';
 import ThemeToggle from '../../components/ui/ThemeToggle';
+import LanguageSwitcher from '../../components/ui/LanguageSwitcher';
+import { useTranslation } from 'react-i18next';
 
 const Dashboard = () => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const { user, logout } = useAuth();
     const [orders, setOrders] = useState([]);
@@ -261,7 +260,7 @@ const Dashboard = () => {
                                                     disabled={actionLoading === order.id || order.status_code === 'archived'}
                                                     style={{
                                                         background: 'rgba(255,255,255,0.05)',
-                                                        color: 'white',
+                                                        color: 'gray',
                                                         border: '1px solid var(--glass-border)',
                                                         borderRadius: '4px',
                                                         fontSize: '0.8rem',
@@ -321,17 +320,18 @@ const Dashboard = () => {
 
     const renderShipmentControls = () => (
         <div className="flex-stack" style={{ display: 'flex', gap: '1rem' }}>
-            <Button variant="secondary" onClick={handleRefresh} disabled={refreshing}>
+            <Button variant="secondary" onClick={handleRefresh} disabled={refreshing} title={t('dashboard.refresh')}>
                 <RefreshCw size={18} className={refreshing ? 'spin' : ''} />
             </Button>
             {user?.role === 'Admin' && (
                 <Button variant="primary" onClick={() => navigate('/backoffice/create-order')}>
-                    <Plus size={18} /> Register Shipment
+                    <Plus size={18} /> {t('dashboard.register_shipment')}
                 </Button>
             )}
+            <LanguageSwitcher />
             <ThemeToggle variant="minimal" />
             <Button variant="outline" onClick={logout} style={{ borderColor: 'var(--color-error)', color: 'var(--color-error)' }}>
-                Logout
+                {t('common.logout')}
             </Button>
         </div>
     );
@@ -343,13 +343,14 @@ const Dashboard = () => {
                 <header className="flex-stack" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
                     <div>
                         <h1 className="text-gradient" style={{ fontSize: '2rem', marginBottom: '0.25rem' }}>Logistics Command Center</h1>
-                        <p style={{ color: 'var(--color-text-muted)' }}>Logged in as {user?.username} ({user?.role})</p>
+                        <p style={{ color: 'var(--color-text-muted)' }}>{t('dashboard.logged_as')} {user?.username} ({user?.role})</p>
                     </div>
                     {activeTab === 'shipments' ? renderShipmentControls() : (
                         <div className="flex-stack" style={{ display: 'flex', gap: '1rem' }}>
+                            <LanguageSwitcher />
                             <ThemeToggle variant="minimal" />
                             <Button variant="outline" onClick={logout} style={{ borderColor: 'var(--color-error)', color: 'var(--color-error)' }}>
-                                Logout
+                                {t('common.logout')}
                             </Button>
                         </div>
                     )}
@@ -366,7 +367,7 @@ const Dashboard = () => {
                                 display: 'flex', alignItems: 'center', gap: '0.5rem'
                             }}
                         >
-                            <Package size={18} /> Shipments
+                            <Package size={18} /> {t('dashboard.tabs.shipments')}
                         </button>
                         <button
                             onClick={() => setActiveTab('users')}
@@ -376,7 +377,7 @@ const Dashboard = () => {
                                 display: 'flex', alignItems: 'center', gap: '0.5rem'
                             }}
                         >
-                            <Users size={18} /> User Management
+                            <Users size={18} /> {t('dashboard.tabs.users')}
                         </button>
                         <button
                             onClick={() => setActiveTab('archived')}
@@ -386,7 +387,7 @@ const Dashboard = () => {
                                 display: 'flex', alignItems: 'center', gap: '0.5rem'
                             }}
                         >
-                            <Archive size={18} /> Archived
+                            <Archive size={18} /> {t('dashboard.tabs.archived')}
                         </button>
                         <button
                             onClick={() => setActiveTab('statuses')}
@@ -396,7 +397,7 @@ const Dashboard = () => {
                                 display: 'flex', alignItems: 'center', gap: '0.5rem'
                             }}
                         >
-                            <Settings size={18} /> Statuses
+                            <Settings size={18} /> {t('dashboard.tabs.statuses')}
                         </button>
                     </div>
                 )}

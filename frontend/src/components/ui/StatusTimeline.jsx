@@ -1,8 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle, Truck, Package, MapPin, Clock } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const StatusTimeline = ({ history = [] }) => {
+    const { t } = useTranslation();
     // Sort history by timestamp descending (newest first)
     const sortedHistory = [...history].sort((a, b) => {
         const dateA = new Date(a.timestamp);
@@ -32,7 +34,7 @@ const StatusTimeline = ({ history = [] }) => {
     return (
         <div className="timeline-container" style={{ marginTop: '2rem' }}>
             <h3 style={{ marginBottom: '1.5rem', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem' }}>
-                Tracking History
+                {t('track.history')}
             </h3>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -101,7 +103,7 @@ const StatusTimeline = ({ history = [] }) => {
                                 {event.location && (event.location.lat || event.location.address) && (
                                     <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', display: 'flex', alignItems: 'center', gap: '0.25rem', opacity: 0.8 }}>
                                         <MapPin size={12} />
-                                        {event.location.address || `Manifested at ${event.location.lat.toFixed(4)}, ${event.location.lng.toFixed(4)}`}
+                                        {event.location.address || `${t('track.manifested_at')} ${event.location.lat.toFixed(4)}, ${event.location.lng.toFixed(4)}`}
                                     </div>
                                 )}
                             </div>

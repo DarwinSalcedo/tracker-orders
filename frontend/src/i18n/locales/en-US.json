@@ -1,0 +1,57 @@
+{
+    "common": {
+        "loading": "Loading...",
+        "error": "An error occurred",
+        "save": "Save Changes",
+        "cancel": "Cancel",
+        "back": "Back",
+        "logout": "Logout",
+        "dashboard": "Dashboard",
+        "login": "Login",
+        "register": "Register"
+    },
+    "home": {
+        "title": "Track your orders in real-time.",
+        "subtitle": "The ultimate logistics solution for modern businesses and customers.",
+        "track_card_title": "Track Shipment",
+        "track_card_desc": "Check your delivery status instantly with your waybill number.",
+        "portal_card_title": "Logistics Portal",
+        "portal_card_desc": "Admin & delivery access for manifest management and dispatch.",
+        "go_to_dashboard": "Go to Dashboard"
+    },
+    "track": {
+        "title": "Track Shipment",
+        "placeholder_waybill": "e.g. TRK-12345678",
+        "placeholder_email": "name@example.com",
+        "button": "Track Shipment",
+        "back_to_search": "New Search",
+        "history": "Tracking History",
+        "manifested_at": "Manifested at",
+        "not_found": "Order not found or invalid credentials",
+        "details_title": "Shipment Details",
+        "waybill": "Waybill",
+        "client": "Client",
+        "dest": "Destination",
+        "origin": "Origin",
+        "status": "Current Status"
+    },
+    "dashboard": {
+        "welcome": "Welcome back",
+        "logged_as": "Logged in as",
+        "register_shipment": "Register Shipment",
+        "refresh": "Refresh",
+        "tabs": {
+            "shipments": "Shipments",
+            "archived": "Archived",
+            "users": "Users",
+            "statuses": "Statuses"
+        },
+        "table": {
+            "id": "Waybill / ID",
+            "client": "Client",
+            "status": "Status",
+            "registered": "Registered",
+            "actions": "Actions"
+        }
+    }
+}
