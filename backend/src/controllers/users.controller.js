@@ -3,7 +3,7 @@ import { query } from '../config/db.js';
 export const getPendingUsers = async (req, res) => {
     try {
         const result = await query(
-            'SELECT id, username, role, created_at FROM users WHERE is_approved = FALSE ORDER BY created_at ASC'
+            "SELECT id, username, role, created_at FROM users WHERE is_approved = FALSE AND role = 'Delivery' ORDER BY created_at ASC"
         );
         res.json(result.rows);
     } catch (err) {
@@ -15,7 +15,7 @@ export const getPendingUsers = async (req, res) => {
 export const getAllUsers = async (req, res) => {
     try {
         const result = await query(
-            'SELECT id, username, role, is_approved, created_at FROM users ORDER BY created_at DESC'
+            "SELECT id, username, role, is_approved, created_at FROM users WHERE role = 'Delivery' ORDER BY created_at DESC"
         );
         res.json(result.rows);
     } catch (err) {
