@@ -17,8 +17,12 @@ import {
     User,
     MessageSquare
 } from 'lucide-react';
+import ThemeToggle from '../../components/ui/ThemeToggle';
+import LanguageSwitcher from '../../components/ui/LanguageSwitcher';
+import { useTranslation } from 'react-i18next';
 
 const CreateOrder = () => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -90,12 +94,15 @@ const CreateOrder = () => {
                 <header style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                     <div>
                         <Button variant="ghost" onClick={() => navigate('/backoffice/dashboard')} style={{ paddingLeft: 0, marginBottom: '1rem' }}>
-                            <ArrowLeft size={18} /> Back
+                            <ArrowLeft size={18} /> {t('common.back')}
                         </Button>
-                        <h1 className="text-gradient">Register New Shipment</h1>
+                        <h1 className="text-gradient">{t('dashboard.register_shipment')}</h1>
                         <p style={{ color: 'var(--color-text-muted)' }}>Initialize a new tracking waybill in the system.</p>
                     </div>
-                    <ThemeToggle variant="minimal" />
+                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                        <LanguageSwitcher />
+                        <ThemeToggle variant="minimal" />
+                    </div>
                 </header>
 
                 <form onSubmit={handleSubmit}>
