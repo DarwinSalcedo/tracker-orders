@@ -8,7 +8,8 @@ const createTables = async () => {
         id SERIAL PRIMARY KEY,
         code VARCHAR(50) UNIQUE NOT NULL,
         label VARCHAR(100) NOT NULL,
-        description TEXT
+        description TEXT,
+        is_system BOOLEAN DEFAULT FALSE
       );
     `);
 
@@ -63,19 +64,19 @@ const createTables = async () => {
 
 const seedStatuses = async () => {
   const statuses = [
-    { code: 'created', label: 'Order Placed', description: 'Your order has been placed and is being processed.' },
-    { code: 'in_transit', label: 'In Transit', description: 'Your package is on its way.' },
-    { code: 'delivered', label: 'Delivered', description: 'Your package has been delivered.' },
-    { code: 'archived', label: 'Archived', description: 'This shipment has been archived and completed.' },
+    { code: 'created', label: 'Order Placed', description: 'Your order has been placed and is being processed.', is_system: true },
+    { code: 'in_transit', label: 'In Transit', description: 'Your package is on its way.', is_system: true },
+    { code: 'delivered', label: 'Delivered', description: 'Your package has been delivered.', is_system: true },
+    { code: 'archived', label: 'Archived', description: 'This shipment has been archived and completed.', is_system: true },
   ];
 
   try {
     for (const status of statuses) {
       await query(`
-        INSERT INTO order_statuses (code, label, description)
-        VALUES ($1, $2, $3)
-        ON CONFLICT (code) DO NOTHING;
-      `, [status.code, status.label, status.description]);
+        INSERT INTO order_statuses (code, label, description, is_system)
+        VALUES ($1, $2, $3, $4)
+        ON CONFLICT (code) DO UPDATE SET is_system = EXCLUDED.is_system;
+      `, [status.code, status.label, status.description, status.is_system]);
     }
     console.log('Statuses seeded successfully.');
   } catch (err) {

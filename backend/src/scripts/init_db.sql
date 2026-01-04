@@ -3,7 +3,8 @@ CREATE TABLE IF NOT EXISTS order_statuses (
     id SERIAL PRIMARY KEY,
     code VARCHAR(50) UNIQUE NOT NULL,
     label VARCHAR(100) NOT NULL,
-    description TEXT
+    description TEXT,
+    is_system BOOLEAN DEFAULT FALSE
 );
 
 -- 2. Create orders table (Drop first to ensuring clean state)
@@ -35,10 +36,10 @@ CREATE TABLE IF NOT EXISTS order_history (
 );
 
 -- 4. Seed Statuses
-INSERT INTO order_statuses (code, label, description)
+INSERT INTO order_statuses (code, label, description, is_system)
 VALUES 
-    ('created', 'Order Placed', 'Your order has been placed and is being processed.'),
-    ('in_transit', 'In Transit', 'Your package is on its way.'),
-    ('delivered', 'Delivery', 'Your package has been delivered.'),
-    ('archived', 'Archived', 'This order has been moved to archive.')
-ON CONFLICT (code) DO NOTHING;
+    ('created', 'Order Placed', 'Your order has been placed and is being processed.', TRUE),
+    ('in_transit', 'In Transit', 'Your package is on its way.', TRUE),
+    ('delivered', 'Delivery', 'Your package has been delivered.', TRUE),
+    ('archived', 'Archived', 'This order has been moved to archive.', TRUE)
+ON CONFLICT (code) DO UPDATE SET is_system = TRUE;
