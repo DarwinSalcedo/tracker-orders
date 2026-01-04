@@ -161,3 +161,29 @@ select {
         width: 100% !important;
     }
 }
+
+.dashboard-row:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+[data-theme='light'] .dashboard-row:hover {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+/* Scrollbar customization */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-bg-main);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--glass-border);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-text-muted);
+}

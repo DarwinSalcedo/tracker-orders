@@ -67,7 +67,7 @@ const StatusTimeline = ({ history = [] }) => {
                                 width: '40px',
                                 height: '40px',
                                 borderRadius: '50%',
-                                background: isLatest ? color : 'var(--bg-secondary)',
+                                background: isLatest ? color : 'var(--color-bg-secondary)',
                                 border: `2px solid ${isLatest ? color : 'var(--glass-border)'}`,
                                 display: 'flex',
                                 alignItems: 'center',

@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
 import { Truck, ShieldCheck, ArrowRight, Boxes } from 'lucide-react';
+import ThemeToggle from '../components/ui/ThemeToggle';
 
 const Home = () => {
     const navigate = useNavigate();
@@ -12,9 +13,13 @@ const Home = () => {
 
     return (
         <div className="page flex-center" style={{
-            background: 'radial-gradient(circle at center, #1e1b4b 0%, var(--color-bg-main) 100%)',
-            padding: '2rem'
+            background: 'radial-gradient(circle at center, var(--color-bg-secondary) 0%, var(--color-bg-main) 100%)',
+            padding: '2rem',
+            position: 'relative'
         }}>
+            <div style={{ position: 'absolute', top: '2rem', right: '2rem' }}>
+                <ThemeToggle />
+            </div>
             <div className="container" style={{ textAlign: 'center', maxWidth: '800px' }}>
                 <motion.div
                     initial={{ opacity: 0, y: -20 }}

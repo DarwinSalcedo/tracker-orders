@@ -31,6 +31,7 @@ import EditShipmentModal from './EditShipmentModal';
 import StatusManagement from './StatusManagement';
 import UserManagement from './UserManagement';
 import { Users } from 'lucide-react';
+import ThemeToggle from '../../components/ui/ThemeToggle';
 
 const Dashboard = () => {
     const navigate = useNavigate();
@@ -184,7 +185,7 @@ const Dashboard = () => {
                 <div className="responsive-table-container">
                     <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                         <thead>
-                            <tr style={{ background: 'rgba(255,255,255,0.02)', color: 'var(--color-text-muted)', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                            <tr style={{ background: 'var(--glass-border)', color: 'var(--color-text-muted)', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                                 <th style={{ padding: '1rem 1.5rem' }}>Waybill / ID</th>
                                 <th style={{ padding: '1rem 1.5rem' }}>Client</th>
                                 <th style={{ padding: '1rem 1.5rem' }}>Status</th>
@@ -328,6 +329,7 @@ const Dashboard = () => {
                     <Plus size={18} /> Register Shipment
                 </Button>
             )}
+            <ThemeToggle variant="minimal" />
             <Button variant="outline" onClick={logout} style={{ borderColor: 'var(--color-error)', color: 'var(--color-error)' }}>
                 Logout
             </Button>
@@ -344,9 +346,12 @@ const Dashboard = () => {
                         <p style={{ color: 'var(--color-text-muted)' }}>Logged in as {user?.username} ({user?.role})</p>
                     </div>
                     {activeTab === 'shipments' ? renderShipmentControls() : (
-                        <Button variant="outline" onClick={logout} style={{ borderColor: 'var(--color-error)', color: 'var(--color-error)' }}>
-                            Logout
-                        </Button>
+                        <div className="flex-stack" style={{ display: 'flex', gap: '1rem' }}>
+                            <ThemeToggle variant="minimal" />
+                            <Button variant="outline" onClick={logout} style={{ borderColor: 'var(--color-error)', color: 'var(--color-error)' }}>
+                                Logout
+                            </Button>
+                        </div>
                     )}
                 </header>
 

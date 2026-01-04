@@ -6,6 +6,7 @@ import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
 import Card from '../../components/ui/Card';
 import { Lock, User, UserPlus, ArrowRight, Loader, ShieldCheck, Truck } from 'lucide-react';
+import ThemeToggle from '../../components/ui/ThemeToggle';
 
 const Register = () => {
     const [username, setUsername] = useState('');
@@ -44,7 +45,10 @@ const Register = () => {
     };
 
     return (
-        <div className="page flex-center" style={{ background: 'radial-gradient(circle at top right, #1e1b4b, var(--color-bg-main))' }}>
+        <div className="page flex-center" style={{ background: 'radial-gradient(circle at top right, var(--color-bg-secondary), var(--color-bg-main))', position: 'relative' }}>
+            <div style={{ position: 'absolute', top: '2rem', right: '2rem' }}>
+                <ThemeToggle variant="minimal" />
+            </div>
             <div className="container" style={{ width: '100%', maxWidth: '420px' }}>
                 <Card className="login-card">
                     <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
@@ -100,7 +104,7 @@ const Register = () => {
                                     onClick={() => setRole('Admin')}
                                     style={{
                                         padding: '1rem',
-                                        background: role === 'Admin' ? 'rgba(99, 102, 241, 0.15)' : 'rgba(255, 255, 255, 0.03)',
+                                        background: role === 'Admin' ? 'rgba(99, 102, 241, 0.15)' : 'var(--glass-bg)',
                                         border: `2px solid ${role === 'Admin' ? 'var(--color-primary)' : 'var(--glass-border)'}`,
                                         borderRadius: '12px',
                                         cursor: 'pointer',
@@ -113,8 +117,8 @@ const Register = () => {
                                         color={role === 'Admin' ? 'var(--color-primary)' : 'var(--color-text-muted)'}
                                         style={{ marginBottom: '0.5rem' }}
                                     />
-                                    <div style={{ fontWeight: '600', fontSize: '0.9rem', color: role === 'Admin' ? 'white' : 'var(--color-text-muted)' }}>Admin</div>
-                                    <div style={{ fontSize: '0.7rem', color: 'var(--color-text-dim)', marginTop: '0.25rem' }}>Full Control</div>
+                                    <div style={{ fontWeight: '600', fontSize: '0.9rem', color: role === 'Admin' ? 'var(--color-text-main)' : 'var(--color-text-muted)' }}>Admin</div>
+                                    <div style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginTop: '0.25rem' }}>Full Control</div>
                                 </motion.div>
 
                                 <motion.div
@@ -123,7 +127,7 @@ const Register = () => {
                                     onClick={() => setRole('Delivery')}
                                     style={{
                                         padding: '1rem',
-                                        background: role === 'Delivery' ? 'rgba(99, 102, 241, 0.15)' : 'rgba(255, 255, 255, 0.03)',
+                                        background: role === 'Delivery' ? 'rgba(99, 102, 241, 0.15)' : 'var(--glass-bg)',
                                         border: `2px solid ${role === 'Delivery' ? 'var(--color-primary)' : 'var(--glass-border)'}`,
                                         borderRadius: '12px',
                                         cursor: 'pointer',
@@ -136,8 +140,8 @@ const Register = () => {
                                         color={role === 'Delivery' ? 'var(--color-primary)' : 'var(--color-text-muted)'}
                                         style={{ marginBottom: '0.5rem' }}
                                     />
-                                    <div style={{ fontWeight: '600', fontSize: '0.9rem', color: role === 'Delivery' ? 'white' : 'var(--color-text-muted)' }}>Delivery</div>
-                                    <div style={{ fontSize: '0.7rem', color: 'var(--color-text-dim)', marginTop: '0.25rem' }}>Field Ops</div>
+                                    <div style={{ fontWeight: '600', fontSize: '0.9rem', color: role === 'Delivery' ? 'var(--color-text-main)' : 'var(--color-text-muted)' }}>Delivery</div>
+                                    <div style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginTop: '0.25rem' }}>Field Ops</div>
                                 </motion.div>
                             </div>
                         </div>

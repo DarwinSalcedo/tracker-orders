@@ -23,7 +23,7 @@
 .premium-button.primary {
     background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
     color: white;
-    box-shadow: 0 4px 15px var(--color-primary-glow);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .premium-button.secondary {

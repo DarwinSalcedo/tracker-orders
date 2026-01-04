@@ -5,9 +5,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
 import Card from '../../components/ui/Card';
-import { Search, Mail, Loader, ArrowLeft, LayoutDashboard } from 'lucide-react';
+import { Search, Mail, Loader, ArrowLeft, LayoutDashboard, Globe } from 'lucide-react';
 import { orderService } from '../../services/orderService';
 import OrderDetails from './OrderDetails';
+import ThemeToggle from '../../components/ui/ThemeToggle';
 
 const TrackOrder = () => {
     const navigate = useNavigate();
@@ -73,22 +74,27 @@ const TrackOrder = () => {
             flexDirection: 'column',
             paddingTop: '2rem',
             paddingBottom: '2rem',
-            background: 'radial-gradient(ellipse at top, #0f172a, #000000)'
+            background: 'radial-gradient(ellipse at top, var(--color-bg-secondary), var(--color-bg-main))'
         }}>
             {/* Header / Nav */}
             <div className="container" style={{ width: '100%', marginBottom: '2rem' }}>
-                {!orderData && (
-                    <div className="flex-stack-sm" style={{ display: 'flex', gap: '1rem' }}>
-                        <Button variant="secondary" onClick={() => navigate(-1)}>
-                            <ArrowLeft size={18} /> Back
-                        </Button>
-                        {isAuthenticated && (
-                            <Button variant="ghost" onClick={() => navigate('/backoffice/dashboard')}>
-                                <LayoutDashboard size={18} /> Dashboard
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                    {!orderData ? (
+                        <div className="flex-stack-sm" style={{ display: 'flex', gap: '1rem' }}>
+                            <Button variant="secondary" onClick={() => navigate(-1)}>
+                                <ArrowLeft size={18} /> Back
                             </Button>
-                        )}
-                    </div>
-                )}
+                            {isAuthenticated && (
+                                <Button variant="ghost" onClick={() => navigate('/backoffice/dashboard')}>
+                                    <LayoutDashboard size={18} /> Dashboard
+                                </Button>
+                            )}
+                        </div>
+                    ) : (
+                        <div /> // Spacer
+                    )}
+                    <ThemeToggle variant="minimal" />
+                </div>
             </div>
 
             <div className="container" style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>

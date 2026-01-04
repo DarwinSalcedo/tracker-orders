@@ -6,6 +6,7 @@ import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
 import Card from '../../components/ui/Card';
 import { Lock, User, ArrowRight, Loader } from 'lucide-react';
+import ThemeToggle from '../../components/ui/ThemeToggle';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -38,7 +39,10 @@ const Login = () => {
     };
 
     return (
-        <div className="page flex-center" style={{ background: 'radial-gradient(circle at top right, #1e1b4b, var(--color-bg-main))' }}>
+        <div className="page flex-center" style={{ background: 'radial-gradient(circle at top right, var(--color-bg-secondary), var(--color-bg-main))', position: 'relative' }}>
+            <div style={{ position: 'absolute', top: '2rem', right: '2rem' }}>
+                <ThemeToggle variant="minimal" />
+            </div>
             <div className="container" style={{ width: '100%', maxWidth: '420px' }}>
                 <Card className="login-card">
                     <div style={{ textAlign: 'center', marginBottom: '2rem' }}>

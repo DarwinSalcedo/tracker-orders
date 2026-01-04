@@ -63,7 +63,7 @@ const UserManagement = () => {
             <div style={{ overflowX: 'auto' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                     <thead>
-                        <tr style={{ background: 'rgba(255,255,255,0.02)', fontSize: '0.85rem', color: 'var(--color-text-muted)', textTransform: 'uppercase' }}>
+                        <tr style={{ background: 'var(--glass-border)', fontSize: '0.85rem', color: 'var(--color-text-muted)', textTransform: 'uppercase' }}>
                             <th style={{ padding: '1rem 1.5rem', textAlign: 'left' }}>User / Role</th>
                             <th style={{ padding: '1rem 1.5rem', textAlign: 'left' }}>Status</th>
                             <th style={{ padding: '1rem 1.5rem', textAlign: 'left' }}>Joined</th>

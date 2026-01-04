@@ -145,7 +145,7 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
                                                 style={{
                                                     width: '100%',
                                                     padding: '0.75rem 1rem 0.75rem 2.8rem',
-                                                    background: 'rgba(255,255,255,0.05)',
+                                                    background: 'var(--glass-bg)',
                                                     border: '1px solid var(--glass-border)',
                                                     borderRadius: 'var(--radius-md)',
                                                     color: 'var(--color-text-main)',

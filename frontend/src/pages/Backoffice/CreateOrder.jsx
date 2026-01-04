@@ -74,7 +74,7 @@ const CreateOrder = () => {
                     animate={{ scale: 1, opacity: 1 }}
                     style={{ textAlign: 'center' }}
                 >
-                    <div style={{ padding: '2rem', background: 'rgba(16, 185, 129, 0.1)', borderRadius: '50%', display: 'inline-block', marginBottom: '1.5rem' }}>
+                    <div style={{ padding: '2rem', background: 'rgba(16, 185, 129, 0.1)', borderRadius: '50%', display: 'inline-block', marginBottom: '1.5rem', border: '1px solid var(--color-success)' }}>
                         <CheckCircle size={64} color="var(--color-success)" />
                     </div>
                     <h1>Shipment Registered!</h1>
@@ -87,12 +87,15 @@ const CreateOrder = () => {
     return (
         <div className="page" style={{ padding: '2rem', background: 'var(--color-bg-main)' }}>
             <div className="container" style={{ maxWidth: '800px' }}>
-                <header style={{ marginBottom: '2rem' }}>
-                    <Button variant="ghost" onClick={() => navigate('/backoffice/dashboard')} style={{ paddingLeft: 0, marginBottom: '1rem' }}>
-                        <ArrowLeft size={18} /> Back
-                    </Button>
-                    <h1 className="text-gradient">Register New Shipment</h1>
-                    <p style={{ color: 'var(--color-text-muted)' }}>Initialize a new tracking waybill in the system.</p>
+                <header style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <div>
+                        <Button variant="ghost" onClick={() => navigate('/backoffice/dashboard')} style={{ paddingLeft: 0, marginBottom: '1rem' }}>
+                            <ArrowLeft size={18} /> Back
+                        </Button>
+                        <h1 className="text-gradient">Register New Shipment</h1>
+                        <p style={{ color: 'var(--color-text-muted)' }}>Initialize a new tracking waybill in the system.</p>
+                    </div>
+                    <ThemeToggle variant="minimal" />
                 </header>
 
                 <form onSubmit={handleSubmit}>
@@ -142,7 +145,7 @@ const CreateOrder = () => {
                                         style={{
                                             width: '100%',
                                             padding: '0.75rem 1rem 0.75rem 2.8rem',
-                                            background: 'rgba(255,255,255,0.05)',
+                                            background: 'var(--glass-bg)',
                                             border: '1px solid var(--glass-border)',
                                             borderRadius: 'var(--radius-md)',
                                             color: 'var(--color-text-main)',

@@ -2,38 +2,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap');
 
 :root {
-  /* Colors - Premium Dark Theme */
-  --color-bg-main: #0B0E14;
-  /* Deep, almost black blue */
-  --color-bg-secondary: #151A23;
-  /* Slightly lighter for cards */
-
-  --color-primary: #6366f1;
-  /* Indigo 500 */
-  --color-primary-hover: #4f46e5;
-  --color-primary-glow: rgba(99, 102, 241, 0.5);
-
-  --color-accent: #8b5cf6;
-  /* Violet */
-  --color-accent-glow: rgba(139, 92, 246, 0.5);
-
-  --color-success: #10b981;
-  --color-warning: #f59e0b;
-  --color-error: #ef4444;
-
-  --color-text-main: #F8FAFC;
-  /* Slate 50 */
-  --color-text-muted: #94A3B8;
-  /* Slate 400 */
-  --color-text-on-primary: #ffffff;
-
-  /* Glassmorphism */
-  --glass-bg: rgba(30, 41, 59, 0.4);
-  /* Slate 800 with opacity */
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-blur: 16px;
-  --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-
   /* Spacing */
   --spacing-xs: 0.25rem;
   --spacing-sm: 0.5rem;
@@ -61,14 +29,49 @@
   --screen-md: 768px;
   --screen-lg: 1024px;
   --screen-xl: 1280px;
+
+  /* Default Colors (Dark Mode - Deep Slate Blue) */
+  --color-bg-main: #0B0E14;
+  --color-bg-secondary: #0F172A;
+  --color-primary: #6366f1;
+  --color-primary-hover: #4f46e5;
+  --color-accent: #8b5cf6;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-text-main: #F8FAFC;
+  --color-text-muted: #94A3B8;
+  --color-text-on-primary: #ffffff;
+  --glass-bg: rgba(30, 41, 59, 0.4);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  --glass-blur: 16px;
 }
 
-.light-mode {
-  /* Placeholder for potential light mode - strict requirement is premium feel, typically dark */
+/* Light Theme */
+[data-theme='light'] {
   --color-bg-main: #F8FAFC;
-  --color-bg-secondary: #ffffff;
-  --color-text-main: #0f172a;
-  --color-text-muted: #64748b;
+  --color-bg-secondary: #FFFFFF;
+  --color-text-main: #0F172A;
+  --color-text-muted: #64748B;
   --glass-bg: rgba(255, 255, 255, 0.7);
-  --glass-border: rgba(0, 0, 0, 0.05);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+  --color-primary: #4F46E5;
+  /* Slightly deeper for accessibility */
+  --color-accent: #7C3AED;
+}
+
+/* Night Theme (Pure Black AMOLED) */
+[data-theme='night'] {
+  --color-bg-main: #000000;
+  --color-bg-secondary: #0A0A0A;
+  --color-text-main: #E5E7EB;
+  --color-text-muted: #9CA3AF;
+  --glass-bg: rgba(0, 0, 0, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.05);
+  --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  --color-primary: #818CF8;
+  /* Slightly lighter for contrast on black */
+  --color-accent: #A78BFA;
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
 
 // Pages
 import Home from './pages/Home';
@@ -27,28 +28,30 @@ const ProtectedRoute = ({ allowedRoles = [] }) => {
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/track" element={<TrackOrder />} />
+    <ThemeProvider>
+      <AuthProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/track" element={<TrackOrder />} />
 
-          {/* Backoffice Routes */}
-          <Route path="/backoffice/login" element={<Login />} />
-          <Route path="/backoffice/register" element={<Register />} />
+            {/* Backoffice Routes */}
+            <Route path="/backoffice/login" element={<Login />} />
+            <Route path="/backoffice/register" element={<Register />} />
 
-          <Route element={<ProtectedRoute allowedRoles={['Admin', 'Delivery']} />}>
-            <Route path="/backoffice/dashboard" element={<Dashboard />} />
-          </Route>
+            <Route element={<ProtectedRoute allowedRoles={['Admin', 'Delivery']} />}>
+              <Route path="/backoffice/dashboard" element={<Dashboard />} />
+            </Route>
 
-          <Route element={<ProtectedRoute allowedRoles={['Admin']} />}>
-            <Route path="/backoffice/create-order" element={<CreateOrder />} />
-          </Route>
+            <Route element={<ProtectedRoute allowedRoles={['Admin']} />}>
+              <Route path="/backoffice/create-order" element={<CreateOrder />} />
+            </Route>
 
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </Router>
-    </AuthProvider>
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Router>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

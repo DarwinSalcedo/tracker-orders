@@ -151,7 +151,7 @@ const StatusManagement = () => {
                 <div className="responsive-table-container">
                     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                         <thead>
-                            <tr style={{ background: 'rgba(255,255,255,0.02)', color: 'var(--color-text-muted)', textTransform: 'uppercase', fontSize: '0.75rem' }}>
+                            <tr style={{ background: 'var(--glass-border)', color: 'var(--color-text-muted)', textTransform: 'uppercase', fontSize: '0.75rem' }}>
                                 <th style={{ padding: '1rem', textAlign: 'left' }}>Status / Code</th>
                                 <th style={{ padding: '1rem', textAlign: 'left' }}>External Description</th>
                                 <th style={{ padding: '1rem', textAlign: 'center' }}>System</th>
@@ -167,7 +167,7 @@ const StatusManagement = () => {
                                                 <input
                                                     value={editData.label}
                                                     onChange={e => setEditData({ ...editData, label: e.target.value })}
-                                                    style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid var(--color-primary)', color: 'white', padding: '0.4rem', borderRadius: '4px' }}
+                                                    style={{ background: 'var(--glass-bg)', border: '1px solid var(--color-primary)', color: 'var(--color-text-main)', padding: '0.4rem', borderRadius: '4px' }}
                                                 />
                                                 <code style={{ fontSize: '0.75rem', opacity: 0.5 }}>{status.code}</code>
                                             </div>
@@ -183,7 +183,7 @@ const StatusManagement = () => {
                                             <textarea
                                                 value={editData.description}
                                                 onChange={e => setEditData({ ...editData, description: e.target.value })}
-                                                style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--glass-border)', color: 'white', padding: '0.4rem', borderRadius: '4px', fontSize: '0.85rem' }}
+                                                style={{ width: '100%', background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', color: 'var(--color-text-main)', padding: '0.4rem', borderRadius: '4px', fontSize: '0.85rem' }}
                                             />
                                         ) : (
                                             <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--color-text-muted)', maxWidth: '250px' }}>{status.description}</p>
