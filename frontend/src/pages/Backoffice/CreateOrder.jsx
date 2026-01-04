@@ -38,7 +38,9 @@ const CreateOrder = () => {
         dropoffLat: '',
         dropoffLng: '',
         deliveryPerson: '',
-        deliveryInstructions: ''
+        deliveryPerson: '',
+        deliveryInstructions: '',
+        externalOrderId: ''
     });
 
     const handleChange = (e) => {
@@ -60,7 +62,9 @@ const CreateOrder = () => {
                 pickup: formData.pickupLat && formData.pickupLng ? { lat: parseFloat(formData.pickupLat), lng: parseFloat(formData.pickupLng) } : null,
                 dropoff: formData.dropoffLat && formData.dropoffLng ? { lat: parseFloat(formData.dropoffLat), lng: parseFloat(formData.dropoffLng) } : null,
                 deliveryPerson: formData.deliveryPerson,
-                deliveryInstructions: formData.deliveryInstructions
+                deliveryPerson: formData.deliveryPerson,
+                deliveryInstructions: formData.deliveryInstructions,
+                externalOrderId: formData.externalOrderId
             };
 
             await orderService.createOrder(payload);
@@ -138,6 +142,14 @@ const CreateOrder = () => {
                                 value={formData.customerPhone}
                                 onChange={handleChange}
                                 placeholder="+1 234 567 890"
+                                icon={Hash}
+                            />
+                            <Input
+                                label="External Reference (Optional)"
+                                name="externalOrderId"
+                                value={formData.externalOrderId}
+                                onChange={handleChange}
+                                placeholder="e.g. ORD-12345"
                                 icon={Hash}
                             />
                             <Input

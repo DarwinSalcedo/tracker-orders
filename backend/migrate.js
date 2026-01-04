@@ -25,6 +25,7 @@ const runMigration = async () => {
             'update_statuses.sql',
             'update_users_approval.sql',
             'alter_orders_add_customer_info.sql',
+            'alter_orders_add_external_id.sql',
             'add_users.sql'
         ];
 

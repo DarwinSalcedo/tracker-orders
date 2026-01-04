@@ -85,6 +85,7 @@ app.post("/api/track", async (req, res) => {
       customerName: order.customer_name,
       customerPhone: order.customer_phone,
       email: order.email,
+      externalOrderId: order.external_order_id,
       createdAt: order.created_at,
       updatedAt: order.updated_at,
       location: { lat: order.location_lat, lng: order.location_lng },

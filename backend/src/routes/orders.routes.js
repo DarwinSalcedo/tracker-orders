@@ -21,7 +21,7 @@ router.get('/orders', verifyToken, async (req, res) => {
 
 // Create Shipment (Backoffice)
 router.post('/orders', verifyToken, authorize('Admin'), async (req, res) => {
-    const { trackingId, email, customerName, customerPhone, pickup, dropoff, deliveryPerson, deliveryInstructions } = req.body;
+    const { trackingId, email, customerName, customerPhone, externalOrderId, pickup, dropoff, deliveryPerson, deliveryInstructions } = req.body;
 
     if (!trackingId) {
         return res.status(400).json({ error: 'Tracking ID is required' });
@@ -38,10 +38,10 @@ router.post('/orders', verifyToken, authorize('Admin'), async (req, res) => {
 
         // Insert Shipment
         const result = await query(
-            `INSERT INTO orders (id, email, customer_name, customer_phone, current_status_id, pickup_lat, pickup_lng, dropoff_lat, dropoff_lng, delivery_person, delivery_instructions) 
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) 
+            `INSERT INTO orders (id, email, customer_name, customer_phone, external_order_id, current_status_id, pickup_lat, pickup_lng, dropoff_lat, dropoff_lng, delivery_person, delivery_instructions) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) 
        RETURNING *`,
-            [trackingId, email, customerName, customerPhone, createdStatusId, pickup?.lat, pickup?.lng, dropoff?.lat, dropoff?.lng, deliveryPerson, deliveryInstructions]
+            [trackingId, email, customerName, customerPhone, externalOrderId, createdStatusId, pickup?.lat, pickup?.lng, dropoff?.lat, dropoff?.lng, deliveryPerson, deliveryInstructions]
         );
 
         // Add initial history entry
@@ -66,6 +66,7 @@ router.patch('/orders/:id', verifyToken, authorize(['Admin', 'Delivery']), async
         email,
         customerName,
         customerPhone,
+        externalOrderId,
         deliveryPerson,
         deliveryInstructions,
         pickupLat,
@@ -138,6 +139,10 @@ router.patch('/orders/:id', verifyToken, authorize(['Admin', 'Delivery']), async
         if (customerPhone !== undefined) {
             updateQuery += `, customer_phone = $${paramCount++}`;
             params.push(customerPhone);
+        }
+        if (externalOrderId !== undefined) {
+            updateQuery += `, external_order_id = $${paramCount++}`;
+            params.push(externalOrderId);
         }
         if (deliveryPerson !== undefined) {
             updateQuery += `, delivery_person = $${paramCount++}`;
