@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import Card from '../../components/ui/Card';
 import StatusTimeline from '../../components/ui/StatusTimeline';
-import { MapPin, Truck, Calendar, Activity } from 'lucide-react';
+import { MapPin, Truck, Calendar, Activity, Clock } from 'lucide-react';
 import Button from '../../components/ui/Button';
 import ShipmentMap from '../../components/ShipmentMap';
 import { useTranslation } from 'react-i18next';
@@ -48,6 +48,15 @@ const OrderDetails = ({ order, onBack }) => {
                                 <div>
                                     <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{t('dashboard.table.registered')}</p>
                                     <p>{new Date(order.createdAt).toLocaleDateString()}</p>
+                                </div>
+                            </div>
+                        )}
+                        {order.updatedAt && (
+                            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                                <Clock size={18} color="var(--color-warning)" />
+                                <div>
+                                    <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{t('track.last_updated')}</p>
+                                    <p>{new Date(order.updatedAt).toLocaleDateString()} {new Date(order.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                                 </div>
                             </div>
                         )}
@@ -111,6 +120,12 @@ const OrderDetails = ({ order, onBack }) => {
                                     <div>
                                         <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Phone</p>
                                         <p style={{ fontWeight: '500' }}>{order.customerPhone}</p>
+                                    </div>
+                                )}
+                                {order.email && (
+                                    <div style={{ gridColumn: '1 / -1' }}>
+                                        <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Email</p>
+                                        <p style={{ fontWeight: '500' }}>{order.email}</p>
                                     </div>
                                 )}
                             </div>

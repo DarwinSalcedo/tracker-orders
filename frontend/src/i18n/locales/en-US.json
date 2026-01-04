@@ -34,6 +34,8 @@
         "dest": "Destination",
         "origin": "Origin",
         "status": "Current Status",
+        "last_updated": "Last Information Update",
+        "registered": "Registered Date",
         "customer_name": "Customer Name",
         "customer_phone": "Phone Number"
     },
