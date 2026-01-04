@@ -42,7 +42,7 @@
         "refresh": "Actualizar",
         "tabs": {
             "shipments": "Envíos",
-            "archived": "Archivados",
+            "completed": "Completados",
             "users": "Usuarios",
             "statuses": "Estados"
         },

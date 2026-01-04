@@ -42,7 +42,7 @@
         "refresh": "Refresh",
         "tabs": {
             "shipments": "Shipments",
-            "archived": "Archived",
+            "completed": "Completed",
             "users": "Users",
             "statuses": "Statuses"
         },

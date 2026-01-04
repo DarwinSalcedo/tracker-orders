@@ -67,7 +67,7 @@ const seedStatuses = async () => {
     { code: 'created', label: 'Order Placed', description: 'Your order has been placed and is being processed.', is_system: true },
     { code: 'in_transit', label: 'In Transit', description: 'Your package is on its way.', is_system: true },
     { code: 'delivered', label: 'Delivered', description: 'Your package has been delivered.', is_system: true },
-    { code: 'archived', label: 'Archived', description: 'This shipment has been archived and completed.', is_system: true },
+    { code: 'completed', label: 'Completed', description: 'This shipment has been completed.', is_system: true },
   ];
 
   try {

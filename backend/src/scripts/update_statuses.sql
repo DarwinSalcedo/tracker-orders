@@ -7,7 +7,7 @@ VALUES
     ('created', 'Order Placed', 'Your order has been placed and is being processed.', TRUE),
     ('in_transit', 'In Transit', 'Your package is on its way.', TRUE),
     ('delivered', 'Delivery', 'Your package has been delivered.', TRUE),
-    ('archived', 'Archived', 'This order has been moved to archive.', TRUE)
+    ('completed', 'Completed', 'This order has been moved to completed.', TRUE)
 ON CONFLICT (code) DO UPDATE SET 
     label = EXCLUDED.label,
     is_system = TRUE;

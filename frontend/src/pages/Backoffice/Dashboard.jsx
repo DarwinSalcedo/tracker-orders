@@ -43,7 +43,7 @@ const Dashboard = () => {
     const [actionLoading, setActionLoading] = useState(null); // tracking ID of order being updated
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [editingShipment, setEditingShipment] = useState(null);
-    const [activeTab, setActiveTab] = useState('shipments'); // 'shipments', 'users', or 'archived'
+    const [activeTab, setActiveTab] = useState('shipments'); // 'shipments', 'users', or 'completed'
 
     const fetchOrders = async () => {
         try {
@@ -106,10 +106,10 @@ const Dashboard = () => {
         const isNotDeleted = order.status_code !== 'deleted';
 
         // Tab filtering
-        if (activeTab === 'archived') {
-            return matchesSearch && isNotDeleted && order.status_code === 'archived';
+        if (activeTab === 'completed') {
+            return matchesSearch && isNotDeleted && order.status_code === 'completed';
         } else if (activeTab === 'shipments') {
-            return matchesSearch && isNotDeleted && order.status_code !== 'archived';
+            return matchesSearch && isNotDeleted && order.status_code !== 'completed';
         }
 
         return matchesSearch && isNotDeleted;
@@ -121,7 +121,7 @@ const Dashboard = () => {
             case 'picked_up': return { bg: 'rgba(139, 92, 246, 0.1)', color: 'var(--color-accent)' };
             case 'in_transit': return { bg: 'rgba(245, 158, 11, 0.1)', color: 'var(--color-warning)' };
             case 'delivered': return { bg: 'rgba(16, 185, 129, 0.1)', color: 'var(--color-success)' };
-            case 'archived': return { bg: 'rgba(71, 85, 105, 0.1)', color: 'var(--color-text-muted)' };
+            case 'completed': return { bg: 'rgba(71, 85, 105, 0.1)', color: 'var(--color-text-muted)' };
             case 'in_sorting': return { bg: 'rgba(59, 130, 246, 0.1)', color: 'var(--color-primary)' };
             default: return { bg: 'rgba(148, 163, 184, 0.1)', color: 'var(--color-text-muted)' };
         }
@@ -168,7 +168,7 @@ const Dashboard = () => {
                 <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--glass-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         <ClipboardList size={20} color="var(--color-primary)" />
-                        <h3 style={{ margin: 0 }}>{activeTab === 'shipments' ? 'Shipment Manifest' : 'Shipment Archive'}</h3>
+                        <h3 style={{ margin: 0 }}>{activeTab === 'shipments' ? 'Shipment Manifest' : 'Completed Shipments'}</h3>
                     </div>
                     <div style={{ width: '300px' }}>
                         <Input
@@ -244,7 +244,7 @@ const Dashboard = () => {
                                                     <ExternalLink size={18} />
                                                 </button>
 
-                                                {user?.role === 'Admin' && order.status_code !== 'archived' && (
+                                                {user?.role === 'Admin' && order.status_code !== 'completed' && (
                                                     <button
                                                         style={{ color: 'var(--color-primary)', background: 'none', border: 'none', cursor: 'pointer', display: 'flex' }}
                                                         title="Edit Shipment"
@@ -257,10 +257,10 @@ const Dashboard = () => {
                                                 <select
                                                     value={order.status_code}
                                                     onChange={(e) => handleUpdateStatus(order.id, e.target.value)}
-                                                    disabled={actionLoading === order.id || order.status_code === 'archived'}
+                                                    disabled={actionLoading === order.id || order.status_code === 'completed'}
                                                     style={{
                                                         background: 'rgba(255,255,255,0.05)',
-                                                        color: 'gray',
+                                                        color: 'rgba(207, 207, 207, 1)',
                                                         border: '1px solid var(--glass-border)',
                                                         borderRadius: '4px',
                                                         fontSize: '0.8rem',
@@ -271,16 +271,16 @@ const Dashboard = () => {
                                                     {statuses
                                                         .filter(s => {
                                                             if (s.code === 'deleted') return false;
-                                                            // If delivered, only allow delivered and archived
+                                                            // If delivered, only allow delivered and completed
                                                             if (order.status_code === 'delivered') {
-                                                                return s.code === 'delivered' || s.code === 'archived';
+                                                                return s.code === 'delivered' || s.code === 'completed';
                                                             }
-                                                            // If archived, only show archived
-                                                            if (order.status_code === 'archived') {
-                                                                return s.code === 'archived';
+                                                            // If completed, only show completed
+                                                            if (order.status_code === 'completed') {
+                                                                return s.code === 'completed';
                                                             }
-                                                            // Otherwise, show all except archived (unless already archived)
-                                                            return s.code !== 'archived';
+                                                            // Otherwise, show all except completed (unless already completed)
+                                                            return s.code !== 'completed';
                                                         })
                                                         .map(s => (
                                                             <option key={s.id} value={s.code}>{s.label}</option>
@@ -291,11 +291,11 @@ const Dashboard = () => {
                                                 {order.status_code === 'delivered' && (
                                                     <button
                                                         style={{ color: 'var(--color-accent)', background: 'none', border: 'none', cursor: 'pointer', display: 'flex' }}
-                                                        title="Archive Shipment"
-                                                        onClick={() => handleUpdateStatus(order.id, 'archived')}
+                                                        title="Complete Shipment"
+                                                        onClick={() => handleUpdateStatus(order.id, 'completed')}
                                                         disabled={actionLoading === order.id}
                                                     >
-                                                        <Archive size={18} />
+                                                        <CheckCircle size={18} />
                                                     </button>
                                                 )}
 
@@ -380,14 +380,14 @@ const Dashboard = () => {
                             <Users size={18} /> {t('dashboard.tabs.users')}
                         </button>
                         <button
-                            onClick={() => setActiveTab('archived')}
+                            onClick={() => setActiveTab('completed')}
                             style={{
-                                background: 'none', border: 'none', color: activeTab === 'archived' ? 'var(--color-primary)' : 'var(--color-text-muted)',
-                                padding: '0.5rem 1rem', cursor: 'pointer', fontWeight: '600', borderBottom: activeTab === 'archived' ? '2px solid var(--color-primary)' : 'none',
+                                background: 'none', border: 'none', color: activeTab === 'completed' ? 'var(--color-primary)' : 'var(--color-text-muted)',
+                                padding: '0.5rem 1rem', cursor: 'pointer', fontWeight: '600', borderBottom: activeTab === 'completed' ? '2px solid var(--color-primary)' : 'none',
                                 display: 'flex', alignItems: 'center', gap: '0.5rem'
                             }}
                         >
-                            <Archive size={18} /> {t('dashboard.tabs.archived')}
+                            <CheckCircle size={18} /> {t('dashboard.tabs.completed')}
                         </button>
                         <button
                             onClick={() => setActiveTab('statuses')}
@@ -412,22 +412,22 @@ const Dashboard = () => {
                                 display: 'flex', alignItems: 'center', gap: '0.5rem'
                             }}
                         >
-                            <Package size={18} /> Shipments
+                            <Package size={18} /> {t('dashboard.tabs.shipments')}
                         </button>
                         <button
-                            onClick={() => setActiveTab('archived')}
+                            onClick={() => setActiveTab('completed')}
                             style={{
-                                background: 'none', border: 'none', color: activeTab === 'archived' ? 'var(--color-primary)' : 'var(--color-text-muted)',
-                                padding: '0.5rem 1rem', cursor: 'pointer', fontWeight: '600', borderBottom: activeTab === 'archived' ? '2px solid var(--color-primary)' : 'none',
+                                background: 'none', border: 'none', color: activeTab === 'completed' ? 'var(--color-primary)' : 'var(--color-text-muted)',
+                                padding: '0.5rem 1rem', cursor: 'pointer', fontWeight: '600', borderBottom: activeTab === 'completed' ? '2px solid var(--color-primary)' : 'none',
                                 display: 'flex', alignItems: 'center', gap: '0.5rem'
                             }}
                         >
-                            <Archive size={18} /> Archived
+                            <CheckCircle size={18} /> {t('dashboard.tabs.completed')}
                         </button>
                     </div>
                 )}
 
-                {activeTab === 'shipments' || activeTab === 'archived' ? renderShipmentsContent() : (
+                {activeTab === 'shipments' || activeTab === 'completed' ? renderShipmentsContent() : (
                     activeTab === 'users' ? <UserManagement /> : <StatusManagement />
                 )}
             </div>
