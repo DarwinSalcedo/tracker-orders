@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import Card from '../../components/ui/Card';
 import StatusTimeline from '../../components/ui/StatusTimeline';
-import { MapPin, Truck, Calendar, Activity, Clock } from 'lucide-react';
+import { MapPin, Truck, Calendar, Activity, Clock, User } from 'lucide-react';
 import Button from '../../components/ui/Button';
 import ShipmentMap from '../../components/ShipmentMap';
 import { useTranslation } from 'react-i18next';
@@ -89,49 +89,79 @@ const OrderDetails = ({ order, onBack }) => {
                         <p><strong>{t('track.origin')}:</strong> {order.pickup?.lat ? `${order.pickup.lat}, ${order.pickup.lng}` : 'Unspecified'}</p>
                         <div style={{ height: '1px', background: 'var(--glass-border)', margin: '0.5rem 0' }} />
                         <p><strong>{t('track.dest')}:</strong> {order.dropoff?.lat ? `${order.dropoff.lat}, ${order.dropoff.lng}` : 'Unspecified'}</p>
-
-                        {(order.deliveryPerson || order.deliveryInstructions) && (
-                            <>
-                                <div style={{ height: '1px', background: 'var(--glass-border)', margin: '0.5rem 0' }} />
-                                {order.deliveryPerson && (
-                                    <p style={{ marginBottom: '0.5rem' }}><strong>Delivery:</strong> {order.deliveryPerson}</p>
-                                )}
-                                {order.deliveryInstructions && (
-                                    <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', fontStyle: 'italic' }}>
-                                        " {order.deliveryInstructions} "
-                                    </p>
-                                )}
-                            </>
-                        )}
                     </div>
-                    {(order.customerName || order.customerPhone) && (
-                        <div style={{ marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid var(--glass-border)' }}>
-                            <h4 style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                                Receiver Details
-                            </h4>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                                {order.customerName && (
-                                    <div>
-                                        <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Name</p>
-                                        <p style={{ fontWeight: '500' }}>{order.customerName}</p>
-                                    </div>
-                                )}
-                                {order.customerPhone && (
-                                    <div>
-                                        <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Phone</p>
-                                        <p style={{ fontWeight: '500' }}>{order.customerPhone}</p>
-                                    </div>
-                                )}
-                                {order.email && (
-                                    <div style={{ gridColumn: '1 / -1' }}>
-                                        <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Email</p>
-                                        <p style={{ fontWeight: '500' }}>{order.email}</p>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    )}
                 </Card>
+
+                {/* Receiver & Delivery Details Card */}
+                {(order.customerName || order.customerPhone || order.email || order.deliveryInstructions || order.deliveryPerson) && (
+                    <Card>
+                        <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
+                            <User size={18} color="var(--color-primary)" /> {t('track.receiver_details') || 'Receiver & Delivery Details'}
+                        </h3>
+
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
+                            {/* Customer Info */}
+                            <div>
+                                <h4 style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                    {t('dashboard.table.client') || 'Client Info'}
+                                </h4>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                    {order.customerName && (
+                                        <div>
+                                            <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{t('track.customer_name')}</p>
+                                            <p style={{ fontWeight: '500' }}>{order.customerName}</p>
+                                        </div>
+                                    )}
+                                    {order.customerPhone && (
+                                        <div>
+                                            <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{t('track.customer_phone')}</p>
+                                            <p style={{ fontWeight: '500' }}>{order.customerPhone}</p>
+                                        </div>
+                                    )}
+                                    {order.email && (
+                                        <div>
+                                            <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Email</p>
+                                            <p style={{ fontWeight: '500' }}>{order.email}</p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Delivery Info */}
+                            {(order.deliveryPerson || order.deliveryInstructions) && (
+                                <div>
+                                    <h4 style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                        Delivery Info
+                                    </h4>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                        {order.deliveryPerson && (
+                                            <div>
+                                                <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Delivery Person</p>
+                                                <p style={{ fontWeight: '500' }}>{order.deliveryPerson}</p>
+                                            </div>
+                                        )}
+                                        {order.deliveryInstructions && (
+                                            <div>
+                                                <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Instructions</p>
+                                                <div style={{
+                                                    background: 'var(--glass-bg)',
+                                                    padding: '0.75rem',
+                                                    borderRadius: 'var(--radius-sm)',
+                                                    border: '1px solid var(--glass-border)',
+                                                    fontSize: '0.9rem',
+                                                    fontStyle: 'italic',
+                                                    marginTop: '0.25rem'
+                                                }}>
+                                                    "{order.deliveryInstructions}"
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </Card>
+                )}
             </div>
 
             <StatusTimeline history={order.history} />

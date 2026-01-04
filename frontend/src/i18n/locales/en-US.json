@@ -37,7 +37,8 @@
         "last_updated": "Last Information Update",
         "registered": "Registered Date",
         "customer_name": "Customer Name",
-        "customer_phone": "Phone Number"
+        "customer_phone": "Phone Number",
+        "receiver_details": "Receiver & Delivery Details"
     },
     "dashboard": {
         "welcome": "Welcome back",

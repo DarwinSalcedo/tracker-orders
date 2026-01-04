@@ -37,7 +37,8 @@
         "last_updated": "Última Actualización",
         "registered": "Fecha Registro",
         "customer_name": "Nombre Cliente",
-        "customer_phone": "Teléfono"
+        "customer_phone": "Teléfono",
+        "receiver_details": "Detalles del Receptor y Entrega"
     },
     "dashboard": {
         "welcome": "Bienvenido de nuevo",
