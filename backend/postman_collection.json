@@ -1,0 +1,173 @@
+{
+    "info": {
+        "_postman_id": "track-as-a-service-e2e",
+        "name": "Track-as-a-Service E2E Flow",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "1. Create Order",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"trackingId\": \"{{trackingId}}\",\n    \"email\": \"{{email}}\",\n    \"pickup\": {\n        \"lat\": 19.4326,\n        \"lng\": -99.1332\n    },\n    \"dropoff\": {\n        \"lat\": 19.4000,\n        \"lng\": -99.1000\n    }\n}"
+                },
+                "url": {
+                    "raw": "{{baseUrl}}/api/orders",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "orders"
+                    ]
+                },
+                "description": "Creates a new order with 'created' status."
+            },
+            "response": []
+        },
+        {
+            "name": "2. Track Order (Initial)",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"trackingId\": \"{{trackingId}}\",\n    \"email\": \"{{email}}\"\n}"
+                },
+                "url": {
+                    "raw": "{{baseUrl}}/api/track",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "track"
+                    ]
+                },
+                "description": "Verifies the order exists and handles pickup/dropoff."
+            },
+            "response": []
+        },
+        {
+            "name": "3. Update - In Transit",
+            "request": {
+                "method": "PATCH",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"statusCode\": \"in_transit\",\n    \"lat\": 19.4200,\n    \"lng\": -99.1200\n}"
+                },
+                "url": {
+                    "raw": "{{baseUrl}}/api/orders/{{trackingId}}",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "orders",
+                        "{{trackingId}}"
+                    ]
+                },
+                "description": "Updates status to in_transit and moves location."
+            },
+            "response": []
+        },
+        {
+            "name": "4. Track Order (After Update)",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"trackingId\": \"{{trackingId}}\",\n    \"email\": \"{{email}}\"\n}"
+                },
+                "url": {
+                    "raw": "{{baseUrl}}/api/track",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "track"
+                    ]
+                },
+                "description": "Verifies history is updated."
+            },
+            "response": []
+        },
+        {
+            "name": "5. Update - Delivered",
+            "request": {
+                "method": "PATCH",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"statusCode\": \"delivered\",\n    \"lat\": 19.4000,\n    \"lng\": -99.1000\n}"
+                },
+                "url": {
+                    "raw": "{{baseUrl}}/api/orders/{{trackingId}}",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "orders",
+                        "{{trackingId}}"
+                    ]
+                },
+                "description": "Updates status to delivered."
+            },
+            "response": []
+        }
+    ],
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost:3000",
+            "type": "string"
+        },
+        {
+            "key": "trackingId",
+            "value": "POSTMAN-FLOW-01",
+            "type": "string"
+        },
+        {
+            "key": "email",
+            "value": "postman@test.com",
+            "type": "string"
+        }
+    ]
+}

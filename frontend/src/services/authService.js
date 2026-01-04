@@ -1,29 +1,41 @@
-// Simulating a real auth service
-const MOCK_USER = {
-    username: 'admin',
-    password: 'password123'
-};
+import api from './api';
 
 export const authService = {
     login: async (username, password) => {
-        // Simulate API delay
-        await new Promise(resolve => setTimeout(resolve, 800));
+        try {
+            const response = await api.post('/auth/login', { username, password });
+            const { token, user } = response.data;
 
-        if (username === MOCK_USER.username && password === MOCK_USER.password) {
-            const token = 'mock-jwt-token-' + Date.now();
             localStorage.setItem('authToken', token);
-            return { token, user: { name: 'Admin User', role: 'admin' } };
-        }
+            localStorage.setItem('user', JSON.stringify(user));
 
-        throw new Error('Invalid credentials');
+            return { token, user };
+        } catch (error) {
+            throw error.response?.data?.error || 'Login failed';
+        }
+    },
+
+    register: async (username, password, role) => {
+        try {
+            const response = await api.post('/auth/register', { username, password, role });
+            return response.data;
+        } catch (error) {
+            throw error.response?.data?.error || 'Registration failed';
+        }
     },
 
     logout: () => {
         localStorage.removeItem('authToken');
+        localStorage.removeItem('user');
     },
 
     isAuthenticated: () => {
         return !!localStorage.getItem('authToken');
+    },
+
+    getUser: () => {
+        const user = localStorage.getItem('user');
+        return user ? JSON.parse(user) : null;
     },
 
     getToken: () => {

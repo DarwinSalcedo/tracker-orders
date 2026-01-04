@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { motion } from 'framer-motion';
 import Button from '../../components/ui/Button';
@@ -98,9 +98,9 @@ const Login = () => {
                     </form>
 
                     <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
-                        <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
-                            For demo use: admin / password123
-                        </span>
+                        <Link to="/backoffice/register" style={{ fontSize: '0.875rem', color: 'var(--color-primary)', textDecoration: 'none' }}>
+                            Need an account? Register here
+                        </Link>
                     </div>
                 </Card>
             </div>

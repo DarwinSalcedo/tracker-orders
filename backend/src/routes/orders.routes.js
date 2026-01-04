@@ -1,10 +1,11 @@
 import express from 'express';
 import { query } from '../config/db.js';
+import { verifyToken, authorize } from '../middleware/auth.middleware.js';
 
 const router = express.Router();
 
 // Get Statuses (Helper)
-router.get('/statuses', async (req, res) => {
+router.get('/statuses', verifyToken, async (req, res) => {
     try {
         const result = await query('SELECT * FROM order_statuses ORDER BY id ASC');
         res.json(result.rows);
@@ -14,7 +15,7 @@ router.get('/statuses', async (req, res) => {
 });
 
 // Get All Orders (Backoffice Dashboard)
-router.get('/orders', async (req, res) => {
+router.get('/orders', verifyToken, async (req, res) => {
     try {
         const result = await query(
             `SELECT o.*, s.code as status_code, s.label as status_label 
@@ -29,7 +30,7 @@ router.get('/orders', async (req, res) => {
 });
 
 // Create Shipment (Backoffice)
-router.post('/orders', async (req, res) => {
+router.post('/orders', verifyToken, authorize('Admin'), async (req, res) => {
     const { trackingId, email, pickup, dropoff, deliveryPerson, deliveryInstructions } = req.body;
 
     if (!trackingId || !email) {
@@ -66,7 +67,7 @@ router.post('/orders', async (req, res) => {
 });
 
 // Update Order (Backoffice)
-router.patch('/orders/:id', async (req, res) => {
+router.patch('/orders/:id', verifyToken, authorize(['Admin', 'Delivery']), async (req, res) => {
     const { id } = req.params;
     const {
         statusCode,
@@ -80,6 +81,17 @@ router.patch('/orders/:id', async (req, res) => {
         dropoffLat,
         dropoffLng
     } = req.body;
+
+    // Delivery field restriction
+    if (req.user.role === 'Delivery') {
+        const allowedFields = ['statusCode', 'lat', 'lng'];
+        const bodyFields = Object.keys(req.body);
+        const forbiddenFields = bodyFields.filter(field => !allowedFields.includes(field));
+
+        if (forbiddenFields.length > 0) {
+            return res.status(403).json({ error: `Delivery role is not allowed to update: ${forbiddenFields.join(', ')}` });
+        }
+    }
 
     try {
         let updateQuery = 'UPDATE orders SET updated_at = NOW()';

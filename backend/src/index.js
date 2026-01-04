@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import ordersRoutes from "./routes/orders.routes.js";
+import authRoutes from "./routes/auth.routes.js";
+import usersRoutes from "./routes/users.routes.js";
 
 import { query } from "./config/db.js";
 
@@ -20,6 +22,12 @@ app.use(cors({
 query('SELECT NOW()')
   .then((res) => console.log('Database connected successfully:', res.rows[0]))
   .catch((err) => console.error('Database connection failed:', err.message));
+
+// Auth Routes
+app.use("/api/auth", authRoutes);
+
+// User Management Routes
+app.use("/api/users", usersRoutes);
 
 // Backoffice Routes
 app.use("/api", ordersRoutes);

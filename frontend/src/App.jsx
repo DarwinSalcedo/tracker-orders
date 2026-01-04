@@ -7,15 +7,22 @@ import Home from './pages/Home';
 import Login from './pages/Backoffice/Login';
 import Dashboard from './pages/Backoffice/Dashboard';
 import CreateOrder from './pages/Backoffice/CreateOrder';
+import Register from './pages/Backoffice/Register';
 import TrackOrder from './pages/Tracker/TrackOrder';
 
 // Protected Route Component
-const ProtectedRoute = () => {
-  const { isAuthenticated, loading } = useAuth();
+const ProtectedRoute = ({ allowedRoles = [] }) => {
+  const { isAuthenticated, user, loading } = useAuth();
 
   if (loading) return <div className="page flex-center">Loading...</div>;
 
-  return isAuthenticated ? <Outlet /> : <Navigate to="/backoffice/login" replace />;
+  if (!isAuthenticated) return <Navigate to="/backoffice/login" replace />;
+
+  if (allowedRoles.length > 0 && !allowedRoles.includes(user?.role)) {
+    return <Navigate to="/backoffice/dashboard" replace />;
+  }
+
+  return <Outlet />;
 };
 
 function App() {
@@ -28,11 +35,14 @@ function App() {
 
           {/* Backoffice Routes */}
           <Route path="/backoffice/login" element={<Login />} />
+          <Route path="/backoffice/register" element={<Register />} />
 
-          <Route element={<ProtectedRoute />}>
+          <Route element={<ProtectedRoute allowedRoles={['Admin', 'Delivery']} />}>
             <Route path="/backoffice/dashboard" element={<Dashboard />} />
+          </Route>
+
+          <Route element={<ProtectedRoute allowedRoles={['Admin']} />}>
             <Route path="/backoffice/create-order" element={<CreateOrder />} />
-            {/* Add Update Order routes here later */}
           </Route>
 
           <Route path="*" element={<Navigate to="/" replace />} />

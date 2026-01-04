@@ -14,8 +14,7 @@ export const AuthProvider = ({ children }) => {
             const isAuth = authService.isAuthenticated();
             if (isAuth) {
                 setIsAuthenticated(true);
-                // In a real app, we would validate the token with the backend here
-                setUser({ name: 'Admin User' });
+                setUser(authService.getUser());
             }
             setLoading(false);
         };
@@ -29,6 +28,10 @@ export const AuthProvider = ({ children }) => {
         return data;
     };
 
+    const register = async (username, password, role) => {
+        return await authService.register(username, password, role);
+    };
+
     const logout = () => {
         authService.logout();
         setIsAuthenticated(false);
@@ -36,7 +39,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, isAuthenticated, login, logout, loading }}>
+        <AuthContext.Provider value={{ user, isAuthenticated, login, logout, register, loading }}>
             {children}
         </AuthContext.Provider>
     );
