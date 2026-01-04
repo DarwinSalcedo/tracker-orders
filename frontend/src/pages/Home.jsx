@@ -30,7 +30,7 @@ const Home = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
                 >
-                    <h1 className="text-gradient">Unknown Logistics</h1>
+                    <h1 className="text-gradient">Global Tracker</h1>
                     <p style={{ color: 'var(--color-text-muted)', marginBottom: '3rem' }}>
                         {t('home.subtitle')}
                     </p>

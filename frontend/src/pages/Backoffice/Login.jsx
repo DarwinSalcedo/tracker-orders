@@ -64,7 +64,7 @@ const Login = () => {
                         >
                             <Lock color="white" size={28} />
                         </motion.div>
-                        <h1 className="text-gradient">Unknown Tracker</h1>
+                        <h1 className="text-gradient">Global Tracker</h1>
                         <p style={{ color: 'var(--color-text-muted)' }}>Sign in to access backoffice</p>
                     </div>
 
