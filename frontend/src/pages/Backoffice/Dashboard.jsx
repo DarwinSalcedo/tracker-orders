@@ -21,7 +21,8 @@ import {
     ClipboardList,
     Boxes,
     Navigation,
-    Edit2
+    Edit2,
+    Archive
 } from 'lucide-react';
 import Input from '../../components/ui/Input';
 import EditShipmentModal from './EditShipmentModal';
@@ -39,7 +40,7 @@ const Dashboard = () => {
     const [actionLoading, setActionLoading] = useState(null); // tracking ID of order being updated
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [editingShipment, setEditingShipment] = useState(null);
-    const [activeTab, setActiveTab] = useState('shipments'); // 'shipments' or 'users'
+    const [activeTab, setActiveTab] = useState('shipments'); // 'shipments', 'users', or 'archived'
 
     const fetchOrders = async () => {
         try {
@@ -113,7 +114,16 @@ const Dashboard = () => {
         const matchesSearch =
             order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
             order.email.toLowerCase().includes(searchTerm.toLowerCase());
+
         const isNotDeleted = order.status_code !== 'deleted';
+
+        // Tab filtering
+        if (activeTab === 'archived') {
+            return matchesSearch && isNotDeleted && order.status_code === 'archived';
+        } else if (activeTab === 'shipments') {
+            return matchesSearch && isNotDeleted && order.status_code !== 'archived';
+        }
+
         return matchesSearch && isNotDeleted;
     });
 
@@ -123,6 +133,7 @@ const Dashboard = () => {
             case 'picked_up': return { bg: 'rgba(139, 92, 246, 0.1)', color: 'var(--color-accent)' };
             case 'in_transit': return { bg: 'rgba(245, 158, 11, 0.1)', color: 'var(--color-warning)' };
             case 'delivered': return { bg: 'rgba(16, 185, 129, 0.1)', color: 'var(--color-success)' };
+            case 'archived': return { bg: 'rgba(71, 85, 105, 0.1)', color: 'var(--color-text-muted)' };
             default: return { bg: 'rgba(148, 163, 184, 0.1)', color: 'var(--color-text-muted)' };
         }
     };
@@ -197,27 +208,64 @@ const Dashboard = () => {
                         >
                             <Users size={18} /> User Management
                         </button>
+                        <button
+                            onClick={() => setActiveTab('archived')}
+                            style={{
+                                background: 'none', border: 'none', color: activeTab === 'archived' ? 'var(--color-primary)' : 'var(--color-text-muted)',
+                                padding: '0.5rem 1rem', cursor: 'pointer', fontWeight: '600', borderBottom: activeTab === 'archived' ? '2px solid var(--color-primary)' : 'none',
+                                display: 'flex', alignItems: 'center', gap: '0.5rem'
+                            }}
+                        >
+                            <Archive size={18} /> Archived
+                        </button>
                     </div>
                 )}
 
-                {activeTab === 'shipments' ? (
+                {user?.role !== 'Admin' && (
+                    <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem' }}>
+                        <button
+                            onClick={() => setActiveTab('shipments')}
+                            style={{
+                                background: 'none', border: 'none', color: activeTab === 'shipments' ? 'var(--color-primary)' : 'var(--color-text-muted)',
+                                padding: '0.5rem 1rem', cursor: 'pointer', fontWeight: '600', borderBottom: activeTab === 'shipments' ? '2px solid var(--color-primary)' : 'none',
+                                display: 'flex', alignItems: 'center', gap: '0.5rem'
+                            }}
+                        >
+                            <Package size={18} /> Shipments
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('archived')}
+                            style={{
+                                background: 'none', border: 'none', color: activeTab === 'archived' ? 'var(--color-primary)' : 'var(--color-text-muted)',
+                                padding: '0.5rem 1rem', cursor: 'pointer', fontWeight: '600', borderBottom: activeTab === 'archived' ? '2px solid var(--color-primary)' : 'none',
+                                display: 'flex', alignItems: 'center', gap: '0.5rem'
+                            }}
+                        >
+                            <Archive size={18} /> Archived
+                        </button>
+                    </div>
+                )}
+
+                {activeTab === 'shipments' || activeTab === 'archived' ? (
                     <>
                         {/* Stats Grid */}
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
-                            {stats.map((stat, i) => (
-                                <Card key={i} style={{ padding: '1.5rem' }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                                        <div>
-                                            <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', marginBottom: '0.5rem' }}>{stat.label}</p>
-                                            <h3 style={{ fontSize: '1.75rem', margin: 0 }}>{stat.value}</h3>
+                        {activeTab === 'shipments' && (
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
+                                {stats.map((stat, i) => (
+                                    <Card key={i} style={{ padding: '1.5rem' }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                                            <div>
+                                                <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', marginBottom: '0.5rem' }}>{stat.label}</p>
+                                                <h3 style={{ fontSize: '1.75rem', margin: 0 }}>{stat.value}</h3>
+                                            </div>
+                                            <div style={{ padding: '0.75rem', background: `${stat.color}15`, borderRadius: '12px' }}>
+                                                <stat.icon size={24} color={stat.color} />
+                                            </div>
                                         </div>
-                                        <div style={{ padding: '0.75rem', background: `${stat.color}15`, borderRadius: '12px' }}>
-                                            <stat.icon size={24} color={stat.color} />
-                                        </div>
-                                    </div>
-                                </Card>
-                            ))}
-                        </div>
+                                    </Card>
+                                ))}
+                            </div>
+                        )}
 
                         {/* Main Content Area */}
                         <Card style={{ padding: 0, overflow: 'hidden' }}>
@@ -314,7 +362,7 @@ const Dashboard = () => {
                                                             <select
                                                                 value={order.status_code}
                                                                 onChange={(e) => handleUpdateStatus(order.id, e.target.value)}
-                                                                disabled={actionLoading === order.id}
+                                                                disabled={actionLoading === order.id || order.status_code === 'archived'}
                                                                 style={{
                                                                     background: 'rgba(255,255,255,0.05)',
                                                                     color: 'var(--color-text-main)',
@@ -325,12 +373,38 @@ const Dashboard = () => {
                                                                     cursor: 'pointer'
                                                                 }}
                                                             >
-                                                                {statuses.filter(s => s.code !== 'deleted').map(s => (
-                                                                    <option key={s.id} value={s.code}>{s.label}</option>
-                                                                ))}
+                                                                {statuses
+                                                                    .filter(s => {
+                                                                        if (s.code === 'deleted') return false;
+                                                                        // If delivered, only allow delivered and archived
+                                                                        if (order.status_code === 'delivered') {
+                                                                            return s.code === 'delivered' || s.code === 'archived';
+                                                                        }
+                                                                        // If archived, only show archived
+                                                                        if (order.status_code === 'archived') {
+                                                                            return s.code === 'archived';
+                                                                        }
+                                                                        // Otherwise, show all except archived (unless already archived)
+                                                                        return s.code !== 'archived';
+                                                                    })
+                                                                    .map(s => (
+                                                                        <option key={s.id} value={s.code}>{s.label}</option>
+                                                                    ))
+                                                                }
                                                             </select>
 
-                                                            {user?.role === 'Admin' && (
+                                                            {order.status_code === 'delivered' && (
+                                                                <button
+                                                                    style={{ color: 'var(--color-accent)', background: 'none', border: 'none', cursor: 'pointer', display: 'flex' }}
+                                                                    title="Archive Shipment"
+                                                                    onClick={() => handleUpdateStatus(order.id, 'archived')}
+                                                                    disabled={actionLoading === order.id}
+                                                                >
+                                                                    <Archive size={18} />
+                                                                </button>
+                                                            )}
+
+                                                            {user?.role === 'Admin' && order.status_code !== 'archived' && (
                                                                 <button
                                                                     style={{ color: 'var(--color-error)', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', opacity: 0.7 }}
                                                                     title="Delete Order"

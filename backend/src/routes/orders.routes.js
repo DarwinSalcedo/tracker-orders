@@ -99,8 +99,32 @@ router.patch('/orders/:id', verifyToken, authorize(['Admin', 'Delivery']), async
         let paramCount = 1;
         let statusId = null;
 
+        // Fetch current status for flow validation
+        const currentOrderRes = await query(
+            `SELECT o.*, s.code as current_status_code 
+             FROM orders o 
+             JOIN order_statuses s ON o.current_status_id = s.id 
+             WHERE o.id = $1`,
+            [id]
+        );
+
+        if (currentOrderRes.rows.length === 0) {
+            return res.status(404).json({ error: 'Shipment not found' });
+        }
+
+        const currentOrder = currentOrderRes.rows[0];
+
         // Resolve status code to ID if provided
         if (statusCode) {
+            // Restriction: If current is 'delivered', only allow 'archived'
+            if (currentOrder.current_status_code === 'delivered' && statusCode !== 'archived') {
+                return res.status(400).json({ error: 'Delivered shipments can only be archived or deleted.' });
+            }
+            // Restriction: Cannot move out of 'archived'
+            if (currentOrder.current_status_code === 'archived') {
+                return res.status(400).json({ error: 'Archived shipments cannot be modified.' });
+            }
+
             const statusRes = await query('SELECT id FROM order_statuses WHERE code = $1', [statusCode]);
             if (statusRes.rows.length === 0) {
                 return res.status(400).json({ error: 'Invalid status code' });

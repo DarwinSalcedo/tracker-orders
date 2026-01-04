@@ -43,6 +43,18 @@ const createTables = async () => {
       );
     `);
 
+    // Users Table
+    await query(`
+      CREATE TABLE IF NOT EXISTS users (
+          id SERIAL PRIMARY KEY,
+          username VARCHAR(50) UNIQUE NOT NULL,
+          password_hash VARCHAR(255) NOT NULL,
+          role VARCHAR(20) NOT NULL CHECK (role IN ('Admin', 'Delivery')),
+          is_approved BOOLEAN DEFAULT FALSE,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+
     console.log('Tables created successfully.');
   } catch (err) {
     console.error('Error creating tables:', err);
@@ -54,6 +66,7 @@ const seedStatuses = async () => {
     { code: 'created', label: 'Order Placed', description: 'Your order has been placed and is being processed.' },
     { code: 'in_transit', label: 'In Transit', description: 'Your package is on its way.' },
     { code: 'delivered', label: 'Delivered', description: 'Your package has been delivered.' },
+    { code: 'archived', label: 'Archived', description: 'This shipment has been archived and completed.' },
   ];
 
   try {
