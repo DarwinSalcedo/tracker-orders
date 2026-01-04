@@ -7,11 +7,23 @@ CREATE TABLE IF NOT EXISTS order_statuses (
     is_system BOOLEAN DEFAULT FALSE
 );
 
--- 2. Create orders table (Drop first to ensuring clean state)
+-- 2. Create users table
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(50) NOT NULL CHECK (role IN ('Admin', 'Delivery', 'Viewer')),
+    is_approved BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 3. Create orders table (Drop first to ensuring clean state)
 DROP TABLE IF EXISTS orders CASCADE;
 CREATE TABLE IF NOT EXISTS orders (
     id VARCHAR(50) PRIMARY KEY,
-    email VARCHAR(255) NOT NULL,
+    email VARCHAR(255),
+    customer_name VARCHAR(255),
+    customer_phone VARCHAR(50),
     location_lat DECIMAL(9, 6),
     location_lng DECIMAL(9, 6),
     pickup_lat DECIMAL(9, 6),
@@ -25,7 +37,7 @@ CREATE TABLE IF NOT EXISTS orders (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 3. Create order_history table
+-- 4. Create order_history table
 CREATE TABLE IF NOT EXISTS order_history (
     id SERIAL PRIMARY KEY,
     order_id VARCHAR(50) REFERENCES orders(id),

@@ -13,6 +13,18 @@ const createTables = async () => {
       );
     `);
 
+    // Users Table
+    await query(`
+      CREATE TABLE IF NOT EXISTS users (
+          id SERIAL PRIMARY KEY,
+          username VARCHAR(255) UNIQUE NOT NULL,
+          password VARCHAR(255) NOT NULL,
+          role VARCHAR(50) NOT NULL CHECK (role IN ('Admin', 'Delivery', 'Viewer')),
+          is_approved BOOLEAN DEFAULT FALSE,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+
     // Orders Table
     // DROP first for dev/setup ease to apply schema changes
     await query(`DROP TABLE IF EXISTS orders CASCADE`);
@@ -28,6 +40,8 @@ const createTables = async () => {
         pickup_lng DECIMAL(9, 6),
         dropoff_lat DECIMAL(9, 6),
         dropoff_lng DECIMAL(9, 6),
+        delivery_person VARCHAR(255),
+        delivery_instructions TEXT,
         current_status_id INTEGER REFERENCES order_statuses(id),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -43,18 +57,6 @@ const createTables = async () => {
         location_lat DECIMAL(9, 6),
         location_lng DECIMAL(9, 6),
         timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
-    `);
-
-    // Users Table
-    await query(`
-      CREATE TABLE IF NOT EXISTS users (
-          id SERIAL PRIMARY KEY,
-          username VARCHAR(50) UNIQUE NOT NULL,
-          password_hash VARCHAR(255) NOT NULL,
-          role VARCHAR(20) NOT NULL CHECK (role IN ('Admin', 'Delivery')),
-          is_approved BOOLEAN DEFAULT FALSE,
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
 
