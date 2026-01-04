@@ -3,26 +3,33 @@
 
 :root {
   /* Colors - Premium Dark Theme */
-  --color-bg-main: #0B0E14; /* Deep, almost black blue */
-  --color-bg-secondary: #151A23; /* Slightly lighter for cards */
-  
-  --color-primary: #6366f1; /* Indigo 500 */
+  --color-bg-main: #0B0E14;
+  /* Deep, almost black blue */
+  --color-bg-secondary: #151A23;
+  /* Slightly lighter for cards */
+
+  --color-primary: #6366f1;
+  /* Indigo 500 */
   --color-primary-hover: #4f46e5;
   --color-primary-glow: rgba(99, 102, 241, 0.5);
 
-  --color-accent: #8b5cf6; /* Violet */
+  --color-accent: #8b5cf6;
+  /* Violet */
   --color-accent-glow: rgba(139, 92, 246, 0.5);
-  
+
   --color-success: #10b981;
   --color-warning: #f59e0b;
   --color-error: #ef4444;
 
-  --color-text-main: #F8FAFC; /* Slate 50 */
-  --color-text-muted: #94A3B8; /* Slate 400 */
+  --color-text-main: #F8FAFC;
+  /* Slate 50 */
+  --color-text-muted: #94A3B8;
+  /* Slate 400 */
   --color-text-on-primary: #ffffff;
 
   /* Glassmorphism */
-  --glass-bg: rgba(30, 41, 59, 0.4); /* Slate 800 with opacity */
+  --glass-bg: rgba(30, 41, 59, 0.4);
+  /* Slate 800 with opacity */
   --glass-border: rgba(255, 255, 255, 0.08);
   --glass-blur: 16px;
   --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -44,10 +51,16 @@
   /* Typography */
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-heading: 'Outfit', sans-serif;
-  
+
   /* Transitions */
   --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Breakpoints */
+  --screen-sm: 640px;
+  --screen-md: 768px;
+  --screen-lg: 1024px;
+  --screen-xl: 1280px;
 }
 
 .light-mode {

@@ -96,7 +96,7 @@ const ShipmentMap = ({ pickup, dropoff, currentLocation }) => {
     }
 
     return (
-        <div style={{ height: '400px', width: '100%', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--glass-border)' }}>
+        <div style={{ height: '400px', minHeight: '300px', maxHeight: '50vh', width: '100%', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--glass-border)' }}>
             <MapContainer
                 center={points[0]}
                 zoom={13}

@@ -138,7 +138,7 @@ const Dashboard = () => {
     }
 
     const renderShipmentControls = () => (
-        <div style={{ display: 'flex', gap: '1rem' }}>
+        <div className="flex-stack" style={{ display: 'flex', gap: '1rem' }}>
             <Button variant="secondary" onClick={handleRefresh} disabled={refreshing}>
                 <RefreshCw size={18} className={refreshing ? 'spin' : ''} />
             </Button>
@@ -154,10 +154,10 @@ const Dashboard = () => {
     );
 
     return (
-        <div className="page" style={{ padding: '2rem', background: 'var(--color-bg-main)' }}>
+        <div className="page" style={{ padding: 'var(--spacing-md) 0', background: 'var(--color-bg-main)' }}>
             <div className="container">
                 {/* Header */}
-                <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+                <header className="flex-stack" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
                     <div>
                         <h1 className="text-gradient" style={{ fontSize: '2rem', marginBottom: '0.25rem' }}>Logistics Command Center</h1>
                         <p style={{ color: 'var(--color-text-muted)' }}>Logged in as {user?.username} ({user?.role})</p>
@@ -171,7 +171,7 @@ const Dashboard = () => {
 
                 {/* Tabs (Admin Only) */}
                 {user?.role === 'Admin' && (
-                    <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem' }}>
+                    <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem', overflowX: 'auto', whiteSpace: 'nowrap' }}>
                         <button
                             onClick={() => setActiveTab('shipments')}
                             style={{

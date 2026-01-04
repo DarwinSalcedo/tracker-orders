@@ -89,9 +89,9 @@ const CreateOrder = () => {
             <div className="container" style={{ maxWidth: '800px' }}>
                 <header style={{ marginBottom: '2rem' }}>
                     <Button variant="ghost" onClick={() => navigate('/backoffice/dashboard')} style={{ paddingLeft: 0, marginBottom: '1rem' }}>
-                        <ArrowLeft size={18} /> Back to Command Center
+                        <ArrowLeft size={18} /> Back
                     </Button>
-                    <h1 className="text-gradient" style={{ fontSize: '2.5rem' }}>Register New Shipment</h1>
+                    <h1 className="text-gradient">Register New Shipment</h1>
                     <p style={{ color: 'var(--color-text-muted)' }}>Initialize a new tracking waybill in the system.</p>
                 </header>
 
@@ -160,7 +160,7 @@ const CreateOrder = () => {
                             <h3 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                 <MapPin size={20} color="var(--color-accent)" /> Pickup Location (Optional)
                             </h3>
-                            <div style={{ display: 'flex', gap: '1rem' }}>
+                            <div className="flex-stack-sm" style={{ display: 'flex', gap: '1rem' }}>
                                 <Input
                                     label="Latitude"
                                     name="pickupLat"
@@ -187,7 +187,7 @@ const CreateOrder = () => {
                             <h3 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                 <MapPin size={20} color="var(--color-success)" /> Destination (Optional)
                             </h3>
-                            <div style={{ display: 'flex', gap: '1rem' }}>
+                            <div className="flex-stack-sm" style={{ display: 'flex', gap: '1rem' }}>
                                 <Input
                                     label="Latitude"
                                     name="dropoffLat"

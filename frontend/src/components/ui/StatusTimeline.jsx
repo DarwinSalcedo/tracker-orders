@@ -79,7 +79,7 @@ const StatusTimeline = ({ history = [] }) => {
                             </div>
 
                             <div style={{ flex: 1 }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.25rem' }}>
+                                <div className="flex-stack-sm" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.25rem' }}>
                                     <span style={{
                                         fontWeight: isLatest ? '600' : '400',
                                         color: isLatest ? 'var(--color-text-main)' : 'var(--color-text-muted)',

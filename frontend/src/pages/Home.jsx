@@ -21,8 +21,8 @@ const Home = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
                 >
-                    <h1 style={{ fontSize: '3.5rem', marginBottom: '1rem' }} className="text-gradient">Unknown Logistics</h1>
-                    <p style={{ fontSize: '1.25rem', color: 'var(--color-text-muted)', marginBottom: '3rem' }}>
+                    <h1 className="text-gradient">Unknown Logistics</h1>
+                    <p style={{ color: 'var(--color-text-muted)', marginBottom: '3rem' }}>
                         Enterprise-grade shipment tracking. Real-time manifests with premium precision.
                     </p>
                 </motion.div>

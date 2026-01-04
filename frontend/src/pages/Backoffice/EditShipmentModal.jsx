@@ -87,7 +87,7 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 zIndex: 1000,
-                padding: '2rem'
+                padding: 'var(--spacing-md)'
             }}>
                 <motion.div
                     initial={{ scale: 0.9, opacity: 0 }}
@@ -111,7 +111,7 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
                             </button>
                         </div>
 
-                        <form onSubmit={handleSubmit} style={{ padding: '2rem' }}>
+                        <form onSubmit={handleSubmit} style={{ padding: 'var(--spacing-lg)' }}>
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
                                 {/* Basic Info */}
                                 <div>
@@ -166,7 +166,7 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
                                         <p style={{ fontSize: '0.85rem', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                             <MapPin size={14} color="var(--color-accent)" /> Pickup Coordinates
                                         </p>
-                                        <div style={{ display: 'flex', gap: '1rem' }}>
+                                        <div className="flex-stack-sm" style={{ display: 'flex', gap: '1rem' }}>
                                             <Input
                                                 placeholder="Lat"
                                                 name="pickupLat"
@@ -190,7 +190,7 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
                                         <p style={{ fontSize: '0.85rem', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                             <MapPin size={14} color="var(--color-success)" /> Destination Coordinates
                                         </p>
-                                        <div style={{ display: 'flex', gap: '1rem' }}>
+                                        <div className="flex-stack-sm" style={{ display: 'flex', gap: '1rem' }}>
                                             <Input
                                                 placeholder="Lat"
                                                 name="dropoffLat"
@@ -212,7 +212,7 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
                                 </div>
                             </div>
 
-                            <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'flex-end', gap: '1rem', borderTop: '1px solid var(--glass-border)', paddingTop: '2rem' }}>
+                            <div className="flex-stack" style={{ marginTop: '2rem', display: 'flex', justifyContent: 'flex-end', gap: '1rem', borderTop: '1px solid var(--glass-border)', paddingTop: '2rem' }}>
                                 <Button type="button" variant="outline" onClick={onClose}>Cancel</Button>
                                 <Button type="submit" variant="primary" disabled={loading}>
                                     {loading ? <Loader className="spin" size={18} /> : (

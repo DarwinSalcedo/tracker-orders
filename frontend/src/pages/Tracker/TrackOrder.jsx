@@ -76,10 +76,10 @@ const TrackOrder = () => {
             background: 'radial-gradient(ellipse at top, #0f172a, #000000)'
         }}>
             {/* Header / Nav */}
-            <div className="container" style={{ width: '100%', marginBottom: '2rem', display: 'flex', justifyContent: 'flex-start', gap: '1rem' }}>
+            <div className="container" style={{ width: '100%', marginBottom: '2rem' }}>
                 {!orderData && (
-                    <>
-                        <Button variant="ghost" onClick={() => navigate(-1)}>
+                    <div className="flex-stack-sm" style={{ display: 'flex', gap: '1rem' }}>
+                        <Button variant="secondary" onClick={() => navigate(-1)}>
                             <ArrowLeft size={18} /> Back
                         </Button>
                         {isAuthenticated && (
@@ -87,7 +87,7 @@ const TrackOrder = () => {
                                 <LayoutDashboard size={18} /> Dashboard
                             </Button>
                         )}
-                    </>
+                    </div>
                 )}
             </div>
 

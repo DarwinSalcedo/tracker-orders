@@ -16,8 +16,8 @@ const OrderDetails = ({ order, onBack }) => {
             exit={{ opacity: 0, y: -20 }}
             style={{ width: '100%', maxWidth: '800px' }}
         >
-            <div style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Button variant="secondary" onClick={onBack}>&larr; Tracking Portal</Button>
+            <div className="flex-stack" style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Button variant="secondary" onClick={onBack} fullWidth={false}>&larr; Tracking Portal</Button>
                 <div style={{ textAlign: 'right' }}>
                     <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '0.2rem' }}>WAYBILL NUMBER</p>
                     <span className="text-gradient" style={{ fontWeight: '700', fontSize: '1.4rem' }}>

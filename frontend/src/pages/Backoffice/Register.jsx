@@ -93,7 +93,7 @@ const Register = () => {
 
                         <div className="input-group" style={{ marginBottom: '1.5rem' }}>
                             <label style={{ display: 'block', marginBottom: '0.75rem', color: 'var(--color-text-dim)', fontSize: '0.875rem', fontWeight: '500' }}>Select Account Type</label>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '1rem' }}>
                                 <motion.div
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}

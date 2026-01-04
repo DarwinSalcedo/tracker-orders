@@ -85,3 +85,79 @@ select {
     display: flex;
     flex-direction: column;
 }
+
+/* Responsive Overrides */
+@media (max-width: 768px) {
+    :root {
+        --spacing-lg: 1rem;
+        --spacing-xl: 1.5rem;
+        --spacing-2xl: 2rem;
+    }
+
+    h1 {
+        font-size: 2.25rem;
+    }
+
+    h2 {
+        font-size: 1.75rem;
+    }
+
+    h3 {
+        font-size: 1.25rem;
+    }
+
+    .container {
+        padding: 0 var(--spacing-md);
+    }
+
+    /* Table Responsiveness */
+    .responsive-table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin: 0 -1rem;
+        padding: 0 1rem;
+    }
+}
+
+.mobile-only {
+    display: none;
+}
+
+.desktop-only {
+    display: block;
+}
+
+@media (max-width: 640px) {
+    .mobile-only {
+        display: block;
+    }
+
+    .desktop-only {
+        display: none;
+    }
+
+    .flex-stack {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 1.5rem !important;
+    }
+
+    .flex-stack>* {
+        width: 100%;
+    }
+
+    .flex-stack-sm {
+        flex-direction: column !important;
+        gap: 0.5rem !important;
+    }
+
+    /* Form adjustments */
+    input,
+    select {
+        width: 100% !important;
+    }
+
+    .full-width-mobile {
+        width: 100% !important;
+    }
+}
