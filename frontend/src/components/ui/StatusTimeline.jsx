@@ -103,7 +103,7 @@ const StatusTimeline = ({ history = [] }) => {
                                 {event.location && (event.location.lat || event.location.address) && (
                                     <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', display: 'flex', alignItems: 'center', gap: '0.25rem', opacity: 0.8 }}>
                                         <MapPin size={12} />
-                                        {event.location.address || `${t('track.manifested_at')} ${event.location.lat.toFixed(4)}, ${event.location.lng.toFixed(4)}`}
+                                        {event.location.address || `${t('track.manifested_at')} ${parseFloat(event.location.lat).toFixed(4)}, ${parseFloat(event.location.lng).toFixed(4)}`}
                                     </div>
                                 )}
                             </div>
