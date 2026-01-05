@@ -114,16 +114,6 @@ const ShipmentMap = ({ pickup, dropoff, currentLocation }) => {
                     </Marker>
                 ))}
 
-                {points.length > 1 && (
-                    <Polyline
-                        positions={points}
-                        color="var(--color-primary)"
-                        weight={4}
-                        opacity={0.6}
-                        dashArray="10, 10"
-                    />
-                )}
-
                 <ChangeView bounds={points} />
             </MapContainer>
         </div>
