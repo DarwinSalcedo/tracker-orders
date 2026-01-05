@@ -1,7 +1,7 @@
 import React from 'react';
 import './styles/Input.css';
 
-const Input = ({ label, type = 'text', name, value, onChange, placeholder, icon: Icon, required = false }) => {
+const Input = ({ label, type = 'text', name, value, onChange, placeholder, icon: Icon, required = false, ...props }) => {
     return (
         <div className="premium-input-container">
             {label && <label htmlFor={name} className="premium-input-label">{label}</label>}
@@ -16,6 +16,7 @@ const Input = ({ label, type = 'text', name, value, onChange, placeholder, icon:
                     placeholder={placeholder}
                     required={required}
                     className={`premium-input ${Icon ? 'with-icon' : ''}`}
+                    {...props}
                 />
             </div>
         </div>
