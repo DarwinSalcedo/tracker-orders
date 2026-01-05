@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS orders (
     dropoff_lng DECIMAL(9, 6),
     dropoff_address TEXT,
     delivery_person VARCHAR(255),
+    delivery_person_id INTEGER REFERENCES users(id),
     delivery_instructions TEXT,
     current_status_id INTEGER REFERENCES order_statuses(id),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

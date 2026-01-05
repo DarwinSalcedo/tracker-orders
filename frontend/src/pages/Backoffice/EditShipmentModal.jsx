@@ -18,6 +18,27 @@ import AddressAutocomplete from '../../components/ui/AddressAutocomplete';
 
 const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
     const [loading, setLoading] = useState(false);
+    const [deliveryUsers, setDeliveryUsers] = useState([]);
+
+    useEffect(() => {
+        if (isOpen) {
+            const fetchUsers = async () => {
+                try {
+                    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users`, {
+                        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        setDeliveryUsers(data);
+                    }
+                } catch (error) {
+                    console.error("Failed to fetch users", error);
+                }
+            };
+            fetchUsers();
+        }
+    }, [isOpen]);
+
     const [error, setError] = useState('');
     const [formData, setFormData] = useState({
         email: '',
@@ -40,6 +61,7 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
                 customerName: shipment.customer_name || '',
                 customerPhone: shipment.customer_phone || '',
                 deliveryPerson: shipment.delivery_person || '',
+                deliveryPersonId: shipment.delivery_person_id || '',
                 deliveryInstructions: shipment.delivery_instructions || '',
                 pickupLat: shipment.pickup_lat || '',
                 pickupLng: shipment.pickup_lng || '',
@@ -75,7 +97,8 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
                 email: formData.email,
                 customerName: formData.customerName,
                 customerPhone: formData.customerPhone,
-                deliveryPerson: formData.deliveryPerson,
+                deliveryPerson: formData.deliveryPersonId ? deliveryUsers.find(u => u.id === parseInt(formData.deliveryPersonId))?.username : '',
+                deliveryPersonId: formData.deliveryPersonId,
                 deliveryInstructions: formData.deliveryInstructions,
                 pickupLat: formData.pickupLat ? parseFloat(formData.pickupLat) : null,
                 pickupLng: formData.pickupLng ? parseFloat(formData.pickupLng) : null,
@@ -161,13 +184,26 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
                                         onChange={handleChange}
                                         icon={Mail}
                                     />
-                                    <Input
-                                        label="Delivery Person (Optional)"
-                                        name="deliveryPerson"
-                                        value={formData.deliveryPerson}
-                                        onChange={handleChange}
-                                        icon={User}
-                                    />
+                                    <div className="premium-input-container">
+                                        <label className="premium-input-label">Delivery Person (Optional)</label>
+                                        <div className="premium-input-wrapper">
+                                            <User size={18} className="premium-input-icon" />
+                                            <select
+                                                name="deliveryPersonId"
+                                                value={formData.deliveryPersonId || ''}
+                                                onChange={handleChange}
+                                                className="premium-input with-icon"
+                                                style={{ appearance: 'none', cursor: 'pointer' }}
+                                            >
+                                                <option value="">Select a delivery person...</option>
+                                                {deliveryUsers.map(user => (
+                                                    <option key={user.id} value={user.id}>
+                                                        {user.username}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    </div>
                                     <div style={{ marginBottom: '1rem' }}>
                                         <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>
                                             Instructions

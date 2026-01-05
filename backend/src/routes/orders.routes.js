@@ -8,6 +8,18 @@ const router = express.Router();
 // Get All Orders (Backoffice Dashboard)
 router.get('/orders', verifyToken, async (req, res) => {
     try {
+        if (req.user.role === 'Delivery') {
+            const result = await query(
+                `SELECT o.*, s.code as status_code, s.label as status_label 
+                 FROM orders o
+                 JOIN order_statuses s ON o.current_status_id = s.id
+                 WHERE o.delivery_person_id = $1
+                 ORDER BY o.created_at DESC`,
+                [req.user.id]
+            );
+            return res.json(result.rows);
+        }
+
         const result = await query(
             `SELECT o.*, s.code as status_code, s.label as status_label 
              FROM orders o
@@ -22,7 +34,7 @@ router.get('/orders', verifyToken, async (req, res) => {
 
 // Create Shipment (Backoffice)
 router.post('/orders', verifyToken, authorize('Admin'), async (req, res) => {
-    const { trackingId, email, customerName, customerPhone, externalOrderId, pickup, dropoff, deliveryPerson, deliveryInstructions } = req.body;
+    const { trackingId, email, customerName, customerPhone, externalOrderId, pickup, dropoff, deliveryPerson, deliveryPersonId, deliveryInstructions } = req.body;
 
 
     if (!trackingId) {
@@ -44,10 +56,10 @@ router.post('/orders', verifyToken, authorize('Admin'), async (req, res) => {
 
         // Insert Shipment
         const result = await query(
-            `INSERT INTO orders (id, email, customer_name, customer_phone, external_order_id, share_token, current_status_id, pickup_lat, pickup_lng, pickup_address, dropoff_lat, dropoff_lng, dropoff_address, delivery_person, delivery_instructions) 
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) 
+            `INSERT INTO orders (id, email, customer_name, customer_phone, external_order_id, share_token, current_status_id, pickup_lat, pickup_lng, pickup_address, dropoff_lat, dropoff_lng, dropoff_address, delivery_person, delivery_person_id, delivery_instructions) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16) 
        RETURNING *`,
-            [trackingId, email, customerName, customerPhone, externalOrderId, shareToken, createdStatusId, pickup?.lat, pickup?.lng, pickup?.address, dropoff?.lat, dropoff?.lng, dropoff?.address, deliveryPerson, deliveryInstructions]
+            [trackingId, email, customerName, customerPhone, externalOrderId, shareToken, createdStatusId, pickup?.lat, pickup?.lng, pickup?.address, dropoff?.lat, dropoff?.lng, dropoff?.address, deliveryPerson, deliveryPersonId, deliveryInstructions]
         );
 
         // Add initial history entry
@@ -74,6 +86,7 @@ router.patch('/orders/:id', verifyToken, authorize(['Admin', 'Delivery']), async
         customerPhone,
         externalOrderId,
         deliveryPerson,
+        deliveryPersonId,
         deliveryInstructions,
         pickupLat,
         pickupLng,
@@ -115,6 +128,13 @@ router.patch('/orders/:id', verifyToken, authorize(['Admin', 'Delivery']), async
 
         const currentOrder = currentOrderRes.rows[0];
 
+        // Access Control for Delivery Role
+        if (req.user.role === 'Delivery') {
+            if (currentOrder.delivery_person_id !== req.user.id) {
+                return res.status(403).json({ error: 'You do not have permission to modify this shipment' });
+            }
+        }
+
         // Resolve status code to ID if provided
         if (statusCode) {
             // Restriction: If current is 'delivered', only allow 'archived'
@@ -152,6 +172,10 @@ router.patch('/orders/:id', verifyToken, authorize(['Admin', 'Delivery']), async
         if (deliveryPerson !== undefined) {
             updateQuery += `, delivery_person = $${paramCount++}`;
             params.push(deliveryPerson);
+        }
+        if (deliveryPersonId !== undefined) {
+            updateQuery += `, delivery_person_id = $${paramCount++}`;
+            params.push(deliveryPersonId);
         }
         if (deliveryInstructions !== undefined) {
             updateQuery += `, delivery_instructions = $${paramCount++}`;

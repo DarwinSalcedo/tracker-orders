@@ -43,9 +43,29 @@ const CreateOrder = () => {
         dropoffLng: '',
         dropoffAddress: '',
         deliveryPerson: '',
+        deliveryPersonId: '',
         deliveryInstructions: '',
         externalOrderId: ''
     });
+
+    const [deliveryUsers, setDeliveryUsers] = useState([]);
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users`, {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    setDeliveryUsers(data);
+                }
+            } catch (error) {
+                console.error("Failed to fetch users", error);
+            }
+        };
+        fetchUsers();
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -82,7 +102,8 @@ const CreateOrder = () => {
                     lng: parseFloat(formData.dropoffLng),
                     address: formData.dropoffAddress
                 } : null,
-                deliveryPerson: formData.deliveryPerson,
+                deliveryPerson: formData.deliveryPersonId ? deliveryUsers.find(u => u.id === parseInt(formData.deliveryPersonId))?.username : '',
+                deliveryPersonId: formData.deliveryPersonId,
                 deliveryInstructions: formData.deliveryInstructions,
                 externalOrderId: formData.externalOrderId
             };
@@ -227,14 +248,26 @@ const CreateOrder = () => {
                                 placeholder="customer@example.com"
                                 icon={Mail}
                             />
-                            <Input
-                                label="Delivery Person (Optional)"
-                                name="deliveryPerson"
-                                value={formData.deliveryPerson}
-                                onChange={handleChange}
-                                placeholder="e.g. John Doe"
-                                icon={User}
-                            />
+                            <div className="premium-input-container">
+                                <label className="premium-input-label">Delivery Person (Optional)</label>
+                                <div className="premium-input-wrapper">
+                                    <User size={18} className="premium-input-icon" />
+                                    <select
+                                        name="deliveryPersonId"
+                                        value={formData.deliveryPersonId}
+                                        onChange={handleChange}
+                                        className="premium-input with-icon"
+                                        style={{ appearance: 'none', cursor: 'pointer' }}
+                                    >
+                                        <option value="">Select a delivery person...</option>
+                                        {deliveryUsers.map(user => (
+                                            <option key={user.id} value={user.id}>
+                                                {user.username}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
                             <div style={{ marginBottom: '1rem' }}>
                                 <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>
                                     Delivery Instructions (Optional)
