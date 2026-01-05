@@ -21,7 +21,8 @@ import {
     Edit2,
     Archive,
     Settings,
-    Link
+    Link,
+    Hash
 } from 'lucide-react';
 import Input from '../../components/ui/Input';
 import EditShipmentModal from './EditShipmentModal';

@@ -39,7 +39,6 @@ const CreateOrder = () => {
         dropoffLat: '',
         dropoffLng: '',
         deliveryPerson: '',
-        deliveryPerson: '',
         deliveryInstructions: '',
         externalOrderId: ''
     });
