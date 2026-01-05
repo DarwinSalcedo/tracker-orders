@@ -18,7 +18,7 @@ const TokenTrack = () => {
         const fetchOrder = async () => {
             try {
                 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-                const response = await axios.get(`${API_URL}/api/track/${token}`);
+                const response = await axios.get(`${API_URL}/track/${token}`);
                 setOrderData(response.data);
             } catch (err) {
                 console.error(err);
