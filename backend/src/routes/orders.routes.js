@@ -118,9 +118,6 @@ router.patch('/orders/:id', verifyToken, authorize(['Admin', 'Delivery']), async
         // Resolve status code to ID if provided
         if (statusCode) {
             // Restriction: If current is 'delivered', only allow 'archived'
-            if (currentOrder.current_status_code === 'delivered' && statusCode !== 'archived') {
-                return res.status(400).json({ error: 'Delivered shipments can only be archived or deleted.' });
-            }
             // Restriction: Cannot move out of 'archived'
             if (currentOrder.current_status_code === 'archived') {
                 return res.status(400).json({ error: 'Archived shipments cannot be modified.' });
