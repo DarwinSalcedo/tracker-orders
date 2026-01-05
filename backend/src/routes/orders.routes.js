@@ -24,6 +24,7 @@ router.get('/orders', verifyToken, async (req, res) => {
 router.post('/orders', verifyToken, authorize('Admin'), async (req, res) => {
     const { trackingId, email, customerName, customerPhone, externalOrderId, pickup, dropoff, deliveryPerson, deliveryInstructions } = req.body;
 
+
     if (!trackingId) {
         return res.status(400).json({ error: 'Tracking ID is required' });
     }
@@ -43,10 +44,10 @@ router.post('/orders', verifyToken, authorize('Admin'), async (req, res) => {
 
         // Insert Shipment
         const result = await query(
-            `INSERT INTO orders (id, email, customer_name, customer_phone, external_order_id, share_token, current_status_id, pickup_lat, pickup_lng, dropoff_lat, dropoff_lng, delivery_person, delivery_instructions) 
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) 
+            `INSERT INTO orders (id, email, customer_name, customer_phone, external_order_id, share_token, current_status_id, pickup_lat, pickup_lng, pickup_address, dropoff_lat, dropoff_lng, dropoff_address, delivery_person, delivery_instructions) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) 
        RETURNING *`,
-            [trackingId, email, customerName, customerPhone, externalOrderId, shareToken, createdStatusId, pickup?.lat, pickup?.lng, dropoff?.lat, dropoff?.lng, deliveryPerson, deliveryInstructions]
+            [trackingId, email, customerName, customerPhone, externalOrderId, shareToken, createdStatusId, pickup?.lat, pickup?.lng, pickup?.address, dropoff?.lat, dropoff?.lng, dropoff?.address, deliveryPerson, deliveryInstructions]
         );
 
         // Add initial history entry
@@ -76,8 +77,10 @@ router.patch('/orders/:id', verifyToken, authorize(['Admin', 'Delivery']), async
         deliveryInstructions,
         pickupLat,
         pickupLng,
+        pickupAddress,
         dropoffLat,
-        dropoffLng
+        dropoffLng,
+        dropoffAddress
     } = req.body;
 
     // Delivery field restriction
@@ -165,6 +168,10 @@ router.patch('/orders/:id', verifyToken, authorize(['Admin', 'Delivery']), async
             updateQuery += `, pickup_lng = $${paramCount++}`;
             params.push(pickupLng);
         }
+        if (pickupAddress !== undefined) {
+            updateQuery += `, pickup_address = $${paramCount++}`;
+            params.push(pickupAddress);
+        }
         if (dropoffLat !== undefined) {
             updateQuery += `, dropoff_lat = $${paramCount++}`;
             params.push(dropoffLat);
@@ -172,6 +179,10 @@ router.patch('/orders/:id', verifyToken, authorize(['Admin', 'Delivery']), async
         if (dropoffLng !== undefined) {
             updateQuery += `, dropoff_lng = $${paramCount++}`;
             params.push(dropoffLng);
+        }
+        if (dropoffAddress !== undefined) {
+            updateQuery += `, dropoff_address = $${paramCount++}`;
+            params.push(dropoffAddress);
         }
 
         // Update current tracking location (if provided)

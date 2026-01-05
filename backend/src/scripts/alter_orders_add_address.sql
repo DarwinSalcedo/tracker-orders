@@ -1,0 +1,3 @@
+ALTER TABLE orders 
+ADD COLUMN IF NOT EXISTS pickup_address TEXT,
+ADD COLUMN IF NOT EXISTS dropoff_address TEXT;

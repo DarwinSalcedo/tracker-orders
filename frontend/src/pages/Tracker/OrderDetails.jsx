@@ -90,9 +90,9 @@ const OrderDetails = ({ order, onBack }) => {
                         currentLocation={order.currentLocation}
                     />
                     <div style={{ padding: '1rem', background: 'var(--color-bg-secondary)', borderRadius: 'var(--radius-md)', marginTop: '1rem' }}>
-                        <p><strong>{t('track.origin')}:</strong> {order.pickup?.lat ? `${order.pickup.lat}, ${order.pickup.lng}` : 'Unspecified'}</p>
+                        <p><strong>{t('track.origin')}:</strong> {order.pickup?.address || (order.pickup?.lat ? `${order.pickup.lat}, ${order.pickup.lng}` : 'Unspecified')}</p>
                         <div style={{ height: '1px', background: 'var(--glass-border)', margin: '0.5rem 0' }} />
-                        <p><strong>{t('track.dest')}:</strong> {order.dropoff?.lat ? `${order.dropoff.lat}, ${order.dropoff.lng}` : 'Unspecified'}</p>
+                        <p><strong>{t('track.dest')}:</strong> {order.dropoff?.address || (order.dropoff?.lat ? `${order.dropoff.lat}, ${order.dropoff.lng}` : 'Unspecified')}</p>
                     </div>
                 </Card>
 

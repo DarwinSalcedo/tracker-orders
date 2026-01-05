@@ -13,6 +13,7 @@ import {
     Loader,
     Save
 } from 'lucide-react';
+import { geocodeAddress } from '../../services/geocodingService';
 
 const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
     const [loading, setLoading] = useState(false);
@@ -25,8 +26,10 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
         deliveryInstructions: '',
         pickupLat: '',
         pickupLng: '',
+        pickupAddress: '',
         dropoffLat: '',
-        dropoffLng: ''
+        dropoffLng: '',
+        dropoffAddress: ''
     });
 
     useEffect(() => {
@@ -39,8 +42,10 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
                 deliveryInstructions: shipment.delivery_instructions || '',
                 pickupLat: shipment.pickup_lat || '',
                 pickupLng: shipment.pickup_lng || '',
+                pickupAddress: shipment.pickup_address || '',
                 dropoffLat: shipment.dropoff_lat || '',
-                dropoffLng: shipment.dropoff_lng || ''
+                dropoffLng: shipment.dropoff_lng || '',
+                dropoffAddress: shipment.dropoff_address || ''
             });
         }
     }, [shipment]);
@@ -48,6 +53,20 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleAddressBlur = async (type) => {
+        const address = type === 'pickup' ? formData.pickupAddress : formData.dropoffAddress;
+        if (!address) return;
+
+        const result = await geocodeAddress(address);
+        if (result) {
+            setFormData(prev => ({
+                ...prev,
+                [`${type}Lat`]: result.lat,
+                [`${type}Lng`]: result.lng
+            }));
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -64,8 +83,10 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
                 deliveryInstructions: formData.deliveryInstructions,
                 pickupLat: formData.pickupLat ? parseFloat(formData.pickupLat) : null,
                 pickupLng: formData.pickupLng ? parseFloat(formData.pickupLng) : null,
+                pickupAddress: formData.pickupAddress,
                 dropoffLat: formData.dropoffLat ? parseFloat(formData.dropoffLat) : null,
-                dropoffLng: formData.dropoffLng ? parseFloat(formData.dropoffLng) : null
+                dropoffLng: formData.dropoffLng ? parseFloat(formData.dropoffLng) : null,
+                dropoffAddress: formData.dropoffAddress
             };
 
             await onUpdate(shipment.id, updateData);
@@ -183,50 +204,40 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
 
                                     <div style={{ marginBottom: '1.5rem' }}>
                                         <p style={{ fontSize: '0.85rem', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                            <MapPin size={14} color="var(--color-accent)" /> Pickup Coordinates
+                                            <MapPin size={14} color="var(--color-accent)" /> Pickup Location
                                         </p>
-                                        <div className="flex-stack-sm" style={{ display: 'flex', gap: '1rem' }}>
-                                            <Input
-                                                placeholder="Lat"
-                                                name="pickupLat"
-                                                type="number"
-                                                step="any"
-                                                value={formData.pickupLat}
-                                                onChange={handleChange}
-                                            />
-                                            <Input
-                                                placeholder="Lng"
-                                                name="pickupLng"
-                                                type="number"
-                                                step="any"
-                                                value={formData.pickupLng}
-                                                onChange={handleChange}
-                                            />
-                                        </div>
+                                        <Input
+                                            label="Address"
+                                            name="pickupAddress"
+                                            value={formData.pickupAddress}
+                                            onChange={handleChange}
+                                            onBlur={() => handleAddressBlur('pickup')}
+                                            placeholder="Enter address..."
+                                        />
+                                        {formData.pickupLat && (
+                                            <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '-0.5rem' }}>
+                                                Coords: {parseFloat(formData.pickupLat).toFixed(4)}, {parseFloat(formData.pickupLng).toFixed(4)}
+                                            </p>
+                                        )}
                                     </div>
 
                                     <div>
                                         <p style={{ fontSize: '0.85rem', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                            <MapPin size={14} color="var(--color-success)" /> Destination Coordinates
+                                            <MapPin size={14} color="var(--color-success)" /> Destination Location
                                         </p>
-                                        <div className="flex-stack-sm" style={{ display: 'flex', gap: '1rem' }}>
-                                            <Input
-                                                placeholder="Lat"
-                                                name="dropoffLat"
-                                                type="number"
-                                                step="any"
-                                                value={formData.dropoffLat}
-                                                onChange={handleChange}
-                                            />
-                                            <Input
-                                                placeholder="Lng"
-                                                name="dropoffLng"
-                                                type="number"
-                                                step="any"
-                                                value={formData.dropoffLng}
-                                                onChange={handleChange}
-                                            />
-                                        </div>
+                                        <Input
+                                            label="Address"
+                                            name="dropoffAddress"
+                                            value={formData.dropoffAddress}
+                                            onChange={handleChange}
+                                            onBlur={() => handleAddressBlur('dropoff')}
+                                            placeholder="Enter address..."
+                                        />
+                                        {formData.dropoffLat && (
+                                            <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '-0.5rem' }}>
+                                                Coords: {parseFloat(formData.dropoffLat).toFixed(4)}, {parseFloat(formData.dropoffLng).toFixed(4)}
+                                            </p>
+                                        )}
                                     </div>
                                 </div>
                             </div>

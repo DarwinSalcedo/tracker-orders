@@ -89,8 +89,8 @@ app.post("/api/track", async (req, res) => {
       createdAt: order.created_at,
       updatedAt: order.updated_at,
       location: { lat: order.location_lat, lng: order.location_lng },
-      pickup: { lat: order.pickup_lat, lng: order.pickup_lng },
-      dropoff: { lat: order.dropoff_lat, lng: order.dropoff_lng },
+      pickup: { lat: order.pickup_lat, lng: order.pickup_lng, address: order.pickup_address },
+      dropoff: { lat: order.dropoff_lat, lng: order.dropoff_lng, address: order.dropoff_address },
       deliveryPerson: order.delivery_person,
       deliveryInstructions: order.delivery_instructions,
       history: historyRes.rows.map(h => ({
@@ -152,8 +152,8 @@ app.get("/api/track/:token", async (req, res) => {
       createdAt: order.created_at,
       updatedAt: order.updated_at,
       location: { lat: order.location_lat, lng: order.location_lng },
-      pickup: { lat: order.pickup_lat, lng: order.pickup_lng },
-      dropoff: { lat: order.dropoff_lat, lng: order.dropoff_lng },
+      pickup: { lat: order.pickup_lat, lng: order.pickup_lng, address: order.pickup_address },
+      dropoff: { lat: order.dropoff_lat, lng: order.dropoff_lng, address: order.dropoff_address },
       deliveryPerson: order.delivery_person,
       deliveryInstructions: order.delivery_instructions,
       history: historyRes.rows.map(h => ({
