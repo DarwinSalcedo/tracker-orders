@@ -63,12 +63,10 @@ const CreateOrder = () => {
                 pickup: formData.pickupLat && formData.pickupLng ? { lat: parseFloat(formData.pickupLat), lng: parseFloat(formData.pickupLng) } : null,
                 dropoff: formData.dropoffLat && formData.dropoffLng ? { lat: parseFloat(formData.dropoffLat), lng: parseFloat(formData.dropoffLng) } : null,
                 deliveryPerson: formData.deliveryPerson,
-                deliveryPerson: formData.deliveryPerson,
                 deliveryInstructions: formData.deliveryInstructions,
                 externalOrderId: formData.externalOrderId
             };
 
-            await orderService.createOrder(payload);
             const response = await orderService.createOrder(payload);
             setCreatedOrder(response);
             setSuccess(true);
