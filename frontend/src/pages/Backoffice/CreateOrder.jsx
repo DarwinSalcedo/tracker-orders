@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { orderService } from '../../services/orderService';
-import { geocodeAddress } from '../../services/geocodingService';
+import { userService } from '../../services/userService';
 import AddressAutocomplete from '../../components/ui/AddressAutocomplete';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
 import {
-    Truck,
     Mail,
     MapPin,
     ArrowLeft,
@@ -50,16 +49,13 @@ const CreateOrder = () => {
 
     const [deliveryUsers, setDeliveryUsers] = useState([]);
 
+
+
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users`, {
-                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-                });
-                if (response.ok) {
-                    const data = await response.json();
-                    setDeliveryUsers(data);
-                }
+                const data = await userService.getAllUsers();
+                setDeliveryUsers(data);
             } catch (error) {
                 console.error("Failed to fetch users", error);
             }

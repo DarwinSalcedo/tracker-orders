@@ -7,6 +7,11 @@ export const orderService = {
         return response.data;
     },
 
+    getOrderByToken: async (token) => {
+        const response = await api.get(`/track/${token}`);
+        return response.data;
+    },
+
     // Backoffice
     getAllOrders: async () => {
         const response = await api.get('/orders');

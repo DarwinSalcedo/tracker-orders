@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import axios from 'axios';
+import { orderService } from '../../services/orderService';
 import OrderDetails from './OrderDetails';
 import { Loader, AlertCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -17,9 +17,8 @@ const TokenTrack = () => {
     useEffect(() => {
         const fetchOrder = async () => {
             try {
-                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-                const response = await axios.get(`${API_URL}/track/${token}`);
-                setOrderData(response.data);
+                const data = await orderService.getOrderByToken(token);
+                setOrderData(data);
             } catch (err) {
                 console.error(err);
                 setError(err.response?.data?.error || 'Invalid or expired tracking link');

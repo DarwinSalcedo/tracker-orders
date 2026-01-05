@@ -14,6 +14,7 @@ import {
     Save
 } from 'lucide-react';
 import { geocodeAddress } from '../../services/geocodingService';
+import { userService } from '../../services/userService';
 import AddressAutocomplete from '../../components/ui/AddressAutocomplete';
 
 const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
@@ -24,13 +25,8 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
         if (isOpen) {
             const fetchUsers = async () => {
                 try {
-                    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users`, {
-                        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-                    });
-                    if (response.ok) {
-                        const data = await response.json();
-                        setDeliveryUsers(data);
-                    }
+                    const data = await userService.getAllUsers();
+                    setDeliveryUsers(data);
                 } catch (error) {
                     console.error("Failed to fetch users", error);
                 }
