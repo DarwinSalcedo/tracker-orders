@@ -36,7 +36,7 @@ const OrderDetails = ({ order, onBack }) => {
                             <Truck size={32} color="var(--color-success)" />
                         </div>
                         <div>
-                            <h2 style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>{order.status.replace('_', ' ').toUpperCase()}</h2>
+                            <h2 style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>{order.status ? order.status.replace('_', ' ').toUpperCase() : 'UNKNOWN'}</h2>
                             <p style={{ color: 'var(--color-text-muted)' }}>{t('track.status')}</p>
                         </div>
                     </div>
@@ -65,7 +65,11 @@ const OrderDetails = ({ order, onBack }) => {
                                 <MapPin size={18} color="var(--color-accent)" />
                                 <div>
                                     <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Last Location</p>
-                                    <p>{order.currentLocation.lat.toFixed(4)}, {order.currentLocation.lng.toFixed(4)}</p>
+                                    <p>
+                                        {order.currentLocation.lat != null && order.currentLocation.lng != null
+                                            ? `${order.currentLocation.lat.toFixed(4)}, ${order.currentLocation.lng.toFixed(4)}`
+                                            : 'Not available'}
+                                    </p>
                                 </div>
                             </div>
                         )}
