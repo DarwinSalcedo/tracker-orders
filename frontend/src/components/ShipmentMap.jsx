@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from 'react-leaflet';
-import { MapPin } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { MapPin, Maximize2, Minimize2 } from 'lucide-react';
 import L from 'leaflet';
 
-// Fix Leaflet marker icon issue with Vite/React
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
@@ -15,7 +14,7 @@ L.Icon.Default.mergeOptions({
     shadowUrl: markerShadow,
 });
 
-// Custom icons for different markers
+
 const pickupIcon = new L.Icon({
     iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -43,7 +42,7 @@ const currentIcon = new L.Icon({
     shadowSize: [41, 41]
 });
 
-// Helper component to adjust map bounds
+
 const ChangeView = ({ bounds }) => {
     const map = useMap();
     useEffect(() => {
@@ -76,6 +75,32 @@ const ShipmentMap = ({ pickup, dropoff, currentLocation }) => {
         markers.push({ pos, icon: dropoffIcon, label: 'Destination' });
     }
 
+    const [isMaximized, setIsMaximized] = useState(false);
+
+    const toggleMaximize = () => setIsMaximized(!isMaximized);
+
+    const containerStyle = isMaximized ? {
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        width: '100vw',
+        height: '100vh',
+        zIndex: 9999,
+        background: 'var(--color-bg-main)',
+        borderRadius: 0
+    } : {
+        height: '400px',
+        minHeight: '300px',
+        maxHeight: '50vh',
+        width: '100%',
+        borderRadius: '12px',
+        overflow: 'hidden',
+        border: '1px solid var(--glass-border)',
+        position: 'relative'
+    };
+
     if (points.length === 0) {
         return (
             <div style={{
@@ -96,12 +121,35 @@ const ShipmentMap = ({ pickup, dropoff, currentLocation }) => {
     }
 
     return (
-        <div style={{ height: '400px', minHeight: '300px', maxHeight: '50vh', width: '100%', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--glass-border)' }}>
+        <div style={containerStyle}>
+            <button
+                onClick={toggleMaximize}
+                style={{
+                    position: 'absolute',
+                    top: '1rem',
+                    right: '1rem',
+                    zIndex: 1000,
+                    background: 'var(--color-bg-secondary)',
+                    border: '1px solid var(--glass-border)',
+                    borderRadius: '8px',
+                    padding: '0.5rem',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'var(--color-text-main)',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                }}
+                title={isMaximized ? "Minimize Map" : "Maximize Map"}
+            >
+                {isMaximized ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
+            </button>
             <MapContainer
+                key={isMaximized ? 'maximized' : 'minimized'}
                 center={points[0]}
-                zoom={13}
+                zoom={15}
                 style={{ height: '100%', width: '100%' }}
-                scrollWheelZoom={false}
+                scrollWheelZoom={isMaximized}
             >
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
