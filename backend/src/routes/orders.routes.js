@@ -1,6 +1,7 @@
 import express from 'express';
 import { query } from '../config/db.js';
 import { verifyToken, authorize } from '../middleware/auth.middleware.js';
+import crypto from 'crypto';
 
 const router = express.Router();
 
@@ -36,12 +37,16 @@ router.post('/orders', verifyToken, authorize('Admin'), async (req, res) => {
             return res.status(500).json({ error: "Default status 'created' not found." });
         }
 
+
+        // Generate unique share token
+        const shareToken = crypto.randomBytes(16).toString('hex');
+
         // Insert Shipment
         const result = await query(
-            `INSERT INTO orders (id, email, customer_name, customer_phone, external_order_id, current_status_id, pickup_lat, pickup_lng, dropoff_lat, dropoff_lng, delivery_person, delivery_instructions) 
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) 
+            `INSERT INTO orders (id, email, customer_name, customer_phone, external_order_id, share_token, current_status_id, pickup_lat, pickup_lng, dropoff_lat, dropoff_lng, delivery_person, delivery_instructions) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) 
        RETURNING *`,
-            [trackingId, email, customerName, customerPhone, externalOrderId, createdStatusId, pickup?.lat, pickup?.lng, dropoff?.lat, dropoff?.lng, deliveryPerson, deliveryInstructions]
+            [trackingId, email, customerName, customerPhone, externalOrderId, shareToken, createdStatusId, pickup?.lat, pickup?.lng, dropoff?.lat, dropoff?.lng, deliveryPerson, deliveryInstructions]
         );
 
         // Add initial history entry

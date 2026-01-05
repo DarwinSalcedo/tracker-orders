@@ -35,6 +35,7 @@ const createTables = async () => {
         customer_name VARCHAR(255),
         customer_phone VARCHAR(50),
         external_order_id VARCHAR(100),
+        share_token VARCHAR(32) UNIQUE,
         location_lat DECIMAL(9, 6),
         location_lng DECIMAL(9, 6),
         pickup_lat DECIMAL(9, 6),

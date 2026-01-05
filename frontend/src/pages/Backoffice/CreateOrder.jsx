@@ -27,6 +27,7 @@ const CreateOrder = () => {
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState('');
+    const [createdOrder, setCreatedOrder] = useState(null);
 
     const [formData, setFormData] = useState({
         trackingId: `TRK-${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
@@ -68,6 +69,8 @@ const CreateOrder = () => {
             };
 
             await orderService.createOrder(payload);
+            const response = await orderService.createOrder(payload);
+            setCreatedOrder(response);
             setSuccess(true);
             setTimeout(() => navigate('/backoffice/dashboard'), 2000);
         } catch (err) {
@@ -90,7 +93,52 @@ const CreateOrder = () => {
                         <CheckCircle size={64} color="var(--color-success)" />
                     </div>
                     <h1>Shipment Registered!</h1>
-                    <p style={{ color: 'var(--color-text-muted)' }}>Updating manifest and redirecting...</p>
+                    <p style={{ color: 'var(--color-text-muted)', marginBottom: '1.5rem' }}>Updating manifest and redirecting...</p>
+                    {createdOrder?.share_token && (
+                        <div style={{
+                            background: 'var(--glass-bg)',
+                            border: '1px solid var(--glass-border)',
+                            borderRadius: 'var(--radius-md)',
+                            padding: '1.5rem',
+                            marginBottom: '1.5rem',
+                            maxWidth: '500px',
+                            margin: '0 auto 1.5rem'
+                        }}>
+                            <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: '0.5rem' }}>Shareable Tracking Link:</p>
+                            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                                <input
+                                    readOnly
+                                    value={`${window.location.origin}/track/${createdOrder.share_token}`}
+                                    style={{
+                                        flex: 1,
+                                        padding: '0.75rem',
+                                        background: 'var(--color-bg-secondary)',
+                                        border: '1px solid var(--glass-border)',
+                                        borderRadius: 'var(--radius-sm)',
+                                        color: 'var(--color-text-main)',
+                                        fontSize: '0.9rem'
+                                    }}
+                                />
+                                <button
+                                    onClick={() => {
+                                        navigator.clipboard.writeText(`${window.location.origin}/track/${createdOrder.share_token}`);
+                                    }}
+                                    style={{
+                                        padding: '0.75rem 1rem',
+                                        background: 'var(--color-primary)',
+                                        color: 'white',
+                                        border: 'none',
+                                        borderRadius: 'var(--radius-sm)',
+                                        cursor: 'pointer',
+                                        fontSize: '0.9rem',
+                                        whiteSpace: 'nowrap'
+                                    }}
+                                >
+                                    Copy Link
+                                </button>
+                            </div>
+                        </div>
+                    )}
                 </motion.div>
             </div>
         );
@@ -129,7 +177,7 @@ const CreateOrder = () => {
                                 required
                             />
                             <Input
-                                label={t('track.client')}
+                                label={t('track.client') + ' (Optional)'}
                                 name="customerName"
                                 value={formData.customerName}
                                 onChange={handleChange}
@@ -137,7 +185,7 @@ const CreateOrder = () => {
                                 icon={User}
                             />
                             <Input
-                                label={t('track.customer_phone')}
+                                label={t('track.customer_phone') + ' (Optional)'}
                                 name="customerPhone"
                                 value={formData.customerPhone}
                                 onChange={handleChange}

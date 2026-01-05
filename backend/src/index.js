@@ -107,6 +107,69 @@ app.post("/api/track", async (req, res) => {
   }
 });
 
+// Public Token-based Tracking (No auth required)
+app.get("/api/track/:token", async (req, res) => {
+  const { token } = req.params;
+
+  if (!token) {
+    return res.status(400).json({ error: "Token is required" });
+  }
+
+  try {
+    // Get Order details by share token
+    const orderRes = await query(
+      `SELECT o.*, s.code as status_code, s.label as status_label 
+       FROM orders o
+       JOIN order_statuses s ON o.current_status_id = s.id
+       WHERE o.share_token = $1`,
+      [token]
+    );
+
+    if (orderRes.rows.length === 0) {
+      return res.status(404).json({ error: "Invalid or expired tracking link" });
+    }
+
+    const order = orderRes.rows[0];
+
+    // Get Order History
+    const historyRes = await query(
+      `SELECT h.*, s.label as status_label, s.description as status_description 
+       FROM order_history h
+       JOIN order_statuses s ON h.status_id = s.id
+       WHERE h.order_id = $1
+       ORDER BY h.timestamp ASC`,
+      [order.id]
+    );
+
+    res.json({
+      trackingId: order.id,
+      status: order.status_code,
+      statusLabel: order.status_label,
+      customerName: order.customer_name,
+      customerPhone: order.customer_phone,
+      email: order.email,
+      externalOrderId: order.external_order_id,
+      createdAt: order.created_at,
+      updatedAt: order.updated_at,
+      location: { lat: order.location_lat, lng: order.location_lng },
+      pickup: { lat: order.pickup_lat, lng: order.pickup_lng },
+      dropoff: { lat: order.dropoff_lat, lng: order.dropoff_lng },
+      deliveryPerson: order.delivery_person,
+      deliveryInstructions: order.delivery_instructions,
+      history: historyRes.rows.map(h => ({
+        status: h.status_label,
+        description: h.status_description,
+        timestamp: h.timestamp,
+        location: { lat: h.location_lat, lng: h.location_lng }
+      }))
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`API running on port ${PORT}`);

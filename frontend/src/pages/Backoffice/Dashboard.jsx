@@ -20,7 +20,8 @@ import {
     Navigation,
     Edit2,
     Archive,
-    Settings
+    Settings,
+    Link
 } from 'lucide-react';
 import Input from '../../components/ui/Input';
 import EditShipmentModal from './EditShipmentModal';
@@ -261,6 +262,18 @@ const Dashboard = () => {
                                                         onClick={() => openEditModal(order)}
                                                     >
                                                         <Edit2 size={18} />
+                                                    </button>
+                                                )}
+
+                                                {order.share_token && (
+                                                    <button
+                                                        style={{ color: 'var(--color-accent)', background: 'none', border: 'none', cursor: 'pointer', display: 'flex' }}
+                                                        title="Copy Share Link"
+                                                        onClick={() => {
+                                                            navigator.clipboard.writeText(`${window.location.origin}/track/${order.share_token}`);
+                                                        }}
+                                                    >
+                                                        <Link size={18} />
                                                     </button>
                                                 )}
 

@@ -10,6 +10,7 @@ import Dashboard from './pages/Backoffice/Dashboard';
 import CreateOrder from './pages/Backoffice/CreateOrder';
 import Register from './pages/Backoffice/Register';
 import TrackOrder from './pages/Tracker/TrackOrder';
+import TokenTrack from './pages/Tracker/TokenTrack';
 
 // Protected Route Component
 const ProtectedRoute = ({ allowedRoles = [] }) => {
@@ -34,6 +35,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/track" element={<TrackOrder />} />
+            <Route path="/track/:token" element={<TokenTrack />} />
 
             {/* Backoffice Routes */}
             <Route path="/backoffice/login" element={<Login />} />
