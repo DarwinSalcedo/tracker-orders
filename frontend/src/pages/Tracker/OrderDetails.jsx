@@ -67,7 +67,7 @@ const OrderDetails = ({ order, onBack }) => {
                                     <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Last Location</p>
                                     <p>
                                         {order.currentLocation.lat != null && order.currentLocation.lng != null
-                                            ? `${order.currentLocation.lat.toFixed(4)}, ${order.currentLocation.lng.toFixed(4)}`
+                                            ? `${parseFloat(order.currentLocation.lat).toFixed(4)}, ${parseFloat(order.currentLocation.lng).toFixed(4)}`
                                             : 'Not available'}
                                     </p>
                                 </div>
