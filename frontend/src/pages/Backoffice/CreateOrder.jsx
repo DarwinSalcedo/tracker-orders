@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { orderService } from '../../services/orderService';
 import { geocodeAddress } from '../../services/geocodingService';
+import AddressAutocomplete from '../../components/ui/AddressAutocomplete';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
@@ -51,18 +52,13 @@ const CreateOrder = () => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleAddressBlur = async (type) => {
-        const address = type === 'pickup' ? formData.pickupAddress : formData.dropoffAddress;
-        if (!address) return;
-
-        const result = await geocodeAddress(address);
-        if (result) {
-            setFormData(prev => ({
-                ...prev,
-                [`${type}Lat`]: result.lat,
-                [`${type}Lng`]: result.lng
-            }));
-        }
+    const handleAddressSelect = (type, suggestion) => {
+        setFormData(prev => ({
+            ...prev,
+            [`${type}Address`]: suggestion.displayName,
+            [`${type}Lat`]: suggestion.lat,
+            [`${type}Lng`]: suggestion.lng
+        }));
     };
 
     const handleSubmit = async (e) => {
@@ -271,17 +267,16 @@ const CreateOrder = () => {
                             <h3 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                 <MapPin size={20} color="var(--color-accent)" /> Pickup Location (Optional)
                             </h3>
-                            <Input
+                            <AddressAutocomplete
                                 label="Pickup Address"
                                 name="pickupAddress"
                                 value={formData.pickupAddress}
                                 onChange={handleChange}
-                                onBlur={() => handleAddressBlur('pickup')}
-                                placeholder="Enter address to auto-fill coordinates"
-                                icon={MapPin}
+                                onSelect={(suggestion) => handleAddressSelect('pickup', suggestion)}
+                                placeholder="Enter address to auto-fill"
                             />
                             {formData.pickupLat && (
-                                <p style={{ fontSize: '0.8rem', color: 'var(--color-success)', marginTop: '-1rem', marginBottom: '1rem' }}>
+                                <p style={{ fontSize: '0.8rem', color: 'var(--color-success)', marginTop: '0.5rem', marginBottom: '1rem' }}>
                                     ✓ Geocoded: {parseFloat(formData.pickupLat).toFixed(4)}, {parseFloat(formData.pickupLng).toFixed(4)}
                                 </p>
                             )}
@@ -292,17 +287,16 @@ const CreateOrder = () => {
                             <h3 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                 <MapPin size={20} color="var(--color-success)" /> Destination (Optional)
                             </h3>
-                            <Input
+                            <AddressAutocomplete
                                 label="Dropoff Address"
                                 name="dropoffAddress"
                                 value={formData.dropoffAddress}
                                 onChange={handleChange}
-                                onBlur={() => handleAddressBlur('dropoff')}
-                                placeholder="Enter address to auto-fill coordinates"
-                                icon={MapPin}
+                                onSelect={(suggestion) => handleAddressSelect('dropoff', suggestion)}
+                                placeholder="Enter address to auto-fill"
                             />
                             {formData.dropoffLat && (
-                                <p style={{ fontSize: '0.8rem', color: 'var(--color-success)', marginTop: '-1rem', marginBottom: '1rem' }}>
+                                <p style={{ fontSize: '0.8rem', color: 'var(--color-success)', marginTop: '0.5rem', marginBottom: '1rem' }}>
                                     ✓ Geocoded: {parseFloat(formData.dropoffLat).toFixed(4)}, {parseFloat(formData.dropoffLng).toFixed(4)}
                                 </p>
                             )}

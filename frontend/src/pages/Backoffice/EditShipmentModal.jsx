@@ -14,6 +14,7 @@ import {
     Save
 } from 'lucide-react';
 import { geocodeAddress } from '../../services/geocodingService';
+import AddressAutocomplete from '../../components/ui/AddressAutocomplete';
 
 const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
     const [loading, setLoading] = useState(false);
@@ -55,18 +56,13 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleAddressBlur = async (type) => {
-        const address = type === 'pickup' ? formData.pickupAddress : formData.dropoffAddress;
-        if (!address) return;
-
-        const result = await geocodeAddress(address);
-        if (result) {
-            setFormData(prev => ({
-                ...prev,
-                [`${type}Lat`]: result.lat,
-                [`${type}Lng`]: result.lng
-            }));
-        }
+    const handleAddressSelect = (type, suggestion) => {
+        setFormData(prev => ({
+            ...prev,
+            [`${type}Address`]: suggestion.displayName,
+            [`${type}Lat`]: suggestion.lat,
+            [`${type}Lng`]: suggestion.lng
+        }));
     };
 
     const handleSubmit = async (e) => {
@@ -206,16 +202,16 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
                                         <p style={{ fontSize: '0.85rem', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                             <MapPin size={14} color="var(--color-accent)" /> Pickup Location
                                         </p>
-                                        <Input
+                                        <AddressAutocomplete
                                             label="Address"
                                             name="pickupAddress"
                                             value={formData.pickupAddress}
                                             onChange={handleChange}
-                                            onBlur={() => handleAddressBlur('pickup')}
+                                            onSelect={(suggestion) => handleAddressSelect('pickup', suggestion)}
                                             placeholder="Enter address..."
                                         />
                                         {formData.pickupLat && (
-                                            <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '-0.5rem' }}>
+                                            <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '0.25rem' }}>
                                                 Coords: {parseFloat(formData.pickupLat).toFixed(4)}, {parseFloat(formData.pickupLng).toFixed(4)}
                                             </p>
                                         )}
@@ -225,16 +221,16 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
                                         <p style={{ fontSize: '0.85rem', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                             <MapPin size={14} color="var(--color-success)" /> Destination Location
                                         </p>
-                                        <Input
+                                        <AddressAutocomplete
                                             label="Address"
                                             name="dropoffAddress"
                                             value={formData.dropoffAddress}
                                             onChange={handleChange}
-                                            onBlur={() => handleAddressBlur('dropoff')}
+                                            onSelect={(suggestion) => handleAddressSelect('dropoff', suggestion)}
                                             placeholder="Enter address..."
                                         />
                                         {formData.dropoffLat && (
-                                            <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '-0.5rem' }}>
+                                            <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '0.25rem' }}>
                                                 Coords: {parseFloat(formData.dropoffLat).toFixed(4)}, {parseFloat(formData.dropoffLng).toFixed(4)}
                                             </p>
                                         )}
