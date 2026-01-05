@@ -18,10 +18,10 @@ export const geocodeAddress = async (address) => {
                 limit: 1,
             },
             headers: {
-                'User-Agent': 'TrackerOrderApp/1.0' // Good practice for OSM API
+                'User-Agent': 'TrackerOrderApp/1.0'
             }
         });
-
+        console.error('Geocoding :', response.data);
         if (response.data && response.data.length > 0) {
             const result = response.data[0];
             return {
