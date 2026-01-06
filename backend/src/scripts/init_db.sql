@@ -1,23 +1,33 @@
--- 1. Create order_statuses table
+-- 1. Create companies table
+CREATE TABLE IF NOT EXISTS companies (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    plan VARCHAR(50) DEFAULT 'free',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 2. Create order_statuses table
 CREATE TABLE IF NOT EXISTS order_statuses (
     id SERIAL PRIMARY KEY,
     code VARCHAR(50) UNIQUE NOT NULL,
     label VARCHAR(100) NOT NULL,
     description TEXT,
-    is_system BOOLEAN DEFAULT FALSE
+    is_system BOOLEAN DEFAULT FALSE,
+    company_id INTEGER REFERENCES companies(id) ON DELETE CASCADE
 );
 
--- 2. Create users table
+-- 3. Create users table
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     role VARCHAR(50) NOT NULL CHECK (role IN ('Admin', 'Delivery', 'Viewer')),
     is_approved BOOLEAN DEFAULT FALSE,
+    company_id INTEGER REFERENCES companies(id) ON DELETE CASCADE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 3. Create orders table (Drop first to ensuring clean state)
+-- 4. Create orders table (Drop first to ensuring clean state)
 DROP TABLE IF EXISTS orders CASCADE;
 CREATE TABLE IF NOT EXISTS orders (
     id VARCHAR(50) PRIMARY KEY,
@@ -38,11 +48,12 @@ CREATE TABLE IF NOT EXISTS orders (
     delivery_person_id INTEGER REFERENCES users(id),
     delivery_instructions TEXT,
     current_status_id INTEGER REFERENCES order_statuses(id),
+    company_id INTEGER REFERENCES companies(id) ON DELETE CASCADE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 4. Create order_history table
+-- 5. Create order_history table
 CREATE TABLE IF NOT EXISTS order_history (
     id SERIAL PRIMARY KEY,
     order_id VARCHAR(50) REFERENCES orders(id),
@@ -52,7 +63,10 @@ CREATE TABLE IF NOT EXISTS order_history (
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 4. Seed Statuses
+-- 6. Seed Default Company
+INSERT INTO companies (id, name, plan) VALUES (1, 'Default Logistics', 'pro') ON CONFLICT (id) DO NOTHING;
+
+-- 7. Seed Statuses
 INSERT INTO order_statuses (code, label, description, is_system)
 VALUES 
     ('created', 'Order Placed', 'Your order has been placed and is being processed.', TRUE),

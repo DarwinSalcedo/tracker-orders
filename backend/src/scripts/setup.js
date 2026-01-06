@@ -2,18 +2,29 @@ import { query } from '../config/db.js';
 
 const createTables = async () => {
   try {
-    // Order Statuses Table
+    // 1. Companies Table
+    await query(`
+      CREATE TABLE IF NOT EXISTS companies (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        plan VARCHAR(50) DEFAULT 'free',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+
+    // 2. Order Statuses Table
     await query(`
       CREATE TABLE IF NOT EXISTS order_statuses (
         id SERIAL PRIMARY KEY,
         code VARCHAR(50) UNIQUE NOT NULL,
         label VARCHAR(100) NOT NULL,
         description TEXT,
-        is_system BOOLEAN DEFAULT FALSE
+        is_system BOOLEAN DEFAULT FALSE,
+        company_id INTEGER REFERENCES companies(id) ON DELETE CASCADE
       );
     `);
 
-    // Users Table
+    // 3. Users Table
     await query(`
       CREATE TABLE IF NOT EXISTS users (
           id SERIAL PRIMARY KEY,
@@ -21,11 +32,12 @@ const createTables = async () => {
           password VARCHAR(255) NOT NULL,
           role VARCHAR(50) NOT NULL CHECK (role IN ('Admin', 'Delivery', 'Viewer')),
           is_approved BOOLEAN DEFAULT FALSE,
+          company_id INTEGER REFERENCES companies(id) ON DELETE CASCADE,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
 
-    // Orders Table
+    // 4. Orders Table
     // DROP first for dev/setup ease to apply schema changes
     await query(`DROP TABLE IF EXISTS orders CASCADE`);
     await query(`
@@ -40,17 +52,21 @@ const createTables = async () => {
         location_lng DECIMAL(9, 6),
         pickup_lat DECIMAL(9, 6),
         pickup_lng DECIMAL(9, 6),
+        pickup_address TEXT,
         dropoff_lat DECIMAL(9, 6),
         dropoff_lng DECIMAL(9, 6),
+        dropoff_address TEXT,
         delivery_person VARCHAR(255),
+        delivery_person_id INTEGER REFERENCES users(id),
         delivery_instructions TEXT,
         current_status_id INTEGER REFERENCES order_statuses(id),
+        company_id INTEGER REFERENCES companies(id) ON DELETE CASCADE,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
 
-    // Order History Table
+    // 5. Order History Table
     await query(`
       CREATE TABLE IF NOT EXISTS order_history (
         id SERIAL PRIMARY KEY,
@@ -61,6 +77,9 @@ const createTables = async () => {
         timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
+
+    // 6. Seed Default Company
+    await query(`INSERT INTO companies (id, name, plan) VALUES (1, 'Default Logistics', 'pro') ON CONFLICT (id) DO NOTHING;`);
 
     console.log('Tables created successfully.');
   } catch (err) {

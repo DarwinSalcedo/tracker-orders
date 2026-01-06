@@ -12,6 +12,7 @@ const Register = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [role, setRole] = useState('Delivery');
+    const [companyId, setCompanyId] = useState('1');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [loading, setLoading] = useState(false);
@@ -32,7 +33,7 @@ const Register = () => {
         setLoading(true);
 
         try {
-            await register(username, password, role);
+            await register(username, password, role, companyId);
             setSuccess('User registered successfully! You can now login.');
             setTimeout(() => {
                 navigate('/backoffice/login');
@@ -145,6 +146,17 @@ const Register = () => {
                                 </motion.div>
                             </div>
                         </div>
+
+                        <Input
+                            label="Company ID"
+                            name="companyId"
+                            type="number"
+                            value={companyId}
+                            onChange={(e) => setCompanyId(e.target.value)}
+                            icon={ShieldCheck}
+                            placeholder="Enter Company ID (Default: 1)"
+                            required
+                        />
 
                         {error && (
                             <motion.div

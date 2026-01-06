@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { query } from '../config/db.js';
 
 export const register = async (req, res) => {
-    const { username, password, role } = req.body;
+    const { username, password, role, company_id } = req.body;
 
     if (!username || !password || !role) {
         return res.status(400).json({ error: 'Missing required fields' });
@@ -18,9 +18,12 @@ export const register = async (req, res) => {
         // Admin is auto-approved, Delivery needs approval
         const isApproved = role === 'Admin';
 
+        // Default to Company ID 1 (Default Logistics) if not provided during migration phase
+        const companyIdToUse = company_id || 1;
+
         const result = await query(
-            'INSERT INTO users (username, password_hash, role, is_approved) VALUES ($1, $2, $3, $4) RETURNING id, username, role, is_approved',
-            [username, passwordHash, role, isApproved]
+            'INSERT INTO users (username, password_hash, role, is_approved, company_id) VALUES ($1, $2, $3, $4, $5) RETURNING id, username, role, is_approved, company_id',
+            [username, passwordHash, role, isApproved, companyIdToUse]
         );
 
         res.status(201).json({
@@ -44,7 +47,13 @@ export const login = async (req, res) => {
     }
 
     try {
-        const result = await query('SELECT * FROM users WHERE username = $1', [username]);
+        const result = await query(
+            `SELECT u.*, c.name as company_name 
+             FROM users u 
+             LEFT JOIN companies c ON u.company_id = c.id 
+             WHERE u.username = $1`,
+            [username]
+        );
 
         if (result.rows.length === 0) {
             return res.status(401).json({ error: 'Invalid credentials' });
@@ -65,7 +74,12 @@ export const login = async (req, res) => {
         }
 
         const token = jwt.sign(
-            { id: user.id, username: user.username, role: user.role },
+            {
+                id: user.id,
+                username: user.username,
+                role: user.role,
+                companyId: user.company_id
+            },
             process.env.JWT_SECRET,
             { expiresIn: '24h' }
         );
@@ -75,7 +89,9 @@ export const login = async (req, res) => {
             user: {
                 id: user.id,
                 username: user.username,
-                role: user.role
+                role: user.role,
+                companyId: user.company_id,
+                companyName: user.company_name
             }
         });
     } catch (err) {

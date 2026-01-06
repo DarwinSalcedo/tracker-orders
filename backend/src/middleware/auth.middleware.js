@@ -29,3 +29,10 @@ export const authorize = (roles = []) => {
         next();
     };
 };
+
+export const requireCompany = (req, res, next) => {
+    if (!req.user || !req.user.companyId) {
+        return res.status(403).json({ error: 'Forbidden: No company context found' });
+    }
+    next();
+};

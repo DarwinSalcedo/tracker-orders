@@ -1,21 +1,21 @@
 import express from 'express';
 import { query } from '../config/db.js';
-import { verifyToken, authorize } from '../middleware/auth.middleware.js';
+import { verifyToken, authorize, requireCompany } from '../middleware/auth.middleware.js';
 import crypto from 'crypto';
 
 const router = express.Router();
 
 // Get All Orders (Backoffice Dashboard)
-router.get('/orders', verifyToken, async (req, res) => {
+router.get('/orders', verifyToken, requireCompany, async (req, res) => {
     try {
         if (req.user.role === 'Delivery') {
             const result = await query(
                 `SELECT o.*, s.code as status_code, s.label as status_label 
                  FROM orders o
                  JOIN order_statuses s ON o.current_status_id = s.id
-                 WHERE o.delivery_person_id = $1
+                 WHERE o.delivery_person_id = $1 AND o.company_id = $2
                  ORDER BY o.created_at DESC`,
-                [req.user.id]
+                [req.user.id, req.user.companyId]
             );
             return res.json(result.rows);
         }
@@ -24,7 +24,9 @@ router.get('/orders', verifyToken, async (req, res) => {
             `SELECT o.*, s.code as status_code, s.label as status_label 
              FROM orders o
              JOIN order_statuses s ON o.current_status_id = s.id
-             ORDER BY o.created_at DESC`
+             WHERE o.company_id = $1
+             ORDER BY o.created_at DESC`,
+            [req.user.companyId]
         );
         res.json(result.rows);
     } catch (err) {
@@ -33,7 +35,7 @@ router.get('/orders', verifyToken, async (req, res) => {
 });
 
 // Create Shipment (Backoffice)
-router.post('/orders', verifyToken, authorize('Admin'), async (req, res) => {
+router.post('/orders', verifyToken, requireCompany, authorize('Admin'), async (req, res) => {
     const { trackingId, email, customerName, customerPhone, externalOrderId, pickup, dropoff, deliveryPerson, deliveryPersonId, deliveryInstructions } = req.body;
 
 
@@ -53,13 +55,14 @@ router.post('/orders', verifyToken, authorize('Admin'), async (req, res) => {
 
         // Generate unique share token
         const shareToken = crypto.randomBytes(16).toString('hex');
+        const companyId = req.user.companyId;
 
         // Insert Shipment
         const result = await query(
-            `INSERT INTO orders (id, email, customer_name, customer_phone, external_order_id, share_token, current_status_id, pickup_lat, pickup_lng, pickup_address, dropoff_lat, dropoff_lng, dropoff_address, delivery_person, delivery_person_id, delivery_instructions) 
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16) 
+            `INSERT INTO orders (id, email, customer_name, customer_phone, external_order_id, share_token, current_status_id, pickup_lat, pickup_lng, pickup_address, dropoff_lat, dropoff_lng, dropoff_address, delivery_person, delivery_person_id, delivery_instructions, company_id) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17) 
        RETURNING *`,
-            [trackingId, email, customerName, customerPhone, externalOrderId, shareToken, createdStatusId, pickup?.lat, pickup?.lng, pickup?.address, dropoff?.lat, dropoff?.lng, dropoff?.address, deliveryPerson, deliveryPersonId, deliveryInstructions]
+            [trackingId, email, customerName, customerPhone, externalOrderId, shareToken, createdStatusId, pickup?.lat, pickup?.lng, pickup?.address, dropoff?.lat, dropoff?.lng, dropoff?.address, deliveryPerson, deliveryPersonId, deliveryInstructions, companyId]
         );
 
         // Add initial history entry
@@ -75,7 +78,7 @@ router.post('/orders', verifyToken, authorize('Admin'), async (req, res) => {
 });
 
 // Update Order (Backoffice)
-router.patch('/orders/:id', verifyToken, authorize(['Admin', 'Delivery']), async (req, res) => {
+router.patch('/orders/:id', verifyToken, requireCompany, authorize(['Admin', 'Delivery']), async (req, res) => {
     const { id } = req.params;
     const {
         statusCode,
@@ -113,13 +116,13 @@ router.patch('/orders/:id', verifyToken, authorize(['Admin', 'Delivery']), async
         let paramCount = 1;
         let statusId = null;
 
-        // Fetch current status for flow validation
+        // Fetch current status for flow validation AND verify Company ID
         const currentOrderRes = await query(
             `SELECT o.*, s.code as current_status_code 
              FROM orders o 
              JOIN order_statuses s ON o.current_status_id = s.id 
-             WHERE o.id = $1`,
-            [id]
+             WHERE o.id = $1 AND o.company_id = $2`,
+            [id, req.user.companyId]
         );
 
         if (currentOrderRes.rows.length === 0) {
@@ -237,7 +240,6 @@ router.patch('/orders/:id', verifyToken, authorize(['Admin', 'Delivery']), async
 
         res.json(result.rows[0]);
 
-        res.json(result.rows[0]);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
