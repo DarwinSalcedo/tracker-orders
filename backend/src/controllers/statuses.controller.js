@@ -84,3 +84,27 @@ export const deleteStatus = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+
+export const reorderStatuses = async (req, res) => {
+    const { items } = req.body; // Expects array of { id, sort_order } or just ordered IDs
+
+    if (!Array.isArray(items)) {
+        return res.status(400).json({ error: 'Items array is required' });
+    }
+
+    try {
+        // Iterate and update each status's sort_order
+        // Using a transaction would be ideal, but simple loops work for small sets
+        for (let i = 0; i < items.length; i++) {
+            await query(
+                'UPDATE order_statuses SET sort_order = $1 WHERE id = $2 AND company_id = $3',
+                [i + 1, items[i].id, req.user.companyId]
+            );
+        }
+
+        res.json({ message: 'Statuses reordered successfully' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};

@@ -19,5 +19,10 @@ export const statusService = {
     deleteStatus: async (id) => {
         const response = await api.delete(`/statuses/${id}`);
         return response.data;
+    },
+
+    reorderStatuses: async (items) => {
+        const response = await api.patch('/statuses/reorder', { items });
+        return response.data;
     }
 };
