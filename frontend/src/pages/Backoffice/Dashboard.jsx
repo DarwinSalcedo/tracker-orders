@@ -25,7 +25,6 @@ import {
     Hash,
     Copy,
     Check,
-    Check,
     Lock,
     BarChart2
 } from 'lucide-react';
