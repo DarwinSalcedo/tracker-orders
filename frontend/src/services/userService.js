@@ -35,5 +35,14 @@ export const userService = {
         } catch (error) {
             throw error.response?.data?.error || 'Failed to delete user';
         }
+    },
+
+    changePassword: async (currentPassword, newPassword) => {
+        try {
+            const response = await api.patch('/users/change-password', { currentPassword, newPassword });
+            return response.data;
+        } catch (error) {
+            throw error.response?.data?.error || 'Failed to change password';
+        }
     }
 };

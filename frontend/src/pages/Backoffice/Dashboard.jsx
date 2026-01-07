@@ -24,10 +24,12 @@ import {
     Link,
     Hash,
     Copy,
-    Check
+    Check,
+    Lock
 } from 'lucide-react';
 import Input from '../../components/ui/Input';
 import EditShipmentModal from './EditShipmentModal';
+import ChangePasswordModal from './ChangePasswordModal';
 import StatusManagement from './StatusManagement';
 import UserManagement from './UserManagement';
 import { Users } from 'lucide-react';
@@ -49,6 +51,7 @@ const Dashboard = () => {
     const [editingShipment, setEditingShipment] = useState(null);
     const [activeTab, setActiveTab] = useState('shipments'); // 'shipments', 'users', or 'completed'
     const [copiedId, setCopiedId] = useState(null);
+    const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
 
     const fetchOrders = async () => {
         try {
@@ -368,6 +371,9 @@ const Dashboard = () => {
             )}
             <LanguageSwitcher />
             <ThemeToggle variant="minimal" />
+            <Button variant="outline" onClick={() => setIsPasswordModalOpen(true)} title={t('common.change_password')}>
+                <Lock size={18} />
+            </Button>
             <Button variant="outline" onClick={logout} style={{ borderColor: 'var(--color-error)', color: 'var(--color-error)' }}>
                 {t('common.logout')}
             </Button>
@@ -387,6 +393,9 @@ const Dashboard = () => {
                         <div className="flex-stack" style={{ display: 'flex', gap: '1rem' }}>
                             <LanguageSwitcher />
                             <ThemeToggle variant="minimal" />
+                            <Button variant="outline" onClick={() => setIsPasswordModalOpen(true)} title={t('common.change_password')}>
+                                <Lock size={18} />
+                            </Button>
                             <Button variant="outline" onClick={logout} style={{ borderColor: 'var(--color-error)', color: 'var(--color-error)' }}>
                                 {t('common.logout')}
                             </Button>
@@ -475,6 +484,11 @@ const Dashboard = () => {
                 onClose={() => setIsEditModalOpen(false)}
                 shipment={editingShipment}
                 onUpdate={handleUpdateShipment}
+            />
+
+            <ChangePasswordModal
+                isOpen={isPasswordModalOpen}
+                onClose={() => setIsPasswordModalOpen(false)}
             />
         </div>
     );
