@@ -1,18 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { motion } from 'framer-motion';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
 import Card from '../../components/ui/Card';
-import { Lock, User, UserPlus, ArrowRight, Loader, ShieldCheck, Truck } from 'lucide-react';
+import { Lock, User, UserPlus, ArrowRight, Loader, ShieldCheck, Truck, Building } from 'lucide-react';
 import ThemeToggle from '../../components/ui/ThemeToggle';
+import api from '../../services/api';
 
 const Register = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [role, setRole] = useState('Delivery');
-    const [companyId, setCompanyId] = useState('1');
+    // Role is fixed to Delivery for public registration
+    const [role] = useState('Delivery');
+    const [companyId, setCompanyId] = useState('');
+    const [companies, setCompanies] = useState([]);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [loading, setLoading] = useState(false);
@@ -20,16 +23,37 @@ const Register = () => {
     const navigate = useNavigate();
 
     // Redirect if already authenticated
-    React.useEffect(() => {
+    useEffect(() => {
         if (isAuthenticated) {
             navigate('/backoffice/dashboard', { replace: true });
         }
     }, [isAuthenticated, navigate]);
 
+    // Fetch companies on mount
+    useEffect(() => {
+        const fetchCompanies = async () => {
+            try {
+                const response = await api.get('/companies');
+                setCompanies(response.data);
+                // Default to first company if available, or stay empty to force user to choose
+                // setCompanyId(response.data[0]?.id || ''); 
+            } catch (err) {
+                console.error("Failed to fetch companies", err);
+            }
+        };
+        fetchCompanies();
+    }, []);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
         setSuccess('');
+
+        if (!companyId) {
+            setError('Please select a company.');
+            return;
+        }
+
         setLoading(true);
 
         try {
@@ -71,8 +95,8 @@ const Register = () => {
                         >
                             <UserPlus color="white" size={28} />
                         </motion.div>
-                        <h1 className="text-gradient">Register User</h1>
-                        <p style={{ color: 'var(--color-text-muted)' }}>Create a new backoffice user</p>
+                        <h1 className="text-gradient">Register Delivery</h1>
+                        <p style={{ color: 'var(--color-text-muted)' }}>Join your organization's fleet</p>
                     </div>
 
                     <form onSubmit={handleSubmit}>
@@ -96,67 +120,47 @@ const Register = () => {
                             required
                         />
 
-                        <div className="input-group" style={{ marginBottom: '1.5rem' }}>
-                            <label style={{ display: 'block', marginBottom: '0.75rem', color: 'var(--color-text-dim)', fontSize: '0.875rem', fontWeight: '500' }}>Select Account Type</label>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '1rem' }}>
-                                <motion.div
-                                    whileHover={{ scale: 1.02 }}
-                                    whileTap={{ scale: 0.98 }}
-                                    onClick={() => setRole('Admin')}
-                                    style={{
-                                        padding: '1rem',
-                                        background: role === 'Admin' ? 'rgba(99, 102, 241, 0.15)' : 'var(--glass-bg)',
-                                        border: `2px solid ${role === 'Admin' ? 'var(--color-primary)' : 'var(--glass-border)'}`,
-                                        borderRadius: '12px',
-                                        cursor: 'pointer',
-                                        textAlign: 'center',
-                                        transition: 'all 0.2s ease'
-                                    }}
+                        {/* Company Selection */}
+                        <div className="premium-input-container">
+                            <label className="premium-input-label">Organization</label>
+                            <div className="premium-input-wrapper">
+                                <Building size={18} className="premium-input-icon" />
+                                <select
+                                    name="companyId"
+                                    value={companyId}
+                                    onChange={(e) => setCompanyId(e.target.value)}
+                                    className="premium-input with-icon"
+                                    style={{ appearance: 'none', cursor: 'pointer' }}
+                                    required
                                 >
-                                    <ShieldCheck
-                                        size={24}
-                                        color={role === 'Admin' ? 'var(--color-primary)' : 'var(--color-text-muted)'}
-                                        style={{ marginBottom: '0.5rem' }}
-                                    />
-                                    <div style={{ fontWeight: '600', fontSize: '0.9rem', color: role === 'Admin' ? 'var(--color-text-main)' : 'var(--color-text-muted)' }}>Admin</div>
-                                    <div style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginTop: '0.25rem' }}>Full Control</div>
-                                </motion.div>
-
-                                <motion.div
-                                    whileHover={{ scale: 1.02 }}
-                                    whileTap={{ scale: 0.98 }}
-                                    onClick={() => setRole('Delivery')}
-                                    style={{
-                                        padding: '1rem',
-                                        background: role === 'Delivery' ? 'rgba(99, 102, 241, 0.15)' : 'var(--glass-bg)',
-                                        border: `2px solid ${role === 'Delivery' ? 'var(--color-primary)' : 'var(--glass-border)'}`,
-                                        borderRadius: '12px',
-                                        cursor: 'pointer',
-                                        textAlign: 'center',
-                                        transition: 'all 0.2s ease'
-                                    }}
-                                >
-                                    <Truck
-                                        size={24}
-                                        color={role === 'Delivery' ? 'var(--color-primary)' : 'var(--color-text-muted)'}
-                                        style={{ marginBottom: '0.5rem' }}
-                                    />
-                                    <div style={{ fontWeight: '600', fontSize: '0.9rem', color: role === 'Delivery' ? 'var(--color-text-main)' : 'var(--color-text-muted)' }}>Delivery</div>
-                                    <div style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginTop: '0.25rem' }}>Field Ops</div>
-                                </motion.div>
+                                    <option value="">Select your company...</option>
+                                    {companies.map(company => (
+                                        <option key={company.id} value={company.id}>
+                                            {company.name}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
                         </div>
 
-                        <Input
-                            label="Company ID"
-                            name="companyId"
-                            type="number"
-                            value={companyId}
-                            onChange={(e) => setCompanyId(e.target.value)}
-                            icon={ShieldCheck}
-                            placeholder="Enter Company ID (Default: 1)"
-                            required
-                        />
+                        {/* Hidden Role Display (Optional, just to inform they are registering as Delivery) */}
+                        <div style={{
+                            padding: '0.75rem',
+                            background: 'rgba(16, 185, 129, 0.1)',
+                            border: '1px solid rgba(16, 185, 129, 0.2)',
+                            borderRadius: '8px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.75rem',
+                            marginBottom: '1.5rem',
+                            marginTop: '1rem'
+                        }}>
+                            <Truck size={20} color="#10b981" />
+                            <span style={{ fontSize: '0.9rem', color: 'var(--color-text-main)' }}>
+                                Registering as <strong>Delivery Driver</strong>
+                            </span>
+                        </div>
+
 
                         {error && (
                             <motion.div

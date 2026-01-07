@@ -5,6 +5,7 @@ import ordersRoutes from "./routes/orders.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import usersRoutes from "./routes/users.routes.js";
 import statusesRoutes from "./routes/statuses.routes.js";
+import companiesRoutes from "./routes/companies.routes.js";
 
 import { query } from "./config/db.js";
 
@@ -32,6 +33,9 @@ app.use("/api/users", usersRoutes);
 
 // Status Management Routes
 app.use("/api/statuses", statusesRoutes);
+
+// Company Routes
+app.use("/api/companies", companiesRoutes);
 
 // Backoffice Routes
 app.use("/api", ordersRoutes);
