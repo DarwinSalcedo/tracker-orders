@@ -62,7 +62,7 @@ router.post('/orders', verifyToken, requireCompany, authorize('Admin'), async (r
             `INSERT INTO orders (id, email, customer_name, customer_phone, external_order_id, share_token, current_status_id, pickup_lat, pickup_lng, pickup_address, dropoff_lat, dropoff_lng, dropoff_address, delivery_person, delivery_person_id, delivery_instructions, company_id) 
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17) 
        RETURNING *`,
-            [trackingId, email, customerName, customerPhone, externalOrderId, shareToken, createdStatusId, pickup?.lat, pickup?.lng, pickup?.address, dropoff?.lat, dropoff?.lng, dropoff?.address, deliveryPerson, deliveryPersonId, deliveryInstructions, companyId]
+            [trackingId, email, customerName, customerPhone, externalOrderId, shareToken, createdStatusId, pickup?.lat, pickup?.lng, pickup?.address, dropoff?.lat, dropoff?.lng, dropoff?.address, deliveryPerson, deliveryPersonId || null, deliveryInstructions, companyId]
         );
 
         // Add initial history entry
