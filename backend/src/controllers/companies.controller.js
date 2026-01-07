@@ -27,16 +27,16 @@ export const createCompany = async (req, res) => {
 
         // Auto-create default system statuses for the new company
         const defaultStatuses = [
-            { code: 'created', label: 'Order Placed', description: 'Your order has been placed and is being processed.' },
-            { code: 'in_transit', label: 'In Transit', description: 'Your package is on its way.' },
-            { code: 'delivered', label: 'Delivery', description: 'Your package has been delivered.' },
-            { code: 'completed', label: 'Completed', description: 'This order has been moved to completed.' }
+            { code: 'created', label: 'Order Placed', description: 'Your order has been placed and is being processed.', order: 10 },
+            { code: 'in_transit', label: 'In Transit', description: 'Your package is on its way.', order: 20 },
+            { code: 'delivered', label: 'Delivery', description: 'Your package has been delivered.', order: 30 },
+            { code: 'completed', label: 'Completed', description: 'This order has been moved to completed.', order: 40 }
         ];
 
         for (const status of defaultStatuses) {
             await query(
-                'INSERT INTO order_statuses (code, label, description, is_system, company_id) VALUES ($1, $2, $3, $4, $5)',
-                [status.code, status.label, status.description, true, newCompany.id]
+                'INSERT INTO order_statuses (code, label, description, is_system, sort_order, company_id) VALUES ($1, $2, $3, $4, $5, $6)',
+                [status.code, status.label, status.description, true, status.order, newCompany.id]
             );
         }
 
