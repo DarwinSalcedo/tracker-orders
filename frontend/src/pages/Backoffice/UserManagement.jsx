@@ -5,8 +5,10 @@ import Button from '../../components/ui/Button';
 import { motion } from 'framer-motion';
 import { UserCheck, Trash2, Loader, User, Shield, Clock, Lock } from 'lucide-react';
 import ChangePasswordModal from './ChangePasswordModal';
+import { useTranslation } from 'react-i18next';
 
 const UserManagement = () => {
+    const { t } = useTranslation();
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [actionLoading, setActionLoading] = useState(null);
@@ -41,7 +43,7 @@ const UserManagement = () => {
     };
 
     const handleDelete = async (id) => {
-        if (!window.confirm('Are you sure you want to delete this user?')) return;
+        if (!window.confirm(t('users.delete_confirm'))) return;
         setActionLoading(id);
         try {
             await userService.deleteUser(id);
@@ -59,19 +61,19 @@ const UserManagement = () => {
         <>
             <Card style={{ padding: 0, overflow: 'hidden' }}>
                 <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--glass-border)' }}>
-                    <h3 style={{ margin: 0 }}>System Users</h3>
+                    <h3 style={{ margin: 0 }}>{t('users.title')}</h3>
                     <p style={{ color: 'var(--color-text-muted)', fontSize: '0.85rem', margin: '0.25rem 0 0' }}>
-                        Manage account approvals and permissions.
+                        {t('users.subtitle')}
                     </p>
                 </div>
                 <div style={{ overflowX: 'auto' }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                         <thead>
                             <tr style={{ background: 'var(--glass-border)', fontSize: '0.85rem', color: 'var(--color-text-muted)', textTransform: 'uppercase' }}>
-                                <th style={{ padding: '1rem 1.5rem', textAlign: 'left' }}>User / Role</th>
-                                <th style={{ padding: '1rem 1.5rem', textAlign: 'left' }}>Status</th>
-                                <th style={{ padding: '1rem 1.5rem', textAlign: 'left' }}>Joined</th>
-                                <th style={{ padding: '1rem 1.5rem', textAlign: 'right' }}>Actions</th>
+                                <th style={{ padding: '1rem 1.5rem', textAlign: 'left' }}>{t('users.table_user_role')}</th>
+                                <th style={{ padding: '1rem 1.5rem', textAlign: 'left' }}>{t('users.table_status')}</th>
+                                <th style={{ padding: '1rem 1.5rem', textAlign: 'left' }}>{t('users.table_joined')}</th>
+                                <th style={{ padding: '1rem 1.5rem', textAlign: 'right' }}>{t('users.table_actions')}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -98,9 +100,9 @@ const UserManagement = () => {
                                     </td>
                                     <td style={{ padding: '1rem 1.5rem' }}>
                                         {user.is_approved ? (
-                                            <span style={{ color: '#10b981', fontSize: '0.85rem', fontWeight: '500' }}>Approved</span>
+                                            <span style={{ color: '#10b981', fontSize: '0.85rem', fontWeight: '500' }}>{t('users.status_approved')}</span>
                                         ) : (
-                                            <span style={{ color: 'var(--color-warning)', fontSize: '0.85rem', fontWeight: '500' }}>Pending Approval</span>
+                                            <span style={{ color: 'var(--color-warning)', fontSize: '0.85rem', fontWeight: '500' }}>{t('users.status_pending')}</span>
                                         )}
                                     </td>
                                     <td style={{ padding: '1rem 1.5rem', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
@@ -116,7 +118,7 @@ const UserManagement = () => {
                                                     onClick={() => handleApprove(user.id)}
                                                     disabled={actionLoading === user.id}
                                                 >
-                                                    {actionLoading === user.id ? <Loader size={14} className="spin" /> : <UserCheck size={16} />} Approve
+                                                    {actionLoading === user.id ? <Loader size={14} className="spin" /> : <UserCheck size={16} />} {t('users.action_approve')}
                                                 </Button>
                                             )}
                                             <button

@@ -7,10 +7,12 @@ import {
     PieChart, Pie, Cell
 } from 'recharts';
 import api from '../../services/api';
+import { useTranslation } from 'react-i18next';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
 
 const AnalyticsDashboard = () => {
+    const { t } = useTranslation();
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -57,7 +59,7 @@ const AnalyticsDashboard = () => {
                             <Clock size={24} />
                         </div>
                         <div>
-                            <div style={{ fontSize: '0.9rem', color: '#666' }}>Avg Delivery Time</div>
+                            <div style={{ fontSize: '0.9rem', color: '#666' }}>{t('analytics.avg_delivery_time')}</div>
                             <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#333' }}>{data.avgDeliveryTime}</div>
                         </div>
                     </div>
@@ -68,7 +70,7 @@ const AnalyticsDashboard = () => {
                             <Package size={24} />
                         </div>
                         <div>
-                            <div style={{ fontSize: '0.9rem', color: '#666' }}>Weekly Orders</div>
+                            <div style={{ fontSize: '0.9rem', color: '#666' }}>{t('analytics.weekly_orders')}</div>
                             <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#333' }}>
                                 {barData.reduce((acc, curr) => acc + curr.orders, 0)}
                             </div>
@@ -81,7 +83,7 @@ const AnalyticsDashboard = () => {
                 {/* Weekly Volume */}
                 <Card>
                     <h3 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <TrendingUp size={20} /> Weekly Volume
+                        <TrendingUp size={20} /> {t('analytics.weekly_volume')}
                     </h3>
                     <div style={{ height: 300 }}>
                         <ResponsiveContainer width="100%" height="100%">
@@ -101,7 +103,7 @@ const AnalyticsDashboard = () => {
                 {/* Status Distribution */}
                 <Card>
                     <h3 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <Package size={20} /> Order Status
+                        <Package size={20} /> {t('analytics.order_status')}
                     </h3>
                     <div style={{ height: 300 }}>
                         <ResponsiveContainer width="100%" height="100%">
@@ -130,15 +132,15 @@ const AnalyticsDashboard = () => {
             {/* Top Drivers */}
             <Card>
                 <h3 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <Users size={20} /> Top Delivery Persons
+                    <Users size={20} /> {t('analytics.top_drivers')}
                 </h3>
                 <div style={{ overflowX: 'auto' }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.95rem' }}>
                         <thead>
                             <tr style={{ borderBottom: '2px solid #f0f0f0', color: '#666', textAlign: 'left' }}>
-                                <th style={{ padding: '1rem' }}>Rank</th>
-                                <th style={{ padding: '1rem' }}>Name</th>
-                                <th style={{ padding: '1rem', textAlign: 'right' }}>Completed Deliveries</th>
+                                <th style={{ padding: '1rem' }}>{t('analytics.rank')}</th>
+                                <th style={{ padding: '1rem' }}>{t('dashboard.table.name')}</th>
+                                <th style={{ padding: '1rem', textAlign: 'right' }}>{t('analytics.completed_deliveries')}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -152,7 +154,7 @@ const AnalyticsDashboard = () => {
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan="3" style={{ padding: '2rem', textAlign: 'center', color: '#999' }}>No data available</td>
+                                    <td colSpan="3" style={{ padding: '2rem', textAlign: 'center', color: '#999' }}>{t('analytics.no_data')}</td>
                                 </tr>
                             )}
                         </tbody>

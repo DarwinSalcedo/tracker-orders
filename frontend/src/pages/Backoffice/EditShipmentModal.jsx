@@ -16,8 +16,10 @@ import {
 import { geocodeAddress } from '../../services/geocodingService';
 import { userService } from '../../services/userService';
 import AddressAutocomplete from '../../components/ui/AddressAutocomplete';
+import { useTranslation } from 'react-i18next';
 
 const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
+    const { t } = useTranslation();
     const [loading, setLoading] = useState(false);
     const [deliveryUsers, setDeliveryUsers] = useState([]);
 
@@ -107,7 +109,7 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
             await onUpdate(shipment.id, updateData);
             onClose();
         } catch (err) {
-            setError(err.response?.data?.error || 'Failed to update shipment');
+            setError(err.response?.data?.error || t('edit_shipment.error_update'));
         } finally {
             setLoading(false);
         }
@@ -146,7 +148,7 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
                         <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--glass-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                                 <div style={{ color: 'var(--color-primary)' }}><Hash size={24} /></div>
-                                <h3 style={{ margin: 0 }}>Edit Shipment <span style={{ color: 'var(--color-primary)' }}>#{shipment?.id}</span></h3>
+                                <h3 style={{ margin: 0 }}>{t('edit_shipment.title')} <span style={{ color: 'var(--color-primary)' }}>#{shipment?.id}</span></h3>
                             </div>
                             <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'var(--color-text-muted)', cursor: 'pointer' }}>
                                 <X size={24} />
@@ -157,23 +159,23 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
                                 {/* Basic Info */}
                                 <div>
-                                    <h4 style={{ marginBottom: '1.5rem', color: 'var(--color-text-muted)', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Shipment Logistics</h4>
+                                    <h4 style={{ marginBottom: '1.5rem', color: 'var(--color-text-muted)', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t('edit_shipment.section_logistics')}</h4>
                                     <Input
-                                        label="Customer Name"
+                                        label={t('edit_shipment.label_customer')}
                                         name="customerName"
                                         value={formData.customerName}
                                         onChange={handleChange}
                                         icon={User}
                                     />
                                     <Input
-                                        label="Phone Number"
+                                        label={t('edit_shipment.label_phone')}
                                         name="customerPhone"
                                         value={formData.customerPhone}
                                         onChange={handleChange}
                                         icon={Hash}
                                     />
                                     <Input
-                                        label="Client Email (Optional)"
+                                        label={t('edit_shipment.label_email')}
                                         name="email"
                                         type="email"
                                         value={formData.email}
@@ -181,7 +183,7 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
                                         icon={Mail}
                                     />
                                     <div className="premium-input-container">
-                                        <label className="premium-input-label">Delivery Person (Optional)</label>
+                                        <label className="premium-input-label">{t('edit_shipment.label_delivery_person')}</label>
                                         <div className="premium-input-wrapper">
                                             <User size={18} className="premium-input-icon" />
                                             <select
@@ -191,7 +193,7 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
                                                 className="premium-input with-icon"
                                                 style={{ appearance: 'none', cursor: 'pointer' }}
                                             >
-                                                <option value="">Select a delivery person...</option>
+                                                <option value="">{t('edit_shipment.placeholder_delivery_person')}</option>
                                                 {deliveryUsers.map(user => (
                                                     <option key={user.id} value={user.id}>
                                                         {user.username}
@@ -202,7 +204,7 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
                                     </div>
                                     <div style={{ marginBottom: '1rem' }}>
                                         <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>
-                                            Instructions
+                                            {t('edit_shipment.label_instructions')}
                                         </label>
                                         <div style={{ position: 'relative' }}>
                                             <MessageSquare size={18} style={{ position: 'absolute', top: '1rem', left: '1rem', color: 'var(--color-text-muted)' }} />
@@ -228,11 +230,11 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
 
                                 {/* Location Info */}
                                 <div>
-                                    <h4 style={{ marginBottom: '1.5rem', color: 'var(--color-text-muted)', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Route Parameters</h4>
+                                    <h4 style={{ marginBottom: '1.5rem', color: 'var(--color-text-muted)', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t('edit_shipment.section_route')}</h4>
 
                                     <div style={{ marginBottom: '1.5rem' }}>
                                         <p style={{ fontSize: '0.85rem', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                            <MapPin size={14} color="var(--color-accent)" /> Pickup Location
+                                            <MapPin size={14} color="var(--color-accent)" /> {t('edit_shipment.label_pickup')}
                                         </p>
                                         <AddressAutocomplete
                                             label="Address"
@@ -240,18 +242,18 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
                                             value={formData.pickupAddress}
                                             onChange={handleChange}
                                             onSelect={(suggestion) => handleAddressSelect('pickup', suggestion)}
-                                            placeholder="Enter address..."
+                                            placeholder={t('edit_shipment.placeholder_address')}
                                         />
                                         {formData.pickupLat && (
                                             <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '0.25rem' }}>
-                                                Coords: {parseFloat(formData.pickupLat).toFixed(4)}, {parseFloat(formData.pickupLng).toFixed(4)}
+                                                {t('edit_shipment.coords')}: {parseFloat(formData.pickupLat).toFixed(4)}, {parseFloat(formData.pickupLng).toFixed(4)}
                                             </p>
                                         )}
                                     </div>
 
                                     <div>
                                         <p style={{ fontSize: '0.85rem', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                            <MapPin size={14} color="var(--color-success)" /> Destination Location
+                                            <MapPin size={14} color="var(--color-success)" /> {t('edit_shipment.label_dropoff')}
                                         </p>
                                         <AddressAutocomplete
                                             label="Address"
@@ -259,11 +261,11 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
                                             value={formData.dropoffAddress}
                                             onChange={handleChange}
                                             onSelect={(suggestion) => handleAddressSelect('dropoff', suggestion)}
-                                            placeholder="Enter address..."
+                                            placeholder={t('edit_shipment.placeholder_address')}
                                         />
                                         {formData.dropoffLat && (
                                             <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '0.25rem' }}>
-                                                Coords: {parseFloat(formData.dropoffLat).toFixed(4)}, {parseFloat(formData.dropoffLng).toFixed(4)}
+                                                {t('edit_shipment.coords')}: {parseFloat(formData.dropoffLat).toFixed(4)}, {parseFloat(formData.dropoffLng).toFixed(4)}
                                             </p>
                                         )}
                                     </div>
@@ -271,11 +273,11 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
                             </div>
 
                             <div className="flex-stack" style={{ marginTop: '2rem', display: 'flex', justifyContent: 'flex-end', gap: '1rem', borderTop: '1px solid var(--glass-border)', paddingTop: '2rem' }}>
-                                <Button type="button" variant="outline" onClick={onClose}>Cancel</Button>
+                                <Button type="button" variant="outline" onClick={onClose}>{t('edit_shipment.btn_cancel')}</Button>
                                 <Button type="submit" variant="primary" disabled={loading}>
                                     {loading ? <Loader className="spin" size={18} /> : (
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                            <Save size={18} /> Save Manifest Changes
+                                            <Save size={18} /> {t('edit_shipment.btn_save')}
                                         </div>
                                     )}
                                 </Button>

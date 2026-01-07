@@ -16,8 +16,10 @@ import {
     AlertCircle,
     GripVertical
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const StatusManagement = () => {
+    const { t } = useTranslation();
     const [statuses, setStatuses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [actionLoading, setActionLoading] = useState(null);
@@ -72,7 +74,7 @@ const StatusManagement = () => {
     };
 
     const handleDelete = async (id) => {
-        if (!window.confirm('Are you sure you want to delete this status? This cannot be undone if not in use.')) return;
+        if (!window.confirm(t('statuses.delete_confirm'))) return;
         setActionLoading(id);
         try {
             await statusService.deleteStatus(id);
@@ -106,12 +108,12 @@ const StatusManagement = () => {
             {/* Header & Add Button */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
-                    <h2 style={{ margin: 0 }}>Workflow Statuses</h2>
-                    <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>Define lifecycle stages. Drag items to reorder.</p>
+                    <h2 style={{ margin: 0 }}>{t('statuses.title')}</h2>
+                    <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>{t('statuses.subtitle')}</p>
                 </div>
                 <Button variant="primary" onClick={() => setShowAddForm(!showAddForm)}>
                     {showAddForm ? <X size={18} /> : <Plus size={18} />}
-                    {showAddForm ? 'Cancel' : 'Add New Status'}
+                    {showAddForm ? t('statuses.btn_cancel') : t('statuses.btn_add')}
                 </Button>
             </div>
 
@@ -127,27 +129,27 @@ const StatusManagement = () => {
                         <Card style={{ padding: '1.5rem', border: '1px solid var(--color-primary)33' }}>
                             <form onSubmit={handleCreate} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', alignItems: 'end' }}>
                                 <Input
-                                    label="Code (Internal ID)"
+                                    label={t('statuses.modal_code')}
                                     placeholder="e.g. out_for_delivery"
                                     value={formData.code}
                                     onChange={e => setFormData({ ...formData, code: e.target.value })}
                                     required
                                 />
                                 <Input
-                                    label="Label (Display Name)"
+                                    label={t('statuses.modal_label')}
                                     placeholder="e.g. Out for Delivery"
                                     value={formData.label}
                                     onChange={e => setFormData({ ...formData, label: e.target.value })}
                                     required
                                 />
                                 <Input
-                                    label="Description"
+                                    label={t('statuses.modal_desc')}
                                     placeholder="Brief explanation for tracker..."
                                     value={formData.description}
                                     onChange={e => setFormData({ ...formData, description: e.target.value })}
                                 />
                                 <Button type="submit" disabled={actionLoading === 'create'} style={{ marginBottom: '1rem' }}>
-                                    {actionLoading === 'create' ? <Loader className="spin" size={18} /> : 'Create Status'}
+                                    {actionLoading === 'create' ? <Loader className="spin" size={18} /> : t('statuses.btn_create')}
                                 </Button>
                             </form>
                         </Card>
@@ -162,10 +164,10 @@ const StatusManagement = () => {
                     color: 'var(--color-text-muted)', fontSize: '0.75rem', textTransform: 'uppercase', marginBottom: '0.5rem'
                 }}>
                     <div></div>
-                    <div>Status / Code</div>
-                    <div>Description</div>
-                    <div style={{ textAlign: 'center' }}>System</div>
-                    <div style={{ textAlign: 'right' }}>Actions</div>
+                    <div>{t('statuses.table_code')}</div>
+                    <div>{t('statuses.table_desc')}</div>
+                    <div style={{ textAlign: 'center' }}>{t('statuses.table_system')}</div>
+                    <div style={{ textAlign: 'right' }}>{t('statuses.table_actions')}</div>
                 </div>
 
                 <Reorder.Group axis="y" values={statuses} onReorder={handleReorder}>
@@ -273,9 +275,9 @@ const StatusManagement = () => {
             <div style={{ padding: '1rem', background: 'rgba(245, 158, 11, 0.05)', borderRadius: '12px', border: '1px solid rgba(245, 158, 11, 0.2)', display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
                 <AlertCircle size={20} color="var(--color-warning)" style={{ marginTop: '0.1rem' }} />
                 <div>
-                    <h4 style={{ margin: '0 0 0.25rem', color: 'var(--color-warning)' }}>Mandatory Statuses & Ordering</h4>
+                    <h4 style={{ margin: '0 0 0.25rem', color: 'var(--color-warning)' }}>{t('statuses.warning_title')}</h4>
                     <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
-                        Drag status items to reorder them in your workflow. Statuses marked with settings icon are required by the system.
+                        {t('statuses.warning_desc')}
                     </p>
                 </div>
             </div>
