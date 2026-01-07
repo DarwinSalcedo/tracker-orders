@@ -19,12 +19,13 @@ const createTables = async () => {
     await query(`
       CREATE TABLE IF NOT EXISTS order_statuses (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-        code VARCHAR(50) UNIQUE NOT NULL,
+        code VARCHAR(50) NOT NULL,
         label VARCHAR(100) NOT NULL,
         description TEXT,
         is_system BOOLEAN DEFAULT FALSE,
         sort_order INTEGER DEFAULT 0,
-        company_id UUID REFERENCES companies(id) ON DELETE CASCADE
+        company_id UUID REFERENCES companies(id) ON DELETE CASCADE,
+        UNIQUE(company_id, code)
       );
     `);
 
@@ -109,7 +110,7 @@ const seedStatuses = async () => {
       await query(`
         INSERT INTO order_statuses (code, label, description, is_system, sort_order, company_id)
         VALUES ($1, $2, $3, $4, $5, '00000000-0000-0000-0000-000000000001')
-        ON CONFLICT (code) DO UPDATE SET is_system = EXCLUDED.is_system, sort_order = EXCLUDED.sort_order, company_id = EXCLUDED.company_id;
+        ON CONFLICT (company_id, code) DO UPDATE SET is_system = EXCLUDED.is_system, sort_order = EXCLUDED.sort_order, company_id = EXCLUDED.company_id;
       `, [status.code, status.label, status.description, status.is_system, status.sort_order]);
     }
     console.log('Statuses seeded successfully.');

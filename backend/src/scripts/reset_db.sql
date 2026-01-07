@@ -26,12 +26,13 @@ CREATE TABLE IF NOT EXISTS companies (
 -- Create order_statuses table
 CREATE TABLE IF NOT EXISTS order_statuses (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    code VARCHAR(50) UNIQUE NOT NULL,
+    code VARCHAR(50) NOT NULL,
     label VARCHAR(100) NOT NULL,
     description TEXT,
     is_system BOOLEAN DEFAULT FALSE,
     sort_order INTEGER DEFAULT 0,
-    company_id UUID REFERENCES companies(id) ON DELETE CASCADE
+    company_id UUID REFERENCES companies(id) ON DELETE CASCADE,
+    UNIQUE(company_id, code)
 );
 
 -- Create users table
@@ -92,7 +93,7 @@ VALUES
     ('in_transit', 'In Transit', 'Your package is on its way.', TRUE, 20, '00000000-0000-0000-0000-000000000001'),
     ('delivered', 'Delivery', 'Your package has been delivered.', TRUE, 30, '00000000-0000-0000-0000-000000000001'),
     ('completed', 'Completed', 'This order has been moved to completed.', TRUE, 40, '00000000-0000-0000-0000-000000000001')
-ON CONFLICT (code) DO UPDATE SET is_system = TRUE, sort_order = EXCLUDED.sort_order, company_id = EXCLUDED.company_id;
+ON CONFLICT (company_id, code) DO UPDATE SET is_system = TRUE, sort_order = EXCLUDED.sort_order;
 
 -- Seed Super Admin User (Password: password)
 INSERT INTO users (username, password, role, is_approved, company_id)
