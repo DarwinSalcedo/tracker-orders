@@ -99,3 +99,39 @@ export const login = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+
+export const changePassword = async (req, res) => {
+    const { oldPassword, newPassword } = req.body;
+    const userId = req.user.id;
+
+    if (!oldPassword || !newPassword) {
+        return res.status(400).json({ error: 'Old password and new password are required' });
+    }
+
+    try {
+        // Fetch current user password
+        const userRes = await query('SELECT password FROM users WHERE id = $1', [userId]);
+
+        if (userRes.rows.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const user = userRes.rows[0];
+        const isMatch = await bcrypt.compare(oldPassword, user.password);
+
+        if (!isMatch) {
+            return res.status(401).json({ error: 'Incorrect old password' });
+        }
+
+        // Hash new password
+        const newPasswordHash = await bcrypt.hash(newPassword, 10);
+
+        // Update password
+        await query('UPDATE users SET password = $1 WHERE id = $2', [newPasswordHash, userId]);
+
+        res.json({ message: 'Password changed successfully' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
