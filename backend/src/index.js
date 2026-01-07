@@ -6,6 +6,7 @@ import authRoutes from "./routes/auth.routes.js";
 import usersRoutes from "./routes/users.routes.js";
 import statusesRoutes from "./routes/statuses.routes.js";
 import companiesRoutes from "./routes/companies.routes.js";
+import analyticsRoutes from "./routes/analytics.routes.js";
 
 import { query } from "./config/db.js";
 
@@ -35,7 +36,11 @@ app.use("/api/users", usersRoutes);
 app.use("/api/statuses", statusesRoutes);
 
 // Company Routes
+// Company Routes
 app.use("/api/companies", companiesRoutes);
+
+// Analytics Routes
+app.use("/api/analytics", analyticsRoutes);
 
 // Backoffice Routes
 app.use("/api", ordersRoutes);

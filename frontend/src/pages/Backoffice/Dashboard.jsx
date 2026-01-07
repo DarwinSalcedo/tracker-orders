@@ -25,11 +25,14 @@ import {
     Hash,
     Copy,
     Check,
-    Lock
+    Check,
+    Lock,
+    BarChart2
 } from 'lucide-react';
 import Input from '../../components/ui/Input';
 import EditShipmentModal from './EditShipmentModal';
 import ChangePasswordModal from './ChangePasswordModal';
+import AnalyticsDashboard from './AnalyticsDashboard';
 import StatusManagement from './StatusManagement';
 import UserManagement from './UserManagement';
 import { Users } from 'lucide-react';
@@ -446,6 +449,16 @@ const Dashboard = () => {
                         >
                             <Settings size={18} /> {t('dashboard.tabs.statuses')}
                         </button>
+                        <button
+                            onClick={() => setActiveTab('analytics')}
+                            style={{
+                                background: 'none', border: 'none', color: activeTab === 'analytics' ? 'var(--color-primary)' : 'var(--color-text-muted)',
+                                padding: '0.5rem 1rem', cursor: 'pointer', fontWeight: '600', borderBottom: activeTab === 'analytics' ? '2px solid var(--color-primary)' : 'none',
+                                display: 'flex', alignItems: 'center', gap: '0.5rem'
+                            }}
+                        >
+                            <BarChart2 size={18} /> Analytics
+                        </button>
                     </div>
                 )}
 
@@ -475,7 +488,9 @@ const Dashboard = () => {
                 )}
 
                 {activeTab === 'shipments' || activeTab === 'completed' ? renderShipmentsContent() : (
-                    activeTab === 'users' ? <UserManagement /> : <StatusManagement />
+                    activeTab === 'users' ? <UserManagement /> :
+                        activeTab === 'statuses' ? <StatusManagement /> :
+                            <AnalyticsDashboard />
                 )}
             </div>
 
