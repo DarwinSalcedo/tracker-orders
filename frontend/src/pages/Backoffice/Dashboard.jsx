@@ -38,6 +38,7 @@ import UserManagement from './UserManagement';
 import { Users } from 'lucide-react';
 import ThemeToggle from '../../components/ui/ThemeToggle';
 import LanguageSwitcher from '../../components/ui/LanguageSwitcher';
+import VersionBadge from '../../components/ui/VersionBadge';
 import { useTranslation } from 'react-i18next';
 
 const Dashboard = () => {
@@ -505,6 +506,8 @@ const Dashboard = () => {
                 isOpen={isPasswordModalOpen}
                 onClose={() => setIsPasswordModalOpen(false)}
             />
+
+            <VersionBadge />
         </div>
     );
 };
