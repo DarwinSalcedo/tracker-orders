@@ -11,6 +11,7 @@ import CreateOrder from './pages/Backoffice/CreateOrder';
 import Register from './pages/Backoffice/Register';
 import TrackOrder from './pages/Tracker/TrackOrder';
 import TokenTrack from './pages/Tracker/TokenTrack';
+import CompanyBadge from './components/CompanyBadge';
 
 // Protected Route Component
 const ProtectedRoute = ({ allowedRoles = [] }) => {
@@ -32,6 +33,7 @@ function App() {
     <ThemeProvider>
       <AuthProvider>
         <Router>
+          <CompanyBadge />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/track" element={<TrackOrder />} />
