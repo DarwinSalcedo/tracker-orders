@@ -44,5 +44,14 @@ export const userService = {
         } catch (error) {
             throw error.response?.data?.error || 'Failed to change password';
         }
+    },
+
+    resetPassword: async (userId, newPassword) => {
+        try {
+            const response = await api.patch(`/users/${userId}/reset-password`, { newPassword });
+            return response.data;
+        } catch (error) {
+            throw error.response?.data?.error || 'Failed to reset password';
+        }
     }
 };

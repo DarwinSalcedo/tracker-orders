@@ -172,3 +172,41 @@ export const changePassword = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+
+export const resetPassword = async (req, res) => {
+    const { id } = req.params;
+    const { newPassword } = req.body;
+    const isSuperAdmin = req.user.role === 'SuperAdmin';
+
+    if (!newPassword) {
+        return res.status(400).json({ error: 'New password is required' });
+    }
+
+    try {
+        // 1. Check if user exists and belongs to company (unless SuperAdmin)
+        let queryText = 'SELECT id, company_id FROM users WHERE id = $1';
+        let params = [id];
+
+        if (!isSuperAdmin) {
+            queryText += ' AND company_id = $2';
+            params.push(req.user.companyId);
+        }
+
+        const userCheck = await query(queryText, params);
+        if (userCheck.rows.length === 0) {
+            return res.status(404).json({ error: 'User not found or you do not have permission to modify this user' });
+        }
+
+        // 2. Hash new password
+        const salt = await bcrypt.genSalt(10);
+        const hash = await bcrypt.hash(newPassword, salt);
+
+        // 3. Update password
+        await query('UPDATE users SET password = $1 WHERE id = $2', [hash, id]);
+
+        res.json({ message: 'Password reset successfully' });
+    } catch (err) {
+        console.error('Reset password error:', err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};

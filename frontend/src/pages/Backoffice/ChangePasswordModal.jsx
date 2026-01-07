@@ -6,12 +6,14 @@ import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
 import { userService } from '../../services/userService';
 
-const ChangePasswordModal = ({ isOpen, onClose }) => {
+const ChangePasswordModal = ({ isOpen, onClose, targetUserId }) => {
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState({ type: '', message: '' });
+
+    const isAdminReset = !!targetUserId;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -30,8 +32,13 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
         setStatus({ type: '', message: '' });
 
         try {
-            await userService.changePassword(currentPassword, newPassword);
-            setStatus({ type: 'success', message: 'Password updated successfully!' });
+            if (isAdminReset) {
+                await userService.resetPassword(targetUserId, newPassword);
+                setStatus({ type: 'success', message: 'User password reset successfully!' });
+            } else {
+                await userService.changePassword(currentPassword, newPassword);
+                setStatus({ type: 'success', message: 'Password updated successfully!' });
+            }
 
             // Clear form
             setCurrentPassword('');
@@ -82,7 +89,7 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
                     <Card>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                             <h3 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                <Lock size={20} className="text-primary" /> Change Password
+                                <Lock size={20} className="text-primary" /> {isAdminReset ? 'Reset User Password' : 'Change Password'}
                             </h3>
                             <button
                                 onClick={onClose}
@@ -109,14 +116,16 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
                         )}
 
                         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                            <Input
-                                label="Current Password"
-                                type="password"
-                                value={currentPassword}
-                                onChange={(e) => setCurrentPassword(e.target.value)}
-                                required
-                                placeholder="••••••••"
-                            />
+                            {!isAdminReset && (
+                                <Input
+                                    label="Current Password"
+                                    type="password"
+                                    value={currentPassword}
+                                    onChange={(e) => setCurrentPassword(e.target.value)}
+                                    required
+                                    placeholder="••••••••"
+                                />
+                            )}
                             <Input
                                 label="New Password"
                                 type="password"
@@ -138,7 +147,7 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
                                     Cancel
                                 </Button>
                                 <Button type="submit" fullWidth disabled={loading}>
-                                    {loading ? <Loader className="spin" size={18} /> : 'Update Password'}
+                                    {loading ? <Loader className="spin" size={18} /> : (isAdminReset ? 'Reset Password' : 'Update Password')}
                                 </Button>
                             </div>
                         </form>
