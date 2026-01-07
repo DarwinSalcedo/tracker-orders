@@ -22,7 +22,7 @@ export const register = async (req, res) => {
         const companyIdToUse = company_id || '00000000-0000-0000-0000-000000000001';
 
         const result = await query(
-            'INSERT INTO users (username, password_hash, role, is_approved, company_id) VALUES ($1, $2, $3, $4, $5) RETURNING id, username, role, is_approved, company_id',
+            'INSERT INTO users (username, password, role, is_approved, company_id) VALUES ($1, $2, $3, $4, $5) RETURNING id, username, role, is_approved, company_id',
             [username, passwordHash, role, isApproved, companyIdToUse]
         );
 
@@ -60,7 +60,7 @@ export const login = async (req, res) => {
         }
 
         const user = result.rows[0];
-        const isMatch = await bcrypt.compare(password, user.password_hash);
+        const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
             return res.status(401).json({ error: 'Invalid credentials' });

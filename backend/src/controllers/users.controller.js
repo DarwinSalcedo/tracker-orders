@@ -123,7 +123,7 @@ export const createCompanyAdmin = async (req, res) => {
         const passwordHash = await bcrypt.hash(password, 10);
 
         const result = await query(
-            "INSERT INTO users (username, password_hash, role, is_approved, company_id) VALUES ($1, $2, 'Admin', TRUE, $3) RETURNING id, username, role, company_id",
+            "INSERT INTO users (username, password, role, is_approved, company_id) VALUES ($1, $2, 'Admin', TRUE, $3) RETURNING id, username, role, company_id",
             [username, passwordHash, companyId]
         );
 

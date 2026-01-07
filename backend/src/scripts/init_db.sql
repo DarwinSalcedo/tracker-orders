@@ -1,3 +1,7 @@
+-- ==========================================
+-- INITIALIZE DATABASE SCRIPT
+-- ==========================================
+
 -- 1. Create companies table
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
@@ -83,21 +87,6 @@ ON CONFLICT (code) DO UPDATE SET is_system = TRUE, sort_order = EXCLUDED.sort_or
 
 -- 8. Seed Super Admin User
 -- Password is 'password' (hashed with bcrypt, cost 10)
--- Since we enabled pgcrypto, we COULD use crypt() but node bcrypt hashes are standard $2b$.
--- Let's use a standard bcrypt hash for "password": $2a$10$X7.1mI2aO5/iK.Q/7n.8..dJ.m.m.m.m.m.. (Example)
--- Actually, let's use pgcrypto's crypt if possible, but the app uses bcryptjs.
--- Ideally we generate a real hash. I will use a known hash for 'password'.
--- Hash for 'password': $2a$10$CwTycUXWue0Thq9StjUM0u.tN.tN.tN.tN.tN.tN.tN.tN.tN.tN (Mock)
--- Let's generate a real one via tool or just use a placeholder I know.
--- Hash for 'password' (bcryptjs default): $2a$10$vI8aWBnW3fBr4ffg5.3.6.x.x.x.x.x
--- I'll use a valid one: $2a$10$Z/bV.M.M.M.M.M.M.M.M.M.M.M.M.M.M.M.M.M.M.M.M.M.M.M
--- Actually, I will use pgcrypto to generate it if compatible, but bcryptjs compat is tricky.
--- Use this hash for "password": $2b$10$3euPcmQFCiblsZeEu5s7p.9/9/9/9/9/9/9/9/9/9/9/9/9/9 
--- WAIT, I can just not seed it? No the user asked for it. 
--- I will use a hardcoded hash that I know works or generated. 
--- Hash for "password": $2a$10$Ix.ExampleHashForPassword.1234567890
--- Better: I'll use a simplified one or just `crypt('password', gen_salt('bf'))` since pgcrypto is on.
--- Node `bcryptjs` can verify `bf` (Blowfish) hashes from `pgcrypto`.
 INSERT INTO users (username, password, role, is_approved, company_id)
 VALUES ('superadmin', crypt('password', gen_salt('bf')), 'SuperAdmin', TRUE, '00000000-0000-0000-0000-000000000001')
 ON CONFLICT (username) DO NOTHING;
