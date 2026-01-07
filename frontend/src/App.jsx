@@ -12,6 +12,7 @@ import Register from './pages/Backoffice/Register';
 import TrackOrder from './pages/Tracker/TrackOrder';
 import TokenTrack from './pages/Tracker/TokenTrack';
 import CompanyBadge from './components/CompanyBadge';
+import SuperAdminDashboard from './pages/SuperAdmin/Dashboard';
 
 // Protected Route Component
 const ProtectedRoute = ({ allowedRoles = [] }) => {
@@ -22,6 +23,10 @@ const ProtectedRoute = ({ allowedRoles = [] }) => {
   if (!isAuthenticated) return <Navigate to="/backoffice/login" replace />;
 
   if (allowedRoles.length > 0 && !allowedRoles.includes(user?.role)) {
+    // If user is SuperAdmin but tries to access Admin/Delivery pages, redirect to SuperAdmin Dashboard
+    if (user?.role === 'SuperAdmin') {
+      return <Navigate to="/super-admin/dashboard" replace />;
+    }
     return <Navigate to="/backoffice/dashboard" replace />;
   }
 
@@ -49,6 +54,10 @@ function App() {
 
             <Route element={<ProtectedRoute allowedRoles={['Admin']} />}>
               <Route path="/backoffice/create-order" element={<CreateOrder />} />
+            </Route>
+
+            <Route element={<ProtectedRoute allowedRoles={['SuperAdmin']} />}>
+              <Route path="/super-admin/dashboard" element={<SuperAdminDashboard />} />
             </Route>
 
             <Route path="*" element={<Navigate to="/" replace />} />

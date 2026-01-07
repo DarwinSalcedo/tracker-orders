@@ -19,7 +19,17 @@ const Login = () => {
     // Redirect if already authenticated
     React.useEffect(() => {
         if (isAuthenticated) {
-            navigate('/backoffice/dashboard', { replace: true });
+            // We can't easily know role here without consuming user context properly, but assuming user object is available
+            // Actually, best to let the user login flow handle the initial navigation, or check the stored user
+            const savedUser = localStorage.getItem('user');
+            if (savedUser) {
+                const role = JSON.parse(savedUser).role;
+                if (role === 'SuperAdmin') {
+                    navigate('/super-admin/dashboard', { replace: true });
+                } else {
+                    navigate('/backoffice/dashboard', { replace: true });
+                }
+            }
         }
     }, [isAuthenticated, navigate]);
 
@@ -29,10 +39,14 @@ const Login = () => {
         setLoading(true);
 
         try {
-            await login(username, password);
-            navigate('/backoffice/dashboard', { replace: true }); // Redirect after login
+            const result = await login(username, password);
+            if (result.user.role === 'SuperAdmin') {
+                navigate('/super-admin/dashboard', { replace: true });
+            } else {
+                navigate('/backoffice/dashboard', { replace: true });
+            }
         } catch (err) {
-            setError(err.message || 'Failed to login');
+            setError(typeof err === 'string' ? err : (err.message || 'Failed to login'));
         } finally {
             setLoading(false);
         }
