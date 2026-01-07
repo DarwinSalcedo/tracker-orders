@@ -191,7 +191,15 @@ const StatusManagement = () => {
                                             <input
                                                 value={editData.label}
                                                 onChange={e => setEditData({ ...editData, label: e.target.value })}
-                                                style={{ background: 'var(--glass-bg)', border: '1px solid var(--color-primary)', color: 'var(--color-text-main)', padding: '0.4rem', borderRadius: '4px' }}
+                                                style={{
+                                                    background: 'var(--color-bg-secondary)',
+                                                    border: '1px solid var(--color-primary)',
+                                                    color: 'var(--color-text-main)',
+                                                    padding: '0.5rem',
+                                                    borderRadius: '6px',
+                                                    fontSize: '0.9rem',
+                                                    width: '100%'
+                                                }}
                                             />
                                             <code style={{ fontSize: '0.75rem', opacity: 0.5 }}>{status.code}</code>
                                         </div>
@@ -208,7 +216,16 @@ const StatusManagement = () => {
                                         <textarea
                                             value={editData.description}
                                             onChange={e => setEditData({ ...editData, description: e.target.value })}
-                                            style={{ width: '90%', background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', color: 'var(--color-text-main)', padding: '0.4rem', borderRadius: '4px', fontSize: '0.85rem' }}
+                                            style={{
+                                                width: '100%',
+                                                background: 'var(--color-bg-secondary)',
+                                                border: '1px solid var(--glass-border)',
+                                                color: 'var(--color-text-main)',
+                                                padding: '0.5rem',
+                                                borderRadius: '6px',
+                                                fontSize: '0.85rem',
+                                                minHeight: '60px'
+                                            }}
                                         />
                                     ) : (
                                         <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>{status.description}</p>

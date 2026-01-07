@@ -4,6 +4,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 
 import enUS from './locales/en-US.json';
 import esAR from './locales/es-AR.json';
+import ptBR from './locales/pt-BR.json';
 
 i18n
     .use(LanguageDetector)
@@ -11,10 +12,11 @@ i18n
     .init({
         resources: {
             'en-US': { translation: enUS },
-            'es-AR': { translation: esAR }
+            'es-AR': { translation: esAR },
+            'pt-BR': { translation: ptBR }
         },
         fallbackLng: 'en-US',
-        supportedLngs: ['en-US', 'es-AR'],
+        supportedLngs: ['en-US', 'es-AR', 'pt-BR'],
         interpolation: {
             escapeValue: false
         },

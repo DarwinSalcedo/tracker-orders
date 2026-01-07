@@ -1,0 +1,87 @@
+{
+    "common": {
+        "loading": "Carregando...",
+        "error": "Ocorreu um erro",
+        "save": "Salvar Alterações",
+        "cancel": "Cancelar",
+        "back": "Voltar",
+        "logout": "Sair",
+        "dashboard": "Painel de Controle",
+        "login": "Entrar",
+        "register": "Cadastrar",
+        "change_password": "Alterar Senha"
+    },
+    "home": {
+        "title": "Rastreie seus pedidos em tempo real.",
+        "subtitle": "A solução logística definitiva para empresas modernas e clientes.",
+        "track_card_title": "Rastrear Remessa",
+        "track_card_desc": "Verifique o status da sua entrega instantaneamente com o número do conhecimento.",
+        "portal_card_title": "Portal Logístico",
+        "portal_card_desc": "Acesso para admin e entregadores gerenciarem manifestos e despachos.",
+        "go_to_dashboard": "Ir para o Painel"
+    },
+    "track": {
+        "title": "Rastrear Remessa",
+        "placeholder_waybill": "ex: TRK-12345678",
+        "placeholder_email": "nome@exemplo.com",
+        "button": "Rastrear",
+        "back_to_search": "Nova Busca",
+        "history": "Histórico de Rastreamento",
+        "manifested_at": "Manifestado em",
+        "not_found": "Pedido não encontrado ou credenciais inválidas",
+        "details_title": "Detalhes da Remessa",
+        "waybill": "Conhecimento",
+        "client": "Cliente",
+        "dest": "Destino",
+        "origin": "Origem",
+        "status": "Status Atual",
+        "last_updated": "Última Atualização",
+        "registered": "Data de Registro",
+        "customer_name": "Nome do Cliente",
+        "customer_phone": "Telefone",
+        "receiver_details": "Detalhes do Recebedor e Entrega"
+    },
+    "dashboard": {
+        "welcome": "Bem-vindo de volta",
+        "logged_as": "Logado como",
+        "register_shipment": "Registrar Remessa",
+        "refresh": "Atualizar",
+        "tabs": {
+            "shipments": "Remessas",
+            "completed": "Completos",
+            "users": "Usuários",
+            "statuses": "Status"
+        },
+        "table": {
+            "id": "ID / Waybill",
+            "client": "Cliente",
+            "name": "Nome",
+            "status": "Status",
+            "registered": "Registrado",
+            "actions": "Ações"
+        }
+    },
+    "create_order": {
+        "title": "Registrar Remessa",
+        "subtitle": "Inicializar um novo conhecimento de rastreamento no sistema.",
+        "section_shipment": "Informações da Remessa",
+        "section_pickup": "Local de Coleta",
+        "section_dropoff": "Destino",
+        "label_waybill": "Conhecimento / ID de Rastreamento",
+        "label_external": "Referência Externa",
+        "label_email": "E-mail do Cliente",
+        "label_delivery_person": "Entregador",
+        "label_instructions": "Instruções de Entrega",
+        "placeholder_select_delivery": "Selecione um entregador...",
+        "placeholder_instructions": "ex: Deixar na portaria",
+        "success_title": "Remessa Registrada!",
+        "success_message": "Atualizando manifesto e redirecionando...",
+        "share_link": "Link de Rastreamento Compartilhável",
+        "copy_link": "Copiar Link",
+        "submit_btn": "Registrar Remessa e Gerar Conhecimento",
+        "optional": "(Opcional)",
+        "address_auto": "Digite o endereço para preencher",
+        "geocoded": "Geocodificado",
+        "error_generic": "Falha ao registrar remessa"
+    }
+}

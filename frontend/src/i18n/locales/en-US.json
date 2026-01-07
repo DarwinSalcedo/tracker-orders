@@ -59,5 +59,28 @@
             "registered": "Registered",
             "actions": "Actions"
         }
+    },
+    "create_order": {
+        "title": "Register Shipment",
+        "subtitle": "Initialize a new tracking waybill in the system.",
+        "section_shipment": "Shipment Information",
+        "section_pickup": "Pickup Location",
+        "section_dropoff": "Destination",
+        "label_waybill": "Waybill / Tracking ID",
+        "label_external": "External Reference",
+        "label_email": "Client Email",
+        "label_delivery_person": "Delivery Person",
+        "label_instructions": "Delivery Instructions",
+        "placeholder_select_delivery": "Select a delivery person...",
+        "placeholder_instructions": "e.g. Leave at front door",
+        "success_title": "Shipment Registered!",
+        "success_message": "Updating manifest and redirecting...",
+        "share_link": "Shareable Tracking Link",
+        "copy_link": "Copy Link",
+        "submit_btn": "Register Shipment & Generate Waybill",
+        "optional": "(Optional)",
+        "address_auto": "Enter address to auto-fill",
+        "geocoded": "Geocoded",
+        "error_generic": "Failed to register shipment"
     }
 }

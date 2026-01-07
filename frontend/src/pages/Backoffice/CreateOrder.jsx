@@ -110,7 +110,7 @@ const CreateOrder = () => {
             setTimeout(() => navigate('/backoffice/dashboard'), 2000);
         } catch (err) {
             console.error(err);
-            setError(err.response?.data?.error || 'Failed to register shipment');
+            setError(err.response?.data?.error || t('create_order.error_generic'));
         } finally {
             setLoading(false);
         }
@@ -127,8 +127,8 @@ const CreateOrder = () => {
                     <div style={{ padding: '2rem', background: 'rgba(16, 185, 129, 0.1)', borderRadius: '50%', display: 'inline-block', marginBottom: '1.5rem', border: '1px solid var(--color-success)' }}>
                         <CheckCircle size={64} color="var(--color-success)" />
                     </div>
-                    <h1>Shipment Registered!</h1>
-                    <p style={{ color: 'var(--color-text-muted)', marginBottom: '1.5rem' }}>Updating manifest and redirecting...</p>
+                    <h1>{t('create_order.success_title')}</h1>
+                    <p style={{ color: 'var(--color-text-muted)', marginBottom: '1.5rem' }}>{t('create_order.success_message')}</p>
                     {createdOrder?.share_token && (
                         <div style={{
                             background: 'var(--glass-bg)',
@@ -139,7 +139,7 @@ const CreateOrder = () => {
                             maxWidth: '500px',
                             margin: '0 auto 1.5rem'
                         }}>
-                            <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: '0.5rem' }}>Shareable Tracking Link:</p>
+                            <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: '0.5rem' }}>{t('create_order.share_link')}:</p>
                             <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                                 <input
                                     readOnly
@@ -169,7 +169,7 @@ const CreateOrder = () => {
                                         whiteSpace: 'nowrap'
                                     }}
                                 >
-                                    Copy Link
+                                    {t('create_order.copy_link')}
                                 </button>
                             </div>
                         </div>
@@ -187,8 +187,8 @@ const CreateOrder = () => {
                         <Button variant="ghost" onClick={() => navigate('/backoffice/dashboard')} style={{ paddingLeft: 0, marginBottom: '1rem' }}>
                             <ArrowLeft size={18} /> {t('common.back')}
                         </Button>
-                        <h1 className="text-gradient">{t('dashboard.register_shipment')}</h1>
-                        <p style={{ color: 'var(--color-text-muted)' }}>Initialize a new tracking waybill in the system.</p>
+                        <h1 className="text-gradient">{t('create_order.title')}</h1>
+                        <p style={{ color: 'var(--color-text-muted)' }}>{t('create_order.subtitle')}</p>
                     </div>
                     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                         <LanguageSwitcher />
@@ -201,10 +201,10 @@ const CreateOrder = () => {
                         {/* General Info */}
                         <Card>
                             <h3 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                <ClipboardList size={20} color="var(--color-primary)" /> Shipment Information
+                                <ClipboardList size={20} color="var(--color-primary)" /> {t('create_order.section_shipment')}
                             </h3>
                             <Input
-                                label="Waybill / Tracking ID"
+                                label={t('create_order.label_waybill')}
                                 name="trackingId"
                                 value={formData.trackingId}
                                 onChange={handleChange}
@@ -212,7 +212,7 @@ const CreateOrder = () => {
                                 required
                             />
                             <Input
-                                label={t('track.client') + ' (Optional)'}
+                                label={t('track.client') + ' ' + t('create_order.optional')}
                                 name="customerName"
                                 value={formData.customerName}
                                 onChange={handleChange}
@@ -220,7 +220,7 @@ const CreateOrder = () => {
                                 icon={User}
                             />
                             <Input
-                                label={t('track.customer_phone') + ' (Optional)'}
+                                label={t('track.customer_phone') + ' ' + t('create_order.optional')}
                                 name="customerPhone"
                                 value={formData.customerPhone}
                                 onChange={handleChange}
@@ -228,7 +228,7 @@ const CreateOrder = () => {
                                 icon={Hash}
                             />
                             <Input
-                                label="External Reference (Optional)"
+                                label={t('create_order.label_external') + ' ' + t('create_order.optional')}
                                 name="externalOrderId"
                                 value={formData.externalOrderId}
                                 onChange={handleChange}
@@ -236,7 +236,7 @@ const CreateOrder = () => {
                                 icon={Hash}
                             />
                             <Input
-                                label="Client Email (Optional)"
+                                label={t('create_order.label_email') + ' ' + t('create_order.optional')}
                                 name="email"
                                 type="email"
                                 value={formData.email}
@@ -245,7 +245,7 @@ const CreateOrder = () => {
                                 icon={Mail}
                             />
                             <div className="premium-input-container">
-                                <label className="premium-input-label">Delivery Person (Optional)</label>
+                                <label className="premium-input-label">{t('create_order.label_delivery_person') + ' ' + t('create_order.optional')}</label>
                                 <div className="premium-input-wrapper">
                                     <User size={18} className="premium-input-icon" />
                                     <select
@@ -255,7 +255,7 @@ const CreateOrder = () => {
                                         className="premium-input with-icon"
                                         style={{ appearance: 'none', cursor: 'pointer' }}
                                     >
-                                        <option value="">Select a delivery person...</option>
+                                        <option value="">{t('create_order.placeholder_select_delivery')}</option>
                                         {deliveryUsers.map(user => (
                                             <option key={user.id} value={user.id}>
                                                 {user.username}
@@ -266,7 +266,7 @@ const CreateOrder = () => {
                             </div>
                             <div style={{ marginBottom: '1rem' }}>
                                 <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>
-                                    Delivery Instructions (Optional)
+                                    {t('create_order.label_instructions') + ' ' + t('create_order.optional')}
                                 </label>
                                 <div style={{ position: 'relative' }}>
                                     <MessageSquare size={18} style={{ position: 'absolute', top: '1rem', left: '1rem', color: 'var(--color-text-muted)' }} />
@@ -274,7 +274,7 @@ const CreateOrder = () => {
                                         name="deliveryInstructions"
                                         value={formData.deliveryInstructions}
                                         onChange={handleChange}
-                                        placeholder="e.g. Leave at front door"
+                                        placeholder={t('create_order.placeholder_instructions')}
                                         style={{
                                             width: '100%',
                                             padding: '0.75rem 1rem 0.75rem 2.8rem',
@@ -294,19 +294,19 @@ const CreateOrder = () => {
                         {/* Pickup Info */}
                         <Card>
                             <h3 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                <MapPin size={20} color="var(--color-accent)" /> Pickup Location (Optional)
+                                <MapPin size={20} color="var(--color-accent)" /> {t('create_order.section_pickup') + ' ' + t('create_order.optional')}
                             </h3>
                             <AddressAutocomplete
-                                label="Pickup Address"
+                                label={t('create_order.section_pickup')}
                                 name="pickupAddress"
                                 value={formData.pickupAddress}
                                 onChange={handleChange}
                                 onSelect={(suggestion) => handleAddressSelect('pickup', suggestion)}
-                                placeholder="Enter address to auto-fill"
+                                placeholder={t('create_order.address_auto')}
                             />
                             {formData.pickupLat && (
                                 <p style={{ fontSize: '0.8rem', color: 'var(--color-success)', marginTop: '0.5rem', marginBottom: '1rem' }}>
-                                    ✓ Geocoded: {parseFloat(formData.pickupLat).toFixed(4)}, {parseFloat(formData.pickupLng).toFixed(4)}
+                                    ✓ {t('create_order.geocoded')}: {parseFloat(formData.pickupLat).toFixed(4)}, {parseFloat(formData.pickupLng).toFixed(4)}
                                 </p>
                             )}
                         </Card>
@@ -314,19 +314,19 @@ const CreateOrder = () => {
                         {/* Dropoff Info */}
                         <Card>
                             <h3 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                <MapPin size={20} color="var(--color-success)" /> Destination (Optional)
+                                <MapPin size={20} color="var(--color-success)" /> {t('create_order.section_dropoff') + ' ' + t('create_order.optional')}
                             </h3>
                             <AddressAutocomplete
-                                label="Dropoff Address"
+                                label={t('create_order.section_dropoff')}
                                 name="dropoffAddress"
                                 value={formData.dropoffAddress}
                                 onChange={handleChange}
                                 onSelect={(suggestion) => handleAddressSelect('dropoff', suggestion)}
-                                placeholder="Enter address to auto-fill"
+                                placeholder={t('create_order.address_auto')}
                             />
                             {formData.dropoffLat && (
                                 <p style={{ fontSize: '0.8rem', color: 'var(--color-success)', marginTop: '0.5rem', marginBottom: '1rem' }}>
-                                    ✓ Geocoded: {parseFloat(formData.dropoffLat).toFixed(4)}, {parseFloat(formData.dropoffLng).toFixed(4)}
+                                    ✓ {t('create_order.geocoded')}: {parseFloat(formData.dropoffLat).toFixed(4)}, {parseFloat(formData.dropoffLng).toFixed(4)}
                                 </p>
                             )}
                         </Card>
@@ -339,7 +339,7 @@ const CreateOrder = () => {
                                 </div>
                             )}
                             <Button type="submit" fullWidth disabled={loading}>
-                                {loading ? <Loader className="spin" size={20} /> : 'Register Shipment & Generate Waybill'}
+                                {loading ? <Loader className="spin" size={20} /> : t('create_order.submit_btn')}
                             </Button>
                         </div>
                     </div>

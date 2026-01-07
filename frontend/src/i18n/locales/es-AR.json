@@ -59,5 +59,28 @@
             "registered": "Registrado",
             "actions": "Acciones"
         }
+    },
+    "create_order": {
+        "title": "Registrar Envío",
+        "subtitle": "Inicializar una nueva guía de seguimiento en el sistema.",
+        "section_shipment": "Información del Envío",
+        "section_pickup": "Lugar de Retiro",
+        "section_dropoff": "Destino",
+        "label_waybill": "Guía / ID de Rastreo",
+        "label_external": "Referencia Externa",
+        "label_email": "Email del Cliente",
+        "label_delivery_person": "Repartidor",
+        "label_instructions": "Instrucciones de Entrega",
+        "placeholder_select_delivery": "Seleccione un repartidor...",
+        "placeholder_instructions": "ej: Dejar en portería",
+        "success_title": "¡Envío Registrado!",
+        "success_message": "Actualizando manifiesto y redirigiendo...",
+        "share_link": "Enlace de Seguimiento Compartible",
+        "copy_link": "Copiar Enlace",
+        "submit_btn": "Registrar Envío y Generar Guía",
+        "optional": "(Opcional)",
+        "address_auto": "Ingrese dirección para autocompletar",
+        "geocoded": "Geocodificado",
+        "error_generic": "Error al registrar envío"
     }
 }
