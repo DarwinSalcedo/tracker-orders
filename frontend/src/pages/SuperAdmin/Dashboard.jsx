@@ -59,12 +59,17 @@ const SuperAdminDashboard = () => {
         }
     };
 
+    const getShortId = (id) => {
+        if (!id) return '';
+        return '...' + id.slice(-4);
+    };
+
     return (
-        <div className="page" style={{ padding: '2rem' }}>
-            <header style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2rem' }}>
+        <div className="page" style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
+            <header style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2rem', alignItems: 'center' }}>
                 <div>
-                    <h1 className="text-gradient">Super Admin</h1>
-                    <p>Platform Management</p>
+                    <h1 className="text-gradient" style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>Super Admin</h1>
+                    <p style={{ color: 'var(--color-text-muted)' }}>Platform Management Dashboard</p>
                 </div>
                 <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                     <ThemeToggle />
@@ -77,26 +82,57 @@ const SuperAdminDashboard = () => {
             {status.message && (
                 <div style={{
                     padding: '1rem',
-                    borderRadius: '8px',
+                    borderRadius: '12px',
                     marginBottom: '2rem',
                     background: status.type === 'success' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
                     color: status.type === 'success' ? '#10b981' : '#ef4444',
-                    border: `1px solid ${status.type === 'success' ? '#10b981' : '#ef4444'}`
+                    border: `1px solid ${status.type === 'success' ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)'}`,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem'
                 }}>
+                    {status.type === 'success' ? <Shield size={18} /> : <LogOut size={18} />}
                     {status.message}
                 </div>
             )}
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+            {/* Stats / Overview Row */}
+            <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                gap: '1.5rem',
+                marginBottom: '2rem'
+            }}>
+                <Card>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        <div style={{
+                            padding: '1rem',
+                            borderRadius: '50%',
+                            background: 'var(--color-primary-light)',
+                            color: 'var(--color-primary)'
+                        }}>
+                            <Building size={24} />
+                        </div>
+                        <div>
+                            <h4 style={{ margin: 0, color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>Total Companies</h4>
+                            <p style={{ margin: 0, fontSize: '1.5rem', fontWeight: 'bold' }}>{companies.length}</p>
+                        </div>
+                    </div>
+                </Card>
+            </div>
 
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '2rem', marginBottom: '2rem' }}>
                 {/* Create Company */}
                 <Card>
-                    <h3><Building size={20} /> New Company</h3>
-                    <form onSubmit={handleCreateCompany} style={{ marginTop: '1rem' }}>
+                    <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
+                        <UserPlus size={20} className="text-primary" /> New Company
+                    </h3>
+                    <form onSubmit={handleCreateCompany} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                         <Input
                             label="Company Name"
                             value={newCompany.name}
                             onChange={e => setNewCompany({ ...newCompany, name: e.target.value })}
+                            placeholder="e.g. Acme Logistics"
                             required
                         />
                         <div className="premium-input-container">
@@ -119,8 +155,10 @@ const SuperAdminDashboard = () => {
 
                 {/* Create Admin */}
                 <Card>
-                    <h3><Shield size={20} /> Create Company Admin</h3>
-                    <form onSubmit={handleCreateAdmin} style={{ marginTop: '1rem' }}>
+                    <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
+                        <Shield size={20} className="text-primary" /> Create Company Admin
+                    </h3>
+                    <form onSubmit={handleCreateAdmin} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                         <div className="premium-input-container">
                             <label className="premium-input-label">Target Company</label>
                             <div className="premium-input-wrapper">
@@ -132,7 +170,9 @@ const SuperAdminDashboard = () => {
                                 >
                                     <option value="">Select Company...</option>
                                     {companies.map(c => (
-                                        <option key={c.id} value={c.id}>{c.name} (ID: {c.id})</option>
+                                        <option key={c.id} value={c.id}>
+                                            {c.name} (ID: {getShortId(c.id)})
+                                        </option>
                                     ))}
                                 </select>
                             </div>
@@ -141,6 +181,7 @@ const SuperAdminDashboard = () => {
                             label="Admin Username"
                             value={newAdmin.username}
                             onChange={e => setNewAdmin({ ...newAdmin, username: e.target.value })}
+                            placeholder="username"
                             required
                         />
                         <Input
@@ -148,51 +189,60 @@ const SuperAdminDashboard = () => {
                             type="password"
                             value={newAdmin.password}
                             onChange={e => setNewAdmin({ ...newAdmin, password: e.target.value })}
+                            placeholder="••••••••"
                             required
                         />
                         <Button type="submit" fullWidth>Create Admin User</Button>
                     </form>
                 </Card>
-
-                {/* Company List */}
-                <Card style={{ gridColumn: '1 / -1' }}>
-                    <h3>System Companies</h3>
-                    <div style={{ overflowX: 'auto', marginTop: '1rem' }}>
-                        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-                            <thead>
-                                <tr style={{ borderBottom: '1px solid var(--glass-border)' }}>
-                                    <th style={{ padding: '1rem' }}>ID</th>
-                                    <th style={{ padding: '1rem' }}>Name</th>
-                                    <th style={{ padding: '1rem' }}>Plan</th>
-                                    <th style={{ padding: '1rem' }}>Created At</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {companies.map(c => (
-                                    <tr key={c.id} style={{ borderBottom: '1px solid var(--glass-border)' }}>
-                                        <td style={{ padding: '1rem' }}>{c.id}</td>
-                                        <td style={{ padding: '1rem', fontWeight: 500 }}>{c.name}</td>
-                                        <td style={{ padding: '1rem' }}>
-                                            <span style={{
-                                                padding: '0.25rem 0.75rem',
-                                                borderRadius: '20px',
-                                                background: 'var(--color-primary)',
-                                                color: 'white',
-                                                fontSize: '0.8rem'
-                                            }}>
-                                                {c.plan}
-                                            </span>
-                                        </td>
-                                        <td style={{ padding: '1rem', fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>
-                                            {new Date(c.created_at).toLocaleDateString()}
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </Card>
             </div>
+
+            {/* Company List */}
+            <Card>
+                <h3 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <Building size={20} className="text-primary" /> System Companies
+                </h3>
+                <div style={{ overflowX: 'auto' }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                        <thead>
+                            <tr style={{ borderBottom: '1px solid var(--glass-border)' }}>
+                                <th style={{ padding: '1rem', color: 'var(--color-text-muted)', fontWeight: 600 }}>ID</th>
+                                <th style={{ padding: '1rem', color: 'var(--color-text-muted)', fontWeight: 600 }}>Name</th>
+                                <th style={{ padding: '1rem', color: 'var(--color-text-muted)', fontWeight: 600 }}>Plan</th>
+                                <th style={{ padding: '1rem', color: 'var(--color-text-muted)', fontWeight: 600 }}>Created At</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {companies.map(c => (
+                                <tr key={c.id} style={{ borderBottom: '1px solid var(--glass-border)', transition: 'background 0.2s' }}>
+                                    <td style={{ padding: '1rem', fontFamily: 'monospace', color: 'var(--color-text-muted)' }}>
+                                        {getShortId(c.id)}
+                                    </td>
+                                    <td style={{ padding: '1rem', fontWeight: 500 }}>{c.name}</td>
+                                    <td style={{ padding: '1rem' }}>
+                                        <span style={{
+                                            padding: '0.25rem 0.75rem',
+                                            borderRadius: '20px',
+                                            background: c.plan === 'pro' ? 'var(--color-primary)' : 'var(--glass-bg)',
+                                            border: c.plan === 'pro' ? 'none' : '1px solid var(--glass-border)',
+                                            color: c.plan === 'pro' ? 'white' : 'var(--color-text)',
+                                            fontSize: '0.75rem',
+                                            textTransform: 'uppercase',
+                                            fontWeight: 'bold',
+                                            letterSpacing: '0.05em'
+                                        }}>
+                                            {c.plan}
+                                        </span>
+                                    </td>
+                                    <td style={{ padding: '1rem', fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>
+                                        {new Date(c.created_at).toLocaleDateString()}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </Card>
         </div>
     );
 };
