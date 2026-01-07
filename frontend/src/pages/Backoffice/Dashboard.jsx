@@ -22,7 +22,9 @@ import {
     Archive,
     Settings,
     Link,
-    Hash
+    Hash,
+    Copy,
+    Check
 } from 'lucide-react';
 import Input from '../../components/ui/Input';
 import EditShipmentModal from './EditShipmentModal';
@@ -46,6 +48,7 @@ const Dashboard = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [editingShipment, setEditingShipment] = useState(null);
     const [activeTab, setActiveTab] = useState('shipments'); // 'shipments', 'users', or 'completed'
+    const [copiedId, setCopiedId] = useState(null);
 
     const fetchOrders = async () => {
         try {
@@ -93,6 +96,13 @@ const Dashboard = () => {
             console.error('Failed to update shipment:', err);
             throw err;
         }
+    };
+
+    const handleCopyLink = (id, token) => {
+        const link = `${window.location.origin}/track/${token}`;
+        navigator.clipboard.writeText(link);
+        setCopiedId(id);
+        setTimeout(() => setCopiedId(null), 2000);
     };
 
     const openEditModal = (shipment) => {
@@ -274,13 +284,11 @@ const Dashboard = () => {
 
                                                 {order.share_token && (
                                                     <button
-                                                        style={{ color: 'var(--color-accent)', background: 'none', border: 'none', cursor: 'pointer', display: 'flex' }}
+                                                        style={{ color: copiedId === order.id ? 'var(--color-success)' : 'var(--color-accent)', background: 'none', border: 'none', cursor: 'pointer', display: 'flex' }}
                                                         title="Copy Share Link"
-                                                        onClick={() => {
-                                                            navigator.clipboard.writeText(`${window.location.origin}/track/${order.share_token}`);
-                                                        }}
+                                                        onClick={() => handleCopyLink(order.id, order.share_token)}
                                                     >
-                                                        <Link size={18} />
+                                                        {copiedId === order.id ? <Check size={18} /> : <Copy size={18} />}
                                                     </button>
                                                 )}
 
