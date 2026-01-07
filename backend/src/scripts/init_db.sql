@@ -1,6 +1,8 @@
 -- 1. Create companies table
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
 CREATE TABLE IF NOT EXISTS companies (
-    id SERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name VARCHAR(255) NOT NULL,
     plan VARCHAR(50) DEFAULT 'free',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -8,22 +10,22 @@ CREATE TABLE IF NOT EXISTS companies (
 
 -- 2. Create order_statuses table
 CREATE TABLE IF NOT EXISTS order_statuses (
-    id SERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     code VARCHAR(50) UNIQUE NOT NULL,
     label VARCHAR(100) NOT NULL,
     description TEXT,
     is_system BOOLEAN DEFAULT FALSE,
-    company_id INTEGER REFERENCES companies(id) ON DELETE CASCADE
+    company_id UUID REFERENCES companies(id) ON DELETE CASCADE
 );
 
 -- 3. Create users table
 CREATE TABLE IF NOT EXISTS users (
-    id SERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     username VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     role VARCHAR(50) NOT NULL CHECK (role IN ('Admin', 'Delivery', 'Viewer')),
     is_approved BOOLEAN DEFAULT FALSE,
-    company_id INTEGER REFERENCES companies(id) ON DELETE CASCADE,
+    company_id UUID REFERENCES companies(id) ON DELETE CASCADE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -45,28 +47,32 @@ CREATE TABLE IF NOT EXISTS orders (
     dropoff_lng DECIMAL(9, 6),
     dropoff_address TEXT,
     delivery_person VARCHAR(255),
-    delivery_person_id INTEGER REFERENCES users(id),
+    delivery_person_id UUID REFERENCES users(id),
     delivery_instructions TEXT,
-    current_status_id INTEGER REFERENCES order_statuses(id),
-    company_id INTEGER REFERENCES companies(id) ON DELETE CASCADE,
+    current_status_id UUID REFERENCES order_statuses(id),
+    company_id UUID REFERENCES companies(id) ON DELETE CASCADE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- 5. Create order_history table
 CREATE TABLE IF NOT EXISTS order_history (
-    id SERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     order_id VARCHAR(50) REFERENCES orders(id),
-    status_id INTEGER REFERENCES order_statuses(id),
+    status_id UUID REFERENCES order_statuses(id),
     location_lat DECIMAL(9, 6),
     location_lng DECIMAL(9, 6),
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- 6. Seed Default Company
-INSERT INTO companies (id, name, plan) VALUES (1, 'Default Logistics', 'pro') ON CONFLICT (id) DO NOTHING;
+-- Using a specific UUID for the default company to ensure consistency in code (e.g., auth controller)
+INSERT INTO companies (id, name, plan) 
+VALUES ('00000000-0000-0000-0000-000000000001', 'Default Logistics', 'pro') 
+ON CONFLICT (id) DO NOTHING;
 
 -- 7. Seed Statuses
+-- We let the DB generate UUIDs for statuses, but since we look them up by 'code' in the code, we don't need hardcoded IDs here.
 INSERT INTO order_statuses (code, label, description, is_system)
 VALUES 
     ('created', 'Order Placed', 'Your order has been placed and is being processed.', TRUE),

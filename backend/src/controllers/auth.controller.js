@@ -18,8 +18,8 @@ export const register = async (req, res) => {
         // Admin is auto-approved, Delivery needs approval
         const isApproved = role === 'Admin';
 
-        // Default to Company ID 1 (Default Logistics) if not provided during migration phase
-        const companyIdToUse = company_id || 1;
+        // Default to Company ID (Default Logistics) if not provided during migration phase
+        const companyIdToUse = company_id || '00000000-0000-0000-0000-000000000001';
 
         const result = await query(
             'INSERT INTO users (username, password_hash, role, is_approved, company_id) VALUES ($1, $2, $3, $4, $5) RETURNING id, username, role, is_approved, company_id',
