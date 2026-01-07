@@ -21,6 +21,11 @@ const OrderDetails = ({ order, onBack }) => {
             <div className="flex-stack" style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Button variant="secondary" onClick={onBack} fullWidth={false}>&larr; {t('track.back_to_search')}</Button>
                 <div style={{ textAlign: 'right' }}>
+                    {order.companyName && (
+                        <p style={{ fontSize: '1rem', fontWeight: 'bold', color: 'var(--color-primary)', marginBottom: '0.5rem' }}>
+                            {order.companyName}
+                        </p>
+                    )}
                     <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '0.2rem' }}>{t('track.waybill').toUpperCase()}</p>
                     <span className="text-gradient" style={{ fontWeight: '700', fontSize: '1.4rem' }}>
                         #{order.trackingId}

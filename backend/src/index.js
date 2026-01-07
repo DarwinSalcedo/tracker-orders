@@ -57,12 +57,13 @@ app.post("/api/track", async (req, res) => {
   }
 
   try {
-    // 1. Get Order details with current status
+    // 1. Get Order details with current status and company info
     const orderRes = await query(
-      `SELECT o.*, s.code as status_code, s.label as status_label 
+      `SELECT o.*, s.code as status_code, s.label as status_label, c.name as company_name
        FROM orders o
        JOIN order_statuses s ON o.current_status_id = s.id
-     WHERE o.id = $1`,
+       LEFT JOIN companies c ON o.company_id = c.id
+       WHERE o.id = $1`,
       [trackingId]
     );
 
@@ -89,6 +90,7 @@ app.post("/api/track", async (req, res) => {
 
     res.json({
       trackingId: order.id,
+      companyName: order.company_name,
       status: order.status_code,
       statusLabel: order.status_label,
       customerName: order.customer_name,
@@ -127,9 +129,10 @@ app.get("/api/track/:token", async (req, res) => {
   try {
     // Get Order details by share token
     const orderRes = await query(
-      `SELECT o.*, s.code as status_code, s.label as status_label 
+      `SELECT o.*, s.code as status_code, s.label as status_label, c.name as company_name
        FROM orders o
        JOIN order_statuses s ON o.current_status_id = s.id
+       LEFT JOIN companies c ON o.company_id = c.id
        WHERE o.share_token = $1`,
       [token]
     );
@@ -152,6 +155,7 @@ app.get("/api/track/:token", async (req, res) => {
 
     res.json({
       trackingId: order.id,
+      companyName: order.company_name,
       status: order.status_code,
       statusLabel: order.status_label,
       customerName: order.customer_name,
