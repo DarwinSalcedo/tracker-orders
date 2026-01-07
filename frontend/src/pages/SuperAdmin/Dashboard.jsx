@@ -5,7 +5,7 @@ import api from '../../services/api';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
-import { Building, UserPlus, Shield, Loader, LogOut } from 'lucide-react';
+import { Building, UserPlus, Shield, Loader, LogOut, Copy, Check } from 'lucide-react';
 import ThemeToggle from '../../components/ui/ThemeToggle';
 
 const SuperAdminDashboard = () => {
@@ -13,6 +13,7 @@ const SuperAdminDashboard = () => {
     const navigate = useNavigate();
     const [companies, setCompanies] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [copiedId, setCopiedId] = useState(null);
 
     // Forms
     const [newCompany, setNewCompany] = useState({ name: '', plan: 'pro' });
@@ -64,6 +65,12 @@ const SuperAdminDashboard = () => {
         return '...' + id.slice(-4);
     };
 
+    const handleCopyId = (id) => {
+        navigator.clipboard.writeText(id);
+        setCopiedId(id);
+        setTimeout(() => setCopiedId(null), 2000);
+    };
+
     return (
         <div className="page" style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
             <header style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2rem', alignItems: 'center' }}>
@@ -98,12 +105,12 @@ const SuperAdminDashboard = () => {
 
             {/* Stats / Overview Row */}
             <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                display: 'flex',
+                flexWrap: 'wrap',
                 gap: '1.5rem',
                 marginBottom: '2rem'
             }}>
-                <Card>
+                <Card style={{ minWidth: '200px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                         <div style={{
                             padding: '1rem',
@@ -215,8 +222,23 @@ const SuperAdminDashboard = () => {
                         <tbody>
                             {companies.map(c => (
                                 <tr key={c.id} style={{ borderBottom: '1px solid var(--glass-border)', transition: 'background 0.2s' }}>
-                                    <td style={{ padding: '1rem', fontFamily: 'monospace', color: 'var(--color-text-muted)' }}>
-                                        {getShortId(c.id)}
+                                    <td style={{ padding: '1rem', color: 'var(--color-text-muted)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                        <span style={{ fontFamily: 'monospace' }}>{getShortId(c.id)}</span>
+                                        <button
+                                            onClick={() => handleCopyId(c.id)}
+                                            style={{
+                                                background: 'none',
+                                                border: 'none',
+                                                cursor: 'pointer',
+                                                color: copiedId === c.id ? 'var(--color-success)' : 'var(--color-text-muted)',
+                                                padding: '4px',
+                                                display: 'flex',
+                                                alignItems: 'center'
+                                            }}
+                                            title="Copy full ID"
+                                        >
+                                            {copiedId === c.id ? <Check size={14} /> : <Copy size={14} />}
+                                        </button>
                                     </td>
                                     <td style={{ padding: '1rem', fontWeight: 500 }}>{c.name}</td>
                                     <td style={{ padding: '1rem' }}>

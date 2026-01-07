@@ -251,7 +251,13 @@ const Dashboard = () => {
                                                 <button
                                                     style={{ color: 'var(--color-text-muted)', background: 'none', border: 'none', cursor: 'pointer', display: 'flex' }}
                                                     title="View Tracking"
-                                                    onClick={() => navigate(`/track?id=${order.id}&email=${order.email}`)}
+                                                    onClick={() => {
+                                                        if (order.share_token) {
+                                                            navigate(`/track/${order.share_token}`);
+                                                        } else {
+                                                            navigate(`/track?id=${order.id}&email=${order.email}`);
+                                                        }
+                                                    }}
                                                 >
                                                     <ExternalLink size={18} />
                                                 </button>
