@@ -22,7 +22,25 @@ export const createCompany = async (req, res) => {
             'INSERT INTO companies (name, plan) VALUES ($1, $2) RETURNING *',
             [name, plan || 'free']
         );
-        res.status(201).json(result.rows[0]);
+
+        const newCompany = result.rows[0];
+
+        // Auto-create default system statuses for the new company
+        const defaultStatuses = [
+            { code: 'created', label: 'Order Placed', description: 'Your order has been placed and is being processed.' },
+            { code: 'in_transit', label: 'In Transit', description: 'Your package is on its way.' },
+            { code: 'delivered', label: 'Delivery', description: 'Your package has been delivered.' },
+            { code: 'completed', label: 'Completed', description: 'This order has been moved to completed.' }
+        ];
+
+        for (const status of defaultStatuses) {
+            await query(
+                'INSERT INTO order_statuses (code, label, description, is_system, company_id) VALUES ($1, $2, $3, $4, $5)',
+                [status.code, status.label, status.description, true, newCompany.id]
+            );
+        }
+
+        res.status(201).json(newCompany);
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Internal server error' });
