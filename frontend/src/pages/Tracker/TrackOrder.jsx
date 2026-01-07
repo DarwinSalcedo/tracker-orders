@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from '../../components/ui/Button';
@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 const TrackOrder = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const location = useLocation();
     const { isAuthenticated } = useAuth();
     const [searchParams] = useSearchParams();
     const [trackingId, setTrackingId] = useState(searchParams.get('id') || '');
@@ -66,7 +67,11 @@ const TrackOrder = () => {
         }
     };
 
-    const clearSearch = () => {
+    const handleBack = () => {
+        if (location.state?.fromDashboard) {
+            navigate('/backoffice/dashboard');
+            return;
+        }
         setOrderData(null);
         setTrackingId('');
         setEmail('');
@@ -155,7 +160,7 @@ const TrackOrder = () => {
                             </Card>
                         </motion.div>
                     ) : (
-                        <OrderDetails order={orderData} onBack={clearSearch} />
+                        <OrderDetails order={orderData} onBack={handleBack} />
                     )}
                 </AnimatePresence>
             </div>

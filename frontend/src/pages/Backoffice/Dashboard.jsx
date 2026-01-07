@@ -253,9 +253,9 @@ const Dashboard = () => {
                                                     title="View Tracking"
                                                     onClick={() => {
                                                         if (order.share_token) {
-                                                            navigate(`/track/${order.share_token}`);
+                                                            navigate(`/track/${order.share_token}`, { state: { fromDashboard: true } });
                                                         } else {
-                                                            navigate(`/track?id=${order.id}&email=${order.email}`);
+                                                            navigate(`/track?id=${order.id}&email=${order.email}`, { state: { fromDashboard: true } });
                                                         }
                                                     }}
                                                 >
