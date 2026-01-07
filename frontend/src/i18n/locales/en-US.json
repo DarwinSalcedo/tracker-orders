@@ -105,6 +105,14 @@
         "refresh": "Refresh",
         "shipment_manifest": "Shipment Manifest",
         "completed_shipments": "Completed Shipments",
+        "search_placeholder": "Search Shipment ID or Client...",
+        "no_results": "No shipments found matching your search.",
+        "stats": {
+            "total_shipments": "Total Shipments",
+            "in_transit": "In Transit",
+            "delivered": "Delivered",
+            "new_today": "New Today"
+        },
         "tabs": {
             "shipments": "Shipments",
             "completed": "Completed",

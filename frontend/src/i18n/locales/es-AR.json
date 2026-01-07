@@ -105,6 +105,14 @@
         "refresh": "Actualizar",
         "shipment_manifest": "Manifiesto de Envíos",
         "completed_shipments": "Envíos Completados",
+        "search_placeholder": "Buscar Guía o Cliente...",
+        "no_results": "No se encontraron envíos con esa búsqueda.",
+        "stats": {
+            "total_shipments": "Total Envíos",
+            "in_transit": "En Tránsito",
+            "delivered": "Entregados",
+            "new_today": "Nuevos Hoy"
+        },
         "tabs": {
             "shipments": "Envíos",
             "completed": "Completados",

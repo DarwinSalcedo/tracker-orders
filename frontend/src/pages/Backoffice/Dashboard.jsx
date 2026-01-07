@@ -148,10 +148,10 @@ const Dashboard = () => {
     };
 
     const stats = [
-        { label: 'Total Shipments', value: orders.length, icon: Boxes, color: 'var(--color-primary)' },
-        { label: 'In Transit', value: orders.filter(o => o.status_code === 'in_transit').length, icon: Truck, color: 'var(--color-warning)' },
-        { label: 'Delivered', value: orders.filter(o => o.status_code === 'delivered').length, icon: CheckCircle, color: 'var(--color-success)' },
-        { label: 'New Today', value: orders.filter(o => new Date(o.created_at).toDateString() === new Date().toDateString()).length, icon: Navigation, color: 'var(--color-accent)' },
+        { label: t('dashboard.stats.total_shipments'), value: orders.length, icon: Boxes, color: 'var(--color-primary)' },
+        { label: t('dashboard.stats.in_transit'), value: orders.filter(o => o.status_code === 'in_transit').length, icon: Truck, color: 'var(--color-warning)' },
+        { label: t('dashboard.stats.delivered'), value: orders.filter(o => o.status_code === 'delivered').length, icon: CheckCircle, color: 'var(--color-success)' },
+        { label: t('dashboard.stats.new_today'), value: orders.filter(o => new Date(o.created_at).toDateString() === new Date().toDateString()).length, icon: Navigation, color: 'var(--color-accent)' },
     ];
 
     if (loading && !refreshing) {
@@ -188,11 +188,11 @@ const Dashboard = () => {
                 <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--glass-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         <ClipboardList size={20} color="var(--color-primary)" />
-                        <h3 style={{ margin: 0 }}>{activeTab === 'shipments' ? 'Shipment Manifest' : 'Completed Shipments'}</h3>
+                        <h3 style={{ margin: 0 }}>{activeTab === 'shipments' ? t('dashboard.shipment_manifest') : t('dashboard.completed_shipments')}</h3>
                     </div>
                     <div style={{ width: '300px' }}>
                         <Input
-                            placeholder="Search Shipment ID or Client..."
+                            placeholder={t('dashboard.search_placeholder')}
                             icon={Search}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
@@ -205,11 +205,11 @@ const Dashboard = () => {
                     <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                         <thead>
                             <tr style={{ background: 'var(--glass-border)', color: 'var(--color-text-muted)', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                                <th style={{ padding: '1rem 1.5rem' }}>Waybill / ID</th>
-                                <th style={{ padding: '1rem 1.5rem' }}>Client</th>
-                                <th style={{ padding: '1rem 1.5rem' }}>Status</th>
-                                <th style={{ padding: '1rem 1.5rem' }}>Registered</th>
-                                <th style={{ padding: '1rem 1.5rem' }}>Actions</th>
+                                <th style={{ padding: '1rem 1.5rem' }}>{t('dashboard.table.id')}</th>
+                                <th style={{ padding: '1rem 1.5rem' }}>{t('dashboard.table.client')}</th>
+                                <th style={{ padding: '1rem 1.5rem' }}>{t('dashboard.table.status')}</th>
+                                <th style={{ padding: '1rem 1.5rem' }}>{t('dashboard.table.registered')}</th>
+                                <th style={{ padding: '1rem 1.5rem' }}>{t('dashboard.table.actions')}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -351,7 +351,7 @@ const Dashboard = () => {
                             }) : (
                                 <tr>
                                     <td colSpan="5" style={{ padding: '4rem', textAlign: 'center', color: 'var(--color-text-muted)' }}>
-                                        No shipments found matching your search.
+                                        {t('dashboard.no_results')}
                                     </td>
                                 </tr>
                             )}
