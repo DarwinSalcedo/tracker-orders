@@ -28,6 +28,8 @@
         "history": "Historial de Seguimiento",
         "manifested_at": "Registrado en",
         "not_found": "Pedido no encontrado o credenciales inválidas",
+        "enter_id_error": "Por favor ingrese un número de guía",
+        "optional": "(Opcional)",
         "details_title": "Detalles del Envío",
         "waybill": "Número de Guía",
         "client": "Cliente",
@@ -38,7 +40,17 @@
         "registered": "Fecha Registro",
         "customer_name": "Nombre Cliente",
         "customer_phone": "Teléfono",
-        "receiver_details": "Detalles del Receptor y Entrega"
+        "receiver_details": "Detalles del Receptor y Entrega",
+        "unknown_status": "DESCONOCIDO",
+        "last_location": "Última Ubicación",
+        "shipment_logistics": "Logística del Envío",
+        "logistics_desc": "Matriz de ruta y destino.",
+        "client_info": "Info Cliente",
+        "delivery_info": "Info Entrega",
+        "delivery_person": "Repartidor",
+        "instructions": "Instrucciones",
+        "not_available": "No disponible",
+        "unspecified": "No especificado"
     },
     "analytics": {
         "avg_delivery_time": "Tiempo Promedio de Entrega",
@@ -117,7 +129,8 @@
             "shipments": "Envíos",
             "completed": "Completados",
             "users": "Usuarios",
-            "statuses": "Estados"
+            "statuses": "Estados",
+            "analytics": "Analítica"
         },
         "table": {
             "id": "Guía / ID",
@@ -128,6 +141,15 @@
             "registered": "Registrado",
             "actions": "Acciones"
         }
+    },
+    "status_codes": {
+        "created": "Creado",
+        "picked_up": "Retirado",
+        "in_transit": "En Tránsito",
+        "in_sorting": "En Clasificación",
+        "delivered": "Entregado",
+        "completed": "Completado",
+        "deleted": "Eliminado"
     },
     "create_order": {
         "title": "Registrar Envío",

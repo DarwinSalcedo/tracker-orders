@@ -253,7 +253,7 @@ const Dashboard = () => {
                                                 color: statusStyle.color,
                                                 textTransform: 'uppercase'
                                             }}>
-                                                {order.status_label}
+                                                {t(`status_codes.${order.status_code.toLowerCase()}`) || order.status_label}
                                             </span>
                                         </td>
                                         <td style={{ padding: '1.25rem 1.5rem' }}>
@@ -327,7 +327,7 @@ const Dashboard = () => {
                                                             return s.code !== 'completed';
                                                         })
                                                         .map(s => (
-                                                            <option key={s.id} value={s.code}>{s.label}</option>
+                                                            <option key={s.id} value={s.code}>{t(`status_codes.${s.code.toLowerCase()}`) || s.label}</option>
                                                         ))
                                                     }
                                                 </select>
@@ -457,7 +457,7 @@ const Dashboard = () => {
                                 display: 'flex', alignItems: 'center', gap: '0.5rem'
                             }}
                         >
-                            <BarChart2 size={18} /> Analytics
+                            <BarChart2 size={18} /> {t('dashboard.tabs.analytics')}
                         </button>
                     </div>
                 )}

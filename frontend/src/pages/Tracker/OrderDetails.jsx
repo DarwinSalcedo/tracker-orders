@@ -36,7 +36,7 @@ const OrderDetails = ({ order, onBack }) => {
                             <Truck size={32} color="var(--color-success)" />
                         </div>
                         <div>
-                            <h2 style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>{order.status ? order.status.replace('_', ' ').toUpperCase() : 'UNKNOWN'}</h2>
+                            <h2 style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>{order.status ? (t(`status_codes.${order.status.toLowerCase()}`) || order.status) : t('track.unknown_status')}</h2>
                             <p style={{ color: 'var(--color-text-muted)' }}>{t('track.status')}</p>
                         </div>
                     </div>
@@ -64,11 +64,11 @@ const OrderDetails = ({ order, onBack }) => {
                             <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                                 <MapPin size={18} color="var(--color-accent)" />
                                 <div>
-                                    <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Last Location</p>
+                                    <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{t('track.last_location')}</p>
                                     <p>
                                         {order.currentLocation.lat != null && order.currentLocation.lng != null
                                             ? `${parseFloat(order.currentLocation.lat).toFixed(4)}, ${parseFloat(order.currentLocation.lng).toFixed(4)}`
-                                            : 'Not available'}
+                                            : t('track.not_available')}
                                     </p>
                                 </div>
                             </div>
@@ -79,10 +79,10 @@ const OrderDetails = ({ order, onBack }) => {
                 {/* Shipment Details Card */}
                 <Card>
                     <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <Activity size={18} color="var(--color-accent)" /> Shipment Logistics
+                        <Activity size={18} color="var(--color-accent)" /> {t('track.shipment_logistics')}
                     </h3>
                     <p style={{ color: 'var(--color-text-muted)', marginBottom: '1rem', fontSize: '0.9rem' }}>
-                        Routing and destination matrix.
+                        {t('track.logistics_desc')}
                     </p>
                     <ShipmentMap
                         pickup={order.pickup}
@@ -90,9 +90,9 @@ const OrderDetails = ({ order, onBack }) => {
                         currentLocation={order.currentLocation}
                     />
                     <div style={{ padding: '1rem', background: 'var(--color-bg-secondary)', borderRadius: 'var(--radius-md)', marginTop: '1rem' }}>
-                        <p><strong>{t('track.origin')}:</strong> {order.pickup?.address || (order.pickup?.lat ? `${order.pickup.lat}, ${order.pickup.lng}` : 'Unspecified')}</p>
+                        <p><strong>{t('track.origin')}:</strong> {order.pickup?.address || (order.pickup?.lat ? `${order.pickup.lat}, ${order.pickup.lng}` : t('track.unspecified'))}</p>
                         <div style={{ height: '1px', background: 'var(--glass-border)', margin: '0.5rem 0' }} />
-                        <p><strong>{t('track.dest')}:</strong> {order.dropoff?.address || (order.dropoff?.lat ? `${order.dropoff.lat}, ${order.dropoff.lng}` : 'Unspecified')}</p>
+                        <p><strong>{t('track.dest')}:</strong> {order.dropoff?.address || (order.dropoff?.lat ? `${order.dropoff.lat}, ${order.dropoff.lng}` : t('track.unspecified'))}</p>
                     </div>
                 </Card>
 
@@ -100,14 +100,14 @@ const OrderDetails = ({ order, onBack }) => {
                 {(order.customerName || order.customerPhone || order.email || order.deliveryInstructions || order.deliveryPerson) && (
                     <Card>
                         <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
-                            <User size={18} color="var(--color-primary)" /> {t('track.receiver_details') || 'Receiver & Delivery Details'}
+                            <User size={18} color="var(--color-primary)" /> {t('track.receiver_details')}
                         </h3>
 
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
                             {/* Customer Info */}
                             <div>
                                 <h4 style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                                    {t('dashboard.table.client') || 'Client Info'}
+                                    {t('track.client_info')}
                                 </h4>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                                     {order.customerName && (
@@ -124,7 +124,7 @@ const OrderDetails = ({ order, onBack }) => {
                                     )}
                                     {order.email && (
                                         <div>
-                                            <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Email</p>
+                                            <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{t('track.placeholder_email')}</p>
                                             <p style={{ fontWeight: '500' }}>{order.email}</p>
                                         </div>
                                     )}
@@ -135,18 +135,18 @@ const OrderDetails = ({ order, onBack }) => {
                             {(order.deliveryPerson || order.deliveryInstructions) && (
                                 <div>
                                     <h4 style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                                        Delivery Info
+                                        {t('track.delivery_info')}
                                     </h4>
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                                         {order.deliveryPerson && (
                                             <div>
-                                                <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Delivery Person</p>
+                                                <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{t('track.delivery_person')}</p>
                                                 <p style={{ fontWeight: '500' }}>{order.deliveryPerson}</p>
                                             </div>
                                         )}
                                         {order.deliveryInstructions && (
                                             <div>
-                                                <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Instructions</p>
+                                                <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{t('track.instructions')}</p>
                                                 <div style={{
                                                     background: 'var(--glass-bg)',
                                                     padding: '0.75rem',

@@ -16,29 +16,40 @@
         "track_card_title": "Track Shipment",
         "track_card_desc": "Check your delivery status instantly with your waybill number.",
         "portal_card_title": "Logistics Portal",
-        "portal_card_desc": "Admin & delivery access for manifest management and dispatch.",
-        "go_to_dashboard": "Go to Dashboard"
+        "portal_card_desc": "Admin & delivery access for manifest management and dispatch."
     },
     "track": {
         "title": "Track Shipment",
         "placeholder_waybill": "e.g. TRK-12345678",
         "placeholder_email": "name@example.com",
-        "button": "Track Shipment",
+        "button": "Track Order",
         "back_to_search": "New Search",
         "history": "Tracking History",
         "manifested_at": "Manifested at",
         "not_found": "Order not found or invalid credentials",
+        "enter_id_error": "Please enter a tracking ID",
+        "optional": "(Optional)",
         "details_title": "Shipment Details",
-        "waybill": "Waybill",
+        "waybill": "Waybill Number",
         "client": "Client",
         "dest": "Destination",
         "origin": "Origin",
         "status": "Current Status",
-        "last_updated": "Last Information Update",
+        "last_updated": "Last Updated",
         "registered": "Registered Date",
         "customer_name": "Customer Name",
-        "customer_phone": "Phone Number",
-        "receiver_details": "Receiver & Delivery Details"
+        "customer_phone": "Phone",
+        "receiver_details": "Receiver & Delivery Details",
+        "unknown_status": "UNKNOWN",
+        "last_location": "Last Location",
+        "shipment_logistics": "Shipment Logistics",
+        "logistics_desc": "Routing and destination matrix.",
+        "client_info": "Client Info",
+        "delivery_info": "Delivery Info",
+        "delivery_person": "Delivery Person",
+        "instructions": "Instructions",
+        "not_available": "Not available",
+        "unspecified": "Unspecified"
     },
     "analytics": {
         "avg_delivery_time": "Avg Delivery Time",
@@ -117,7 +128,8 @@
             "shipments": "Shipments",
             "completed": "Completed",
             "users": "Users",
-            "statuses": "Statuses"
+            "statuses": "Statuses",
+            "analytics": "Analytics"
         },
         "table": {
             "id": "Waybill / ID",
@@ -128,6 +140,15 @@
             "registered": "Registered",
             "actions": "Actions"
         }
+    },
+    "status_codes": {
+        "created": "Created",
+        "picked_up": "Picked Up",
+        "in_transit": "In Transit",
+        "in_sorting": "In Sorting",
+        "delivered": "Delivered",
+        "completed": "Completed",
+        "deleted": "Deleted"
     },
     "create_order": {
         "title": "Register Shipment",
