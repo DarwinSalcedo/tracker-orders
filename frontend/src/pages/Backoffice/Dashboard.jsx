@@ -420,16 +420,6 @@ const Dashboard = () => {
                             <Package size={18} /> {t('dashboard.tabs.shipments')}
                         </button>
                         <button
-                            onClick={() => setActiveTab('users')}
-                            style={{
-                                background: 'none', border: 'none', color: activeTab === 'users' ? 'var(--color-primary)' : 'var(--color-text-muted)',
-                                padding: '0.5rem 1rem', cursor: 'pointer', fontWeight: '600', borderBottom: activeTab === 'users' ? '2px solid var(--color-primary)' : 'none',
-                                display: 'flex', alignItems: 'center', gap: '0.5rem'
-                            }}
-                        >
-                            <Users size={18} /> {t('dashboard.tabs.users')}
-                        </button>
-                        <button
                             onClick={() => setActiveTab('completed')}
                             style={{
                                 background: 'none', border: 'none', color: activeTab === 'completed' ? 'var(--color-primary)' : 'var(--color-text-muted)',
@@ -438,6 +428,16 @@ const Dashboard = () => {
                             }}
                         >
                             <CheckCircle size={18} /> {t('dashboard.tabs.completed')}
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('users')}
+                            style={{
+                                background: 'none', border: 'none', color: activeTab === 'users' ? 'var(--color-primary)' : 'var(--color-text-muted)',
+                                padding: '0.5rem 1rem', cursor: 'pointer', fontWeight: '600', borderBottom: activeTab === 'users' ? '2px solid var(--color-primary)' : 'none',
+                                display: 'flex', alignItems: 'center', gap: '0.5rem'
+                            }}
+                        >
+                            <Users size={18} /> {t('dashboard.tabs.users')}
                         </button>
                         <button
                             onClick={() => setActiveTab('statuses')}
