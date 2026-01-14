@@ -51,7 +51,10 @@ const translations = {
         cta: {
             title: "Ready to simplify your logistics?",
             subtitle: "Join flexible teams moving faster with EnCaminar.",
-            btn: "Get Started"
+            btn: "Get Started",
+            email_placeholder: "your@email.com",
+            phone_placeholder: "+1 (555) 000-0000",
+            contact_message: "We'll contact you shortly to get you started"
         },
         landing: {
             driver_arrived: "Driver Arrived",
@@ -98,7 +101,10 @@ const translations = {
         cta: {
             title: "¿Listo para simplificar?",
             subtitle: "Únete a equipos flexibles que se mueven más rápido.",
-            btn: "Comenzar"
+            btn: "Comenzar",
+            email_placeholder: "tu@email.com",
+            phone_placeholder: "+54 (11) 0000-0000",
+            contact_message: "Te contactaremos pronto para comenzar"
         },
         landing: {
             driver_arrived: "Llegó el chofer",
@@ -146,7 +152,10 @@ const translations = {
         cta: {
             title: "Pronto para simplificar?",
             subtitle: "Junte-se a equipes flexíveis que se movem mais rápido.",
-            btn: "Começar"
+            btn: "Começar",
+            email_placeholder: "seu@email.com",
+            phone_placeholder: "+55 (11) 00000-0000",
+            contact_message: "Entraremos em contato em breve para começar"
         },
         landing: {
             driver_arrived: "Chofer llegó",
@@ -173,6 +182,16 @@ const changeLanguage = (lang) => {
         keys.forEach(k => { if (text) text = text[k]; });
 
         if (text) el.innerHTML = text;
+    });
+
+    // Update Placeholders
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        const keys = key.split('.');
+        let text = translations[lang];
+        keys.forEach(k => { if (text) text = text[k]; });
+
+        if (text) el.placeholder = text;
     });
 };
 

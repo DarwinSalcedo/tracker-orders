@@ -47,7 +47,7 @@
                 <div class="nav-links">
                     <a href="#features" data-i18n="nav.features">Features</a>
                     <a href="#adaptability" data-i18n="nav.adaptability">Adaptability</a>
-                    <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
+                    <!-- <a href="#pricing" data-i18n="nav.pricing">Pricing</a>-->
                 </div>
 
                 <!-- Language Switcher -->
@@ -58,7 +58,7 @@
                 </div>
 
                 <div class="auth-btns">
-                    <a href="/login" class="nav-btn-secondary" data-i18n="nav.login">Login</a>
+                    <!-- <a href="/login" class="nav-btn-secondary" data-i18n="nav.login">Login</a> -->
                     <a href="/register" class="nav-btn-primary" data-i18n="nav.get_started">Get Started</a>
                 </div>
                 <div class="mobile-menu-btn"><span></span><span></span></div>
@@ -224,10 +224,14 @@
                 <h2 data-i18n="cta.title">Ready to simplify your logistics?</h2>
                 <p data-i18n="cta.subtitle">Join flexible teams moving faster with EnCaminar.</p>
                 <form class="cta-form-fresh" action="/register">
-                    <input type="email" placeholder="work@company.com" required>
+                    <input type="email" data-i18n-placeholder="cta.email_placeholder" placeholder="your@email.com"
+                        required>
+                    <input type="tel" data-i18n-placeholder="cta.phone_placeholder" placeholder="+1 (555) 000-0000"
+                        required>
                     <button type="submit" class="btn-primary" data-i18n="cta.btn">Get Started</button>
                 </form>
-                <span class="no-card-required">No credit card required</span>
+                <span class="no-card-required" data-i18n="cta.contact_message">We'll contact you shortly to get you
+                    started</span>
             </div>
         </div>
     </section>
