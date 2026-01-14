@@ -22,7 +22,7 @@ const LoginScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Tracker Delivery</Text>
+            <Text style={styles.title}>EnCaminar Delivery</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Username"

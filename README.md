@@ -1,6 +1,6 @@
-# Global Tracker 🌍📦
+# EnCaminar 🌍📦
 
-**Global Tracker** is a comprehensive real-time logistics and shipment tracking solution, designed to modernize delivery management and enhance the final customer experience.
+**EnCaminar** is a comprehensive real-time logistics and shipment tracking solution, designed to modernize delivery management and enhance the final customer experience.
 
 This platform allows businesses to manage their shipment flow from creation to "last-mile" delivery, providing full visibility to both administrators and customers.
 

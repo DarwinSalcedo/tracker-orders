@@ -144,7 +144,7 @@ const StatusManagement = () => {
                                 />
                                 <Input
                                     label={t('statuses.modal_desc')}
-                                    placeholder="Brief explanation for tracker..."
+                                    placeholder="Brief explanation for tracking..."
                                     value={formData.description}
                                     onChange={e => setFormData({ ...formData, description: e.target.value })}
                                 />

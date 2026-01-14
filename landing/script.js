@@ -23,13 +23,13 @@ const translations = {
         hero: {
             badge: "New in 2.0: Flex-Routing",
             title: "Logistics that <br><span class='highlight-text'>flows with you.</span>",
-            subtitle: "Stop fighting rigid software. Tracker Order adjusts to your workflows, not the other way around. Simple, powerful, and adaptable.",
+            subtitle: "Stop fighting rigid software. EnCaminar adjusts to your workflows, not the other way around. Simple, powerful, and adaptable.",
             cta_primary: "Start for Free",
             cta_secondary: "See how it works →"
         },
         adapt: {
             title: "One Platform, Any Model",
-            subtitle: "From last-mile delivery to B2B freight, configure Tracker Order to fit your specific needs.",
+            subtitle: "From last-mile delivery to B2B freight, configure EnCaminar to fit your specific needs.",
             taxi: { title: "Taxi Networks", desc: "Give passengers real-time visibility of their route. Autonomous or fleet-managed." },
             retail: { title: "Hardware & Retail", desc: "Look professional. Send branded tracking links for every delivery, no matter the size." },
             lastmile: { title: "Last Mile Visibility", desc: "Ensure transparency in the final leg of logistics. Build trust with every drop-off." }
@@ -37,14 +37,26 @@ const translations = {
         features: {
             title: "Simple. Powerful.",
             subtitle: "We removed the clutter so you can focus on moving things.",
-            workflow: { title: "Custom Workflows", desc: "Define your own status stages." },
             mobile: { title: "Driver App", desc: "Native iOS & Android experience." },
-            analytics: { title: "Real-Time Data", desc: "Live metrics that actually matter." }
+            analytics: { title: "Real-Time Data", desc: "Live metrics that actually matter." },
+            workflow: {
+                title: "Custom Workflows",
+                desc: "Define your own status stages.",
+                start: "Start",
+                process: "Processing",
+                transit: "In Transit",
+                finish: "Delivered"
+            }
         },
         cta: {
             title: "Ready to simplify your logistics?",
-            subtitle: "Join flexible teams moving faster with Tracker Order.",
+            subtitle: "Join flexible teams moving faster with EnCaminar.",
             btn: "Get Started"
+        },
+        landing: {
+            driver_arrived: "Driver Arrived",
+            order: "Order",
+            order_status: "Delivered"
         }
     },
     es: {
@@ -58,13 +70,13 @@ const translations = {
         hero: {
             badge: "Nuevo en 2.0: Flex-Routing",
             title: "Logística que <br><span class='highlight-text'>fluye contigo.</span>",
-            subtitle: "Deja de pelear con software rígido. Tracker Order se ajusta a tus flujos de trabajo. Simple, potente y adaptable.",
+            subtitle: "Deja de pelear con software rígido. EnCaminar se ajusta a tus flujos de trabajo. Simple, potente y adaptable.",
             cta_primary: "Prueba Gratis",
             cta_secondary: "Mira cómo funciona →"
         },
         adapt: {
             title: "Una Plataforma, Cualquier Modelo",
-            subtitle: "Desde taxis autónomos hasta ferreterías, configura Tracker Order a tu medida.",
+            subtitle: "Desde taxis autónomos hasta ferreterías, configura EnCaminar a tu medida.",
             taxi: { title: "Red de Taxis", desc: "Dale visibilidad en tiempo real a tus pasajeros. Autónomos o flotas." },
             retail: { title: "Ferretería y Retail", desc: "Luce más profesional. Envía links de rastreo con tu marca en cada entrega." },
             lastmile: { title: "Visibilidad Última Milla", desc: "Asegura transparencia en el tramo final. Genera confianza en cada entrega." }
@@ -72,14 +84,26 @@ const translations = {
         features: {
             title: "Simple. Potente.",
             subtitle: "Quitamos el desorden para que te enfoques en mover cosas.",
-            workflow: { title: "Flujos a Medida", desc: "Define tus propios estados." },
             mobile: { title: "App de Choferes", desc: "Experiencia nativa iOS y Android." },
-            analytics: { title: "Datos en Tiempo Real", desc: "Métricas en vivo que importan." }
+            analytics: { title: "Datos en Tiempo Real", desc: "Métricas en vivo que importan." },
+            workflow: {
+                title: "Flujos a Medida",
+                desc: "Define tus propios estados.",
+                start: "Comienzo",
+                process: "Procesamiento",
+                transit: "En Transito",
+                finish: "Entregado"
+            }
         },
         cta: {
             title: "¿Listo para simplificar?",
             subtitle: "Únete a equipos flexibles que se mueven más rápido.",
             btn: "Comenzar"
+        },
+        landing: {
+            driver_arrived: "Llegó el chofer",
+            order: "Pedido",
+            order_status: "Entregado"
         }
     },
     pt: {
@@ -93,13 +117,13 @@ const translations = {
         hero: {
             badge: "Novo na 2.0: Flex-Routing",
             title: "Logística que <br><span class='highlight-text'>frui com você.</span>",
-            subtitle: "Pare de lutar com software rígido. Tracker Order se ajusta aos seus fluxos. Simples, poderoso e adaptável.",
+            subtitle: "Pare de lutar com software rígido. EnCaminar se ajusta aos seus fluxos. Simples, poderoso e adaptável.",
             cta_primary: "Teste Grátis",
             cta_secondary: "Veja como funciona →"
         },
         adapt: {
             title: "Uma Plataforma, Qualquer Modelo",
-            subtitle: "De táxis autônomos a lojas de varejo, configure o Tracker Order para suas necessidades.",
+            subtitle: "De táxis autônomos a lojas de varejo, configure o EnCaminar para suas necessidades.",
             taxi: { title: "Rede de Táxis", desc: "Dê visibilidade em tempo real aos passageiros. Autônomos ou frotas." },
             retail: { title: "Varejo e Ferramentas", desc: "Pareça profissional. Envie links de rastreio com sua marca." },
             lastmile: { title: "Visibilidade Final", desc: "Garanta transparência na etapa final da logística. Gere confiança." }
@@ -107,16 +131,29 @@ const translations = {
         features: {
             title: "Simples. Poderoso.",
             subtitle: "Removemos a bagunça para você focar no movimento.",
-            workflow: { title: "Fluxos Personalizados", desc: "Defina seus próprios status." },
+            workflow: {},
             mobile: { title: "App do Motorista", desc: "Experiência nativa iOS e Android." },
-            analytics: { title: "Dados em Tempo Real", desc: "Métricas ao vivo que importam." }
+            analytics: { title: "Dados em Tempo Real", desc: "Métricas ao vivo que importam." },
+            workflow: {
+                title: "Fluxos Personalizados",
+                desc: "Defina seus próprios status.",
+                start: "Comienzo",
+                process: "Procesamiento",
+                transit: "En Transito",
+                finish: "Entregado"
+            }
         },
         cta: {
             title: "Pronto para simplificar?",
             subtitle: "Junte-se a equipes flexíveis que se movem mais rápido.",
             btn: "Começar"
+        },
+        landing: {
+            driver_arrived: "Chofer llegó",
+            order: "Pedido",
+            order_status: "Entregado"
         }
-    }
+    },
     // Added Portuguese translations for new sections
 };
 

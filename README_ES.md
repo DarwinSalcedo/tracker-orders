@@ -1,6 +1,6 @@
-# Global Tracker 🌍📦
+# EnCaminar 🌍📦
 
-**Global Tracker** es una solución integral de logística y seguimiento de envíos en tiempo real, diseñada para modernizar la gestión de entregas y mejorar la experiencia del cliente final.
+**EnCaminar** es una solución integral de logística y seguimiento de envíos en tiempo real, diseñada para modernizar la gestión de entregas y mejorar la experiencia del cliente final.
 
 Esta plataforma permite a las empresas gestionar su flujo de envíos desde la creación hasta la entrega ("last-mile"), proporcionando visibilidad total tanto a los administradores como a los clientes.
 

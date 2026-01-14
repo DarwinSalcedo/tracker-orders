@@ -389,7 +389,7 @@ const Dashboard = () => {
                 {/* Header */}
                 <header className="flex-stack" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
                     <div>
-                        <h1 className="text-gradient" style={{ fontSize: '2rem', marginBottom: '0.25rem' }}>{user?.companyName || 'Global Tracker'}</h1>
+                        <h1 className="text-gradient" style={{ fontSize: '2rem', marginBottom: '0.25rem' }}>{user?.companyName || 'EnCaminar'}</h1>
                         <p style={{ color: 'var(--color-text-muted)' }}>{t('dashboard.logged_as')} {user?.username} ({user?.role})</p>
                     </div>
                     {activeTab === 'shipments' ? renderShipmentControls() : (
