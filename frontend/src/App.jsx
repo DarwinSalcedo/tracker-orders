@@ -63,7 +63,7 @@ function App() {
 
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
-          <ChatWidget />
+          {/* <ChatWidget /> */}
         </Router>
       </AuthProvider>
     </ThemeProvider>
