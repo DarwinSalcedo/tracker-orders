@@ -223,11 +223,18 @@
             <div class="cta-box">
                 <h2 data-i18n="cta.title">Ready to simplify your logistics?</h2>
                 <p data-i18n="cta.subtitle">Join flexible teams moving faster with EnCaminar.</p>
-                <form class="cta-form-fresh" action="/register">
-                    <input type="email" data-i18n-placeholder="cta.email_placeholder" placeholder="your@email.com"
-                        required>
-                    <input type="tel" data-i18n-placeholder="cta.phone_placeholder" placeholder="+1 (555) 000-0000"
-                        required>
+                <form class="cta-form-fresh" action="https://formsubmit.co/encaminar.logistics@gmail.com" method="POST">
+                    <!-- Hidden configuration fields -->
+                    <input type="hidden" name="_subject" value="Nueva solicitud de contacto - EnCaminar">
+                    <input type="hidden" name="_captcha" value="false">
+                    <input type="hidden" name="_template" value="table">
+                    <input type="text" name="_honey" style="display:none">
+
+                    <!-- Visible form fields -->
+                    <input type="email" name="email" data-i18n-placeholder="cta.email_placeholder"
+                        placeholder="your@email.com" required>
+                    <input type="tel" name="phone" data-i18n-placeholder="cta.phone_placeholder"
+                        placeholder="+1 (555) 000-0000" required>
                     <button type="submit" class="btn-primary" data-i18n="cta.btn">Get Started</button>
                 </form>
                 <span class="no-card-required" data-i18n="cta.contact_message">We'll contact you shortly to get you
