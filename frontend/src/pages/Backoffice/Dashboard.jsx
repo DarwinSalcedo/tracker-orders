@@ -26,7 +26,8 @@ import {
     Copy,
     Check,
     Lock,
-    BarChart2
+    BarChart2,
+    DollarSign
 } from 'lucide-react';
 import Input from '../../components/ui/Input';
 import EditShipmentModal from './EditShipmentModal';
@@ -207,6 +208,7 @@ const Dashboard = () => {
                             <tr style={{ background: 'var(--glass-border)', color: 'var(--color-text-muted)', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                                 <th style={{ padding: '1rem 1.5rem' }}>{t('dashboard.table.id')}</th>
                                 <th style={{ padding: '1rem 1.5rem' }}>{t('dashboard.table.client')}</th>
+                                <th style={{ padding: '1rem 1.5rem' }}>{t('create_order.label_amount')}</th>
                                 <th style={{ padding: '1rem 1.5rem' }}>{t('dashboard.table.status')}</th>
                                 <th style={{ padding: '1rem 1.5rem' }}>{t('dashboard.table.registered')}</th>
                                 <th style={{ padding: '1rem 1.5rem' }}>{t('dashboard.table.actions')}</th>
@@ -241,6 +243,16 @@ const Dashboard = () => {
                                                 <div style={{ fontSize: '0.8rem', color: 'var(--color-text-dim)', marginTop: '0.25rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
                                                     <Hash size={12} /> {order.customer_phone}
                                                 </div>
+                                            )}
+                                        </td>
+                                        <td style={{ padding: '1.25rem 1.5rem' }}>
+                                            {order.amount ? (
+                                                <div style={{ fontWeight: '600', color: 'var(--color-success)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                                    <DollarSign size={14} />
+                                                    {parseFloat(order.amount).toFixed(2)}
+                                                </div>
+                                            ) : (
+                                                <span style={{ fontStyle: 'italic', color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>-</span>
                                             )}
                                         </td>
                                         <td style={{ padding: '1.25rem 1.5rem' }}>

@@ -11,7 +11,8 @@ import {
     MapPin,
     Hash,
     Loader,
-    Save
+    Save,
+    DollarSign
 } from 'lucide-react';
 import { geocodeAddress } from '../../services/geocodingService';
 import { userService } from '../../services/userService';
@@ -49,7 +50,8 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
         pickupAddress: '',
         dropoffLat: '',
         dropoffLng: '',
-        dropoffAddress: ''
+        dropoffAddress: '',
+        amount: ''
     });
 
     useEffect(() => {
@@ -66,7 +68,8 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
                 pickupAddress: shipment.pickup_address || '',
                 dropoffLat: shipment.dropoff_lat || '',
                 dropoffLng: shipment.dropoff_lng || '',
-                dropoffAddress: shipment.dropoff_address || ''
+                dropoffAddress: shipment.dropoff_address || '',
+                amount: shipment.amount || ''
             });
         }
     }, [shipment]);
@@ -103,7 +106,8 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
                 pickupAddress: formData.pickupAddress,
                 dropoffLat: formData.dropoffLat ? parseFloat(formData.dropoffLat) : null,
                 dropoffLng: formData.dropoffLng ? parseFloat(formData.dropoffLng) : null,
-                dropoffAddress: formData.dropoffAddress
+                dropoffAddress: formData.dropoffAddress,
+                amount: formData.amount ? parseFloat(formData.amount) : null
             };
 
             await onUpdate(shipment.id, updateData);
@@ -181,6 +185,17 @@ const EditShipmentModal = ({ isOpen, onClose, shipment, onUpdate }) => {
                                         value={formData.email}
                                         onChange={handleChange}
                                         icon={Mail}
+                                    />
+                                    <Input
+                                        label={t('create_order.label_amount') + ' ' + t('create_order.optional')}
+                                        name="amount"
+                                        type="number"
+                                        step="0.01"
+                                        min="0"
+                                        value={formData.amount}
+                                        onChange={handleChange}
+                                        placeholder="0.00"
+                                        icon={DollarSign}
                                     />
                                     <div className="premium-input-container">
                                         <label className="premium-input-label">{t('edit_shipment.label_delivery_person')}</label>
