@@ -166,16 +166,16 @@ const Dashboard = () => {
         <>
             {/* Stats Grid */}
             {activeTab === 'shipments' && (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(120px, 100%), 1fr))', gap: '1rem', marginBottom: '2rem' }}>
                     {stats.map((stat, i) => (
-                        <Card key={i} style={{ padding: '1.5rem' }}>
+                        <Card key={i} style={{ padding: '1.25rem' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                                 <div>
-                                    <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', marginBottom: '0.5rem' }}>{stat.label}</p>
-                                    <h3 style={{ fontSize: '1.75rem', margin: 0 }}>{stat.value}</h3>
+                                    <p style={{ color: 'var(--color-text-muted)', fontSize: '0.85rem', marginBottom: '0.5rem' }}>{stat.label}</p>
+                                    <h3 style={{ fontSize: '1.5rem', margin: 0 }}>{stat.value}</h3>
                                 </div>
                                 <div style={{ padding: '0.75rem', background: `${stat.color}15`, borderRadius: '12px' }}>
-                                    <stat.icon size={24} color={stat.color} />
+                                    <stat.icon size={20} color={stat.color} />
                                 </div>
                             </div>
                         </Card>
@@ -186,11 +186,11 @@ const Dashboard = () => {
             {/* Main Content Area */}
             <Card style={{ padding: 0, overflow: 'hidden' }}>
                 <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--glass-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', minWidth: '200px' }}>
                         <ClipboardList size={20} color="var(--color-primary)" />
                         <h3 style={{ margin: 0 }}>{activeTab === 'shipments' ? t('dashboard.shipment_manifest') : t('dashboard.completed_shipments')}</h3>
                     </div>
-                    <div style={{ width: '300px' }}>
+                    <div style={{ flex: '1', minWidth: '250px', maxWidth: '400px' }}>
                         <Input
                             placeholder={t('dashboard.search_placeholder')}
                             icon={Search}
@@ -363,13 +363,14 @@ const Dashboard = () => {
     );
 
     const renderShipmentControls = () => (
-        <div className="flex-stack" style={{ display: 'flex', gap: '1rem' }}>
-            <Button variant="secondary" onClick={handleRefresh} disabled={refreshing} title={t('dashboard.refresh')}>
+        <div className="flex-stack" style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
+            <Button variant="ghost" onClick={fetchOrders} disabled={refreshing}>
                 <RefreshCw size={18} className={refreshing ? 'spin' : ''} />
             </Button>
             {user?.role === 'Admin' && (
                 <Button variant="primary" onClick={() => navigate('/backoffice/create-order')}>
-                    <Plus size={18} /> {t('dashboard.register_shipment')}
+                    <Plus size={18} />
+                    <span className="desktop-only" style={{ marginLeft: '0.5rem' }}>{t('dashboard.register_shipment')}</span>
                 </Button>
             )}
             <LanguageSwitcher />
@@ -378,7 +379,8 @@ const Dashboard = () => {
                 <Lock size={18} />
             </Button>
             <Button variant="outline" onClick={logout} style={{ borderColor: 'var(--color-error)', color: 'var(--color-error)' }}>
-                {t('common.logout')}
+                <span className="desktop-only">{t('common.logout')}</span>
+                <span className="mobile-only">✕</span>
             </Button>
         </div>
     );
