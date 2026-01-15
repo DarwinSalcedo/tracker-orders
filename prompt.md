@@ -438,3 +438,177 @@ Login: Use a delivery user account.
 View: Confirm only assigned orders appear.
 Update: Change status to "In Transit" from phone.
 Check Web: Verify status and location update on the Backoffice dashboard.
+
+
+-----------------------------------
+
+Google Gemini Chatbot Implementation Plan
+Overview
+Implement a technical support chatbot using Google Gemini AI to assist EnCaminar users with common questions about tracking, orders, and platform usage.
+
+Why Google Gemini?
+✅ Free tier: 60 requests/minute
+✅ Multilingual: Supports ES/EN/PT natively
+✅ Context-aware: Can maintain conversation history
+✅ Fast: Low latency responses
+✅ Easy integration: Official SDK available
+Proposed Changes
+Backend
+[NEW] 
+chatbotService.js
+Create Gemini service to handle chat requests:
+
+Initialize Gemini AI client
+Define system prompt with EnCaminar context
+Handle conversation history
+Generate responses with safety settings
+Key Features:
+
+Multilingual support (auto-detects language)
+Context about EnCaminar features
+Safety filters enabled
+Temperature: 0.7 for balanced responses
+[NEW] 
+chatbot.routes.js
+API endpoint for chat:
+
+POST /api/chatbot/chat - Send message, get response
+Request body: { message, history }
+Response: { response, conversationId }
+Security:
+
+No authentication required (public support)
+Rate limiting recommended
+Input validation
+[MODIFY] 
+index.js
+Register chatbot routes:
+
+import chatbotRoutes from './routes/chatbot.routes.js';
+app.use('/api/chatbot', chatbotRoutes);
+Frontend
+[NEW] 
+ChatWidget.jsx
+Floating chat widget component:
+
+Floating button (bottom-right)
+Expandable chat window
+Message history display
+Input field with send button
+Loading states
+Responsive design
+Features:
+
+Framer Motion animations
+Auto-scroll to latest message
+Enter key to send
+Typing indicator
+Error handling
+[MODIFY] 
+App.jsx
+Add ChatWidget to main app:
+
+import ChatWidget from './components/ChatWidget';
+// In return, after routes
+<ChatWidget />
+Configuration
+[MODIFY] 
+.env
+Add Gemini API key:
+
+GEMINI_API_KEY=your_api_key_here
+How to get API key:
+
+Go to https://makersuite.google.com/app/apikey
+Create new API key
+Copy and paste to .env
+Translations
+[MODIFY] Locale Files
+Add chatbot translations:
+
+{
+  "chatbot": {
+    "title": "Soporte EnCaminar",
+    "placeholder": "Escribe tu mensaje...",
+    "initial_message": "¡Hola! ¿En qué puedo ayudarte?",
+    "typing": "Escribiendo...",
+    "error": "Lo siento, hubo un error. Intenta de nuevo."
+  }
+}
+System Prompt
+The chatbot will be configured with this context:
+
+Eres un asistente de soporte técnico para EnCaminar, una plataforma de 
+logística y rastreo de envíos en tiempo real.
+Características de EnCaminar:
+- Rastreo de pedidos con número de guía
+- Dashboard para administradores y repartidores
+- Estados personalizables de envío
+- Mapa de rutas en tiempo real
+- Notificaciones por email
+- App móvil para repartidores
+Puedes ayudar con:
+1. Rastreo de pedidos (ingresar número de guía en la página principal)
+2. Problemas de login/registro
+3. Cómo usar el dashboard
+4. Explicar estados de envío
+5. Cómo registrar nuevos envíos
+6. Preguntas sobre la app móvil
+Responde de manera:
+- Amigable y profesional
+- Concisa (máximo 3-4 líneas)
+- En el idioma del usuario
+- Con emojis ocasionales para ser más cercano
+Si no sabes algo, sugiere contactar a: encaminar.logistics@gmail.com
+Installation Steps
+1. Install Dependencies
+cd backend
+npm install @google/generative-ai
+2. Get API Key
+Visit: https://makersuite.google.com/app/apikey
+Create new project (if needed)
+Generate API key
+Copy to .env
+3. Test API Key
+# Test in backend
+node -e "import('@google/generative-ai').then(m => console.log('✅ SDK installed'))"
+Testing Plan
+Manual Testing
+Open application
+Click chat button (bottom-right)
+Send test messages:
+"Hola"
+"¿Cómo rastro mi pedido?"
+"No puedo iniciar sesión"
+"¿Qué significa 'En Tránsito'?"
+Verify responses are relevant
+Test in different languages
+Edge Cases
+Empty messages
+Very long messages
+Special characters
+Network errors
+API rate limits
+Deployment Considerations
+Environment Variables
+Add GEMINI_API_KEY to Render environment variables
+Keep key secret, never commit to git
+Rate Limiting
+Free tier limits:
+
+60 requests/minute
+1,500 requests/day
+Consider adding rate limiting if needed.
+
+Monitoring
+Log chatbot usage
+Track common questions
+Monitor API costs (if upgraded)
+Summary
+✅ Backend: Gemini service + API route
+✅ Frontend: Floating chat widget
+✅ Multilingual: Auto-detects ES/EN/PT
+✅ Free: Uses Gemini free tier
+✅ Context-aware: Knows about EnCaminar features
+
+Ready to implement! 🚀

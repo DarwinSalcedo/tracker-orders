@@ -13,6 +13,7 @@ import TrackOrder from './pages/Tracker/TrackOrder';
 import TokenTrack from './pages/Tracker/TokenTrack';
 import CompanyBadge from './components/CompanyBadge';
 import SuperAdminDashboard from './pages/SuperAdmin/Dashboard';
+import ChatWidget from './components/ChatWidget';
 
 // Protected Route Component
 const ProtectedRoute = ({ allowedRoles = [] }) => {
@@ -62,6 +63,7 @@ function App() {
 
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
+          <ChatWidget />
         </Router>
       </AuthProvider>
     </ThemeProvider>
