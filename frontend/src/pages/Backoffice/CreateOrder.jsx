@@ -16,7 +16,8 @@ import {
     Hash,
     ClipboardList,
     User,
-    MessageSquare
+    MessageSquare,
+    DollarSign
 } from 'lucide-react';
 import ThemeToggle from '../../components/ui/ThemeToggle';
 import LanguageSwitcher from '../../components/ui/LanguageSwitcher';
@@ -44,7 +45,8 @@ const CreateOrder = () => {
         deliveryPerson: '',
         deliveryPersonId: '',
         deliveryInstructions: '',
-        externalOrderId: ''
+        externalOrderId: '',
+        amount: ''
     });
 
     const [deliveryUsers, setDeliveryUsers] = useState([]);
@@ -101,7 +103,8 @@ const CreateOrder = () => {
                 deliveryPerson: formData.deliveryPersonId ? deliveryUsers.find(u => u.id === parseInt(formData.deliveryPersonId))?.username : '',
                 deliveryPersonId: formData.deliveryPersonId,
                 deliveryInstructions: formData.deliveryInstructions,
-                externalOrderId: formData.externalOrderId
+                externalOrderId: formData.externalOrderId,
+                amount: formData.amount ? parseFloat(formData.amount) : null
             };
 
             const response = await orderService.createOrder(payload);
@@ -243,6 +246,17 @@ const CreateOrder = () => {
                                 onChange={handleChange}
                                 placeholder="customer@example.com"
                                 icon={Mail}
+                            />
+                            <Input
+                                label={t('create_order.label_amount') + ' ' + t('create_order.optional')}
+                                name="amount"
+                                type="number"
+                                step="0.01"
+                                min="0"
+                                value={formData.amount}
+                                onChange={handleChange}
+                                placeholder="0.00"
+                                icon={DollarSign}
                             />
                             <div className="premium-input-container">
                                 <label className="premium-input-label">{t('create_order.label_delivery_person') + ' ' + t('create_order.optional')}</label>

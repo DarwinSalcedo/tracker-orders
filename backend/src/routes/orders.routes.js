@@ -36,7 +36,7 @@ router.get('/orders', verifyToken, requireCompany, async (req, res) => {
 
 // Create Shipment (Backoffice)
 router.post('/orders', verifyToken, requireCompany, authorize('Admin'), async (req, res) => {
-    const { trackingId, email, customerName, customerPhone, externalOrderId, pickup, dropoff, deliveryPerson, deliveryPersonId, deliveryInstructions } = req.body;
+    const { trackingId, email, customerName, customerPhone, externalOrderId, pickup, dropoff, deliveryPerson, deliveryPersonId, deliveryInstructions, amount } = req.body;
 
 
     if (!trackingId) {
@@ -59,10 +59,10 @@ router.post('/orders', verifyToken, requireCompany, authorize('Admin'), async (r
 
         // Insert Shipment
         const result = await query(
-            `INSERT INTO orders (id, email, customer_name, customer_phone, external_order_id, share_token, current_status_id, pickup_lat, pickup_lng, pickup_address, dropoff_lat, dropoff_lng, dropoff_address, delivery_person, delivery_person_id, delivery_instructions, company_id) 
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17) 
+            `INSERT INTO orders (id, email, customer_name, customer_phone, external_order_id, share_token, current_status_id, pickup_lat, pickup_lng, pickup_address, dropoff_lat, dropoff_lng, dropoff_address, delivery_person, delivery_person_id, delivery_instructions, amount, company_id) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18) 
        RETURNING *`,
-            [trackingId, email, customerName, customerPhone, externalOrderId, shareToken, createdStatusId, pickup?.lat, pickup?.lng, pickup?.address, dropoff?.lat, dropoff?.lng, dropoff?.address, deliveryPerson, deliveryPersonId || null, deliveryInstructions, companyId]
+            [trackingId, email, customerName, customerPhone, externalOrderId, shareToken, createdStatusId, pickup?.lat, pickup?.lng, pickup?.address, dropoff?.lat, dropoff?.lng, dropoff?.address, deliveryPerson, deliveryPersonId || null, deliveryInstructions, amount || null, companyId]
         );
 
         // Add initial history entry
@@ -96,7 +96,8 @@ router.patch('/orders/:id', verifyToken, requireCompany, authorize(['Admin', 'De
         pickupAddress,
         dropoffLat,
         dropoffLng,
-        dropoffAddress
+        dropoffAddress,
+        amount
     } = req.body;
 
     // Delivery field restriction
@@ -207,6 +208,10 @@ router.patch('/orders/:id', verifyToken, requireCompany, authorize(['Admin', 'De
         if (dropoffAddress !== undefined) {
             updateQuery += `, dropoff_address = $${paramCount++}`;
             params.push(dropoffAddress);
+        }
+        if (amount !== undefined) {
+            updateQuery += `, amount = $${paramCount++}`;
+            params.push(amount);
         }
 
         // Update current tracking location (if provided)

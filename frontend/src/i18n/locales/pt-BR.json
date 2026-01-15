@@ -131,6 +131,7 @@
         "label_waybill": "Conhecimento / ID de Rastreamento",
         "label_external": "Referência Externa",
         "label_email": "E-mail do Cliente",
+        "label_amount": "Valor",
         "label_delivery_person": "Entregador",
         "label_instructions": "Instruções de Entrega",
         "placeholder_select_delivery": "Selecione um entregador...",

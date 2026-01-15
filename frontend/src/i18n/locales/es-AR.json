@@ -160,6 +160,7 @@
         "label_waybill": "Guía / ID de Rastreo",
         "label_external": "Referencia Externa",
         "label_email": "Email del Cliente",
+        "label_amount": "Monto",
         "label_delivery_person": "Repartidor",
         "label_instructions": "Instrucciones de Entrega",
         "placeholder_select_delivery": "Seleccione un repartidor...",

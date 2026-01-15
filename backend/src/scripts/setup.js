@@ -64,6 +64,7 @@ const createTables = async () => {
         delivery_person VARCHAR(255),
         delivery_person_id UUID REFERENCES users(id),
         delivery_instructions TEXT,
+        amount DECIMAL(10, 2),
         current_status_id UUID REFERENCES order_statuses(id),
         company_id UUID REFERENCES companies(id) ON DELETE CASCADE,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

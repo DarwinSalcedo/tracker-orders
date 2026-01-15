@@ -159,6 +159,7 @@
         "label_waybill": "Waybill / Tracking ID",
         "label_external": "External Reference",
         "label_email": "Client Email",
+        "label_amount": "Amount",
         "label_delivery_person": "Delivery Person",
         "label_instructions": "Delivery Instructions",
         "placeholder_select_delivery": "Select a delivery person...",
