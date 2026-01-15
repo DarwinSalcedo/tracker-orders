@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, Loader } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTranslation } from 'react-i18n';
+import { useTranslation } from 'react-i18next';
 import api from '../services/api';
 
 const ChatWidget = () => {
